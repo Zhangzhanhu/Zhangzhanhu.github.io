@@ -127,10 +127,21 @@
 <p>注意：ClassLoader只负责class文件的加载，至于它是否可以运行，则由Executing Engine决定。</p>
 <p><img src="image-20220104153135632.png" alt="image-20220104153135632"></p>
 <p>程序演示：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">loader</span><span class="params">()</span></span>&#123;</span><br><span class="line">    ClassLoader loader = GCTest.class.getClassLoader();</span><br><span class="line">    <span class="keyword">while</span>(loader != <span class="keyword">null</span>)&#123;</span><br><span class="line">        System.out.println(loader.getClass().getName());</span><br><span class="line">        loader = loader.getParent();<span class="comment">//获取父类加载器</span></span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(loader);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">======================输出======================</span><br><span class="line">sun.misc.Launcher$AppClassLoader</span><br><span class="line">sun.misc.Launcher$ExtClassLoader</span><br><span class="line"><span class="keyword">null</span></span><br></pre></td></tr></table></figure>
+<pre><code class="java">public static void loader()&#123;
+    ClassLoader loader = GCTest.class.getClassLoader();
+    while(loader != null)&#123;
+        System.out.println(loader.getClass().getName());
+        loader = loader.getParent();//获取父类加载器
+    &#125;
+    System.out.println(loader);
+&#125;
 
 
-
+======================输出======================
+sun.misc.Launcher$AppClassLoader
+sun.misc.Launcher$ExtClassLoader
+null
+</code></pre>
 <h2 id="1、引导类加载器BootStrapLoader"><a href="#1、引导类加载器BootStrapLoader" class="headerlink" title="1、引导类加载器BootStrapLoader"></a>1、引导类加载器BootStrapLoader</h2><p>类加载器也是java类，他们也需要类加载器加载进入内存，显然必须要有第一个不是java类的类加载器，来完成这个工作，这个正是BootStrap。负责加载存放在D:\Program Files(x86)\Java\jdk1.7.0_79\jre\lib下，或被-Xbootclasspath参数指定的路径中的，并且能被虚拟机识别的类库（如rt.jar，所有的java.*开头的类均被Bootstrap ClassLoader加载）；启动类加载器是无法被Java程序直接引用的；rt.jar 里面的类的加载器都是BootStrapLoader。</p>
 <h2 id="2、扩展类加载器-Extension-ClassLoader"><a href="#2、扩展类加载器-Extension-ClassLoader" class="headerlink" title="2、扩展类加载器 Extension ClassLoader"></a>2、扩展类加载器 Extension ClassLoader</h2><p>该加载器由sun.misc.Launcher$ExtClassLoader实现，它负责加载D:\Program Files (x86) \Java \jdk1.7.0_79\jre\lib\ext目录中，或者由java.ext.dirs系统变量指定的路径中的所有类库（如javax.*开头的类），开发者可以直接使用扩展类加载器。ext 目录下所有的类的加载器都是Extension  ClassLoader 。</p>
 <h2 id="3、应用程序类加载器-Application-ClassLoader"><a href="#3、应用程序类加载器-Application-ClassLoader" class="headerlink" title="3、应用程序类加载器 Application ClassLoader"></a>3、应用程序类加载器 Application ClassLoader</h2><p>sun.misc.Launcher$AppClassLoader来实现，它负责加载用户类路径（ClassPath）所指定的类，开发者可以直接使用该类加载器，如果应用程序中没有自定义过自己的类加载器，一般情况下这个就是程序中默认的类加载器。</p>
@@ -210,12 +221,24 @@
 <p>该区域出问题的情况：启动类加载了大量的jar包；Tomcat部署了太多的应用，大量动态生成的反射类，不断被加载时，内存就会满，则会出现OOM</p>
 <p><img src="image-20220106182915862.png" alt="image-20220106182915862"></p>
 <p>元空间：逻辑上存在，物理上不存在（从内存分配时可以看出）</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo03</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//返回JVM试图使用的最大内存</span></span><br><span class="line">        <span class="keyword">long</span> maxMemory = Runtime.getRuntime().maxMemory();</span><br><span class="line">        <span class="comment">//返回JVM的初始化总内存</span></span><br><span class="line">        <span class="keyword">long</span> totalMemory = Runtime.getRuntime().totalMemory();</span><br><span class="line">        System.out.println(<span class="string">&quot;max = &quot;</span> + maxMemory + <span class="string">&quot;字节\t&quot;</span> + (maxMemory/(<span class="keyword">double</span>)<span class="number">1024</span>/<span class="number">1024</span>) + <span class="string">&quot;MB&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;total = &quot;</span> + totalMemory + <span class="string">&quot;字节\t&quot;</span> + (totalMemory/(<span class="keyword">double</span>)<span class="number">1024</span>/<span class="number">1024</span>) + <span class="string">&quot;MB&quot;</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//默认情况下，分配的总内存是电脑内存的1/4，而初始化的内存：1/64</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">运行结果=================================</span><br><span class="line">max = <span class="number">3668967424</span>字节	<span class="number">3499.</span>0MB</span><br><span class="line">total = <span class="number">247463936</span>字节	<span class="number">236.</span>0MB</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre><code class="java">public class Demo03 &#123;
+    public static void main(String[] args) &#123;
+        //返回JVM试图使用的最大内存
+        long maxMemory = Runtime.getRuntime().maxMemory();
+        //返回JVM的初始化总内存
+        long totalMemory = Runtime.getRuntime().totalMemory();
+        System.out.println(&quot;max = &quot; + maxMemory + &quot;字节\t&quot; + (maxMemory/(double)1024/1024) + &quot;MB&quot;);
+        System.out.println(&quot;total = &quot; + totalMemory + &quot;字节\t&quot; + (totalMemory/(double)1024/1024) + &quot;MB&quot;);
+        
+        //默认情况下，分配的总内存是电脑内存的1/4，而初始化的内存：1/64
+    &#125;
+&#125;
 
 
-
-
-
+运行结果=================================
+max = 3668967424字节    3499.0MB
+total = 247463936字节    236.0MB
+</code></pre>
 <h1 id="堆内存调优"><a href="#堆内存调优" class="headerlink" title="堆内存调优"></a>堆内存调优</h1><p>手动修改堆内存参数</p>
 <p>-Xms8m -Xmx8m -XX:+PrintGCDetails</p>
 <p><img src="image-20220111210420590.png" alt="image-20220111210420590"></p>
@@ -354,6 +377,15 @@
 
    
   <nav class="article-nav">
+    
+      <a href="/2022/02/01/MyBatisPlus%E4%BD%BF%E7%94%A8/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            MyBatisPlus使用
+          
+        </div>
+      </a>
     
     
       <a href="/2022/01/05/Java%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA%E8%BF%87%E7%A8%8B%E8%AF%A6%E8%A7%A3/" class="article-nav-link">

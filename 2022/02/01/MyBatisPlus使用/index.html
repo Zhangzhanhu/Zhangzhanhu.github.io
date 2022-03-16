@@ -13,7 +13,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>博客创建记录及Markdown测试 |  Tunan`s Blog</title>
+      <title>MyBatisPlus使用 |  Tunan`s Blog</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/favicon.ico" />
@@ -56,7 +56,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-博客创建记录及Markdown测试"
+  id="post-MyBatisPlus使用"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -67,7 +67,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  博客创建记录及Markdown测试
+  MyBatisPlus使用
 </h1>
  
 
@@ -75,11 +75,11 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/12/08/%E5%8D%9A%E5%AE%A2%E5%88%9B%E5%BB%BA%E8%AE%B0%E5%BD%95%E5%8F%8AMarkdown%E6%B5%8B%E8%AF%95/" class="article-date">
-  <time datetime="2021-12-08T07:03:10.000Z" itemprop="datePublished">2021-12-08</time>
+      <a href="/2022/02/01/MyBatisPlus%E4%BD%BF%E7%94%A8/" class="article-date">
+  <time datetime="2022-02-01T11:26:47.000Z" itemprop="datePublished">2022-02-01</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Web/">Web</a>
+    <a class="article-category-link" href="/categories/Mybatis/">Mybatis</a>
   </div>
   
 <div class="word_count">
@@ -87,7 +87,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">865</span>
+            <span class="post-count">1.2k</span>
         </span>
     </span>
 
@@ -96,7 +96,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">3 min</span>
+            <span class="post-count">5 min</span>
         </span>
     </span>
 </div>
@@ -111,123 +111,212 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <h3 id="第一步：-环境准备"><a href="#第一步：-环境准备" class="headerlink" title="第一步： 环境准备"></a>第一步： 环境准备</h3><ul>
-<li><p>Windows 64位操作系统</p>
-</li>
-<li><p>已安装Node.js    </p>
-</li>
-</ul>
-<ul>
-<li>已安装Git  </li>
-</ul>
-<p>安装完成后查看对应的版本信息，测试是否安装正确，在命令提示符中分别输入<span id="more"></span></p>
-<pre><code class="shell">node -v #查看node版本
-npm -v #查看npm版本
-git --version #查看git版本
+  <h1 id="mp是什么"><a href="#mp是什么" class="headerlink" title="mp是什么"></a>mp是什么</h1><p>是MyBatis的增强工具。</p>
+<h1 id="mp入门"><a href="#mp入门" class="headerlink" title="mp入门"></a>mp入门</h1><p>1、添加SpringBoot项目的依赖</p>
+<pre><code class="xml">&lt;!--Mybatis-plus--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;com.baomidou&lt;/groupId&gt;
+    &lt;artifactId&gt;mybatis-plus-boot-starter&lt;/artifactId&gt;
+    &lt;version&gt;3.0.5&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;!--Mysql--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;mysql&lt;/groupId&gt;
+    &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+&lt;/dependency&gt;
+
+&lt;!--Lombok--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
+    &lt;artifactId&gt;lombok&lt;/artifactId&gt;
+&lt;/dependency&gt;
 </code></pre>
-<p>运行效果如图所示</p>
-<p><img src="image-20211208151328399.png" alt="image-20211208151328399"></p>
-<h3 id="第二步：-Hexo下载与初始化"><a href="#第二步：-Hexo下载与初始化" class="headerlink" title="第二步： Hexo下载与初始化"></a>第二步： Hexo下载与初始化</h3><p>新建一个文件夹，作为博客的主体，可以取名为MyBlog</p>
-<p><img src="image-20211208152004239.png" alt="image-20211208152004239"></p>
-<p>进入到该文件夹下，右击鼠标右键，点击Git Bush Here</p>
-<p>键入命令<code>npm install -g hexo</code>进行Hexo下载</p>
-<p><img src="image-20211208152406968.png" alt="image-20211208152406968"></p>
-<p>该过程稍微有点久（可能会存在墙），解决办法可以自行百度，正常情况下稍等即可完成下载。</p>
-<p>键入命令<code>hexo init</code>进行Hexo初始化，等待即可</p>
-<p><img src="image-20211208152744234.png" alt="image-20211208152744234"></p>
-<p>目录分析：</p>
-<p>安装后目录如下：</p>
-<p><img src="image-20211208152900205.png" alt="image-20211208152900205"></p>
-<p>​    </p>
-<ul>
-<li><p>node_modules 是Hexo插件位置</p>
-</li>
-<li><p>scaffolds 是模板文件</p>
-</li>
-<li><p>source 是微博正文和其他源文件所在位置，其中_ posts存放正文，_ drafts存放草稿</p>
-</li>
-<li><p>themes 是主题文件，可以自己下载更换</p>
-</li>
-<li><p>_ config.yml 是全局配置文件</p>
-</li>
-</ul>
-<p>​    </p>
-<h3 id="第三步：-本地运行Hexo"><a href="#第三步：-本地运行Hexo" class="headerlink" title="第三步： 本地运行Hexo"></a>第三步： 本地运行Hexo</h3><p>下面三条Shell语句十分常用</p>
-<pre><code class="shell">hexo clean # 清空已有hexo网站文件
-hexo generate(or g) # 依据网页文本与新的CSS样式生成新网站文件
-hexo server(or s) # 启动本地服务器，可以在localhost:4000查看网站修改效果
+<p>2、配置application.properties</p>
+<pre><code class="properties">spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.url=jdbc:mysql://localhost:3306/mybaties?serverTimezone=UTC&amp;useUnicode=true&amp;characterEncoding=utf-8
+spring.datasource.username=root
+spring.datasource.password=123456
+
+# Mybatis Plus 日志 # 控制台输出
+mybatis-plus.configuration.log-impl=org.apache.ibatis.logging.stdout.StdOutImpl
 </code></pre>
-<p><img src="image-20211208153751650.png" alt="image-20211208153751650"></p>
-<p>在<a target="_blank" rel="noopener" href="http://localhost:4000/%E4%B8%8A%E8%AF%95%E7%9D%80%E8%BF%90%E8%A1%8C%E5%90%A7%EF%BC%81">http://localhost:4000/上试着运行吧！</a></p>
-<p><img src="image-20211208153703858.png" alt="image-20211208153703858"></p>
-<h3 id="第四步：Github仓库配置"><a href="#第四步：Github仓库配置" class="headerlink" title="第四步：Github仓库配置"></a>第四步：Github仓库配置</h3><ol>
-<li> 新建一个Repository</li>
-</ol>
-<p>   注意： Repository name要与Owner一样</p>
-<p><img src="image-20211208154432036.png" alt="image-20211208154432036"></p>
-<ol start="2">
-<li><p>在 _config.yml 中进行配置</p>
-<p>注意：每一个冒号都要为英文冒号，且后面接的内容与冒号之间存在一个空格</p>
-<p>repository ：仓库地址</p>
-<p><img src="image-20211208154641166.png" alt="image-20211208154641166"></p>
-</li>
-</ol>
-<h3 id="第五步：-生成密钥绑定密钥"><a href="#第五步：-生成密钥绑定密钥" class="headerlink" title="第五步： 生成密钥绑定密钥"></a>第五步： 生成密钥绑定密钥</h3><p>生成步骤</p>
+<p>3、编写实体类以及核心接口代码</p>
+<p>主要是继承这个BaseMapper类，这里面有各种增删改查操作</p>
+<pre><code class="java">@Repository
+public interface UserMapper extends BaseMapper&lt;User&gt; &#123;
+&#125;
+</code></pre>
+<p>4、测试</p>
+<pre><code class="java">@SpringBootTest
+class MpdemoApplicationTests &#123;
+    
+    @Autowired
+    private UserMapper userMapper;
+
+    @Test
+    public void findAll()&#123;
+        List&lt;User&gt; users = userMapper.selectList(null);
+        System.out.println(users);
+
+    &#125;
+
+&#125;
+</code></pre>
+<h1 id="实现增删改查"><a href="#实现增删改查" class="headerlink" title="实现增删改查"></a>实现增删改查</h1><h2 id="查"><a href="#查" class="headerlink" title="查"></a>查</h2><pre><code class="java">//查询操作
+@Test
+public void findAll()&#123;
+    List&lt;User&gt; users = userMapper.selectList(null);
+    System.out.println(users);
+
+&#125;
+</code></pre>
+<p>分页查询：<br>1、配置插件</p>
+<pre><code class="java">/*
+     * 分页查询插件
+     */
+@Bean
+public PaginationInterceptor paginationInterceptor()&#123;
+    return new PaginationInterceptor();
+&#125;
+</code></pre>
+<p>2、分页查询代码</p>
+<p>1）插件Page对象，传入两个参数：当前页和每页记录数</p>
+<p>2）调用mp函数</p>
+<pre><code class="java">//分页查询
+@Test
+public void selectByPage()&#123;
+    Page&lt;User&gt; page = new Page&lt;&gt;(1,3);
+    IPage&lt;User&gt; userPage = userMapper.selectPage(page, null);
+
+    //返回对象得到分页的所有数据
+    long pages = userPage.getPages(); //得到分页总页数
+    long current = userPage.getCurrent(); //当前页
+    List&lt;User&gt; records = userPage.getRecords(); //查询数据集合
+    long total = userPage.getTotal(); //总记录数
+&#125;
+</code></pre>
+<h2 id="增"><a href="#增" class="headerlink" title="增"></a>增</h2><pre><code class="java">//添加操作
+@Test
+public void addUser()&#123;
+    User user = new User();
+    user.setName(&quot;Luck2&quot;);
+    user.setPwd(&quot;2222&quot;);
+    int insert = userMapper.insert(user);
+    System.out.println(insert);
+&#125;
+</code></pre>
+<p>这里面并没有设置Id，因为Mp有自己的主键自增策略，这里简单做一下记录：</p>
+<p><img src="image-20220223190931938.png"></p>
+<p>单一应用时，我们一般设置主键自增，即使用@TableId(type=IdType.AUTO)， 数据库中的主键为：</p>
+<p><img src="image-20220223190955125.png"></p>
+<p>分布式应用时，我们需要生成分布式ID，可以选择使用@TableId(type=IdType.ID_WORKER)，数据库中的主键为：</p>
+<p><img src="image-20220223191009190.png"></p>
+<p>==注意：==</p>
 <ol>
-<li><p>在桌面右击鼠标，Git Bush Here</p>
-</li>
-<li><p>执行下面的命令：</p>
-<p>ssh : 检查是否存在ssh，这个电脑一般都是会设置好的</p>
-<p>ssh-keygen -t rsa -C “邮箱地址” ： 这里的邮箱地址应该是github注册的邮箱地址</p>
-</li>
-<li><p>然后在c盘用户目录下，进入.ssh文件，右击打开id_rsa.pub（推荐使用Notdpad++），Ctrl+A Ctrl+C保证复制完整</p>
-</li>
+<li>这里如果采用主键自增，需要在建表时检查是否设置了主键自增；如果采用分布式ID，则在实体类中采用Long类型来声明id，在建表时采用bigint类型建立id。</li>
+<li>如果想要切换主键生成策略，最好在切换之前对数据表执行<code>TRUNCATE TABLE &#39;table name&#39;</code>操作</li>
 </ol>
-<p>绑定步骤</p>
-<ol>
-<li><p>在github主页，进入右上角的setting中，在SSH and GPGKeys中添加上即可</p>
-</li>
-<li><p>检查是否绑定成功</p>
-<p>在刚才的Bash中输入 ssh -T <a href="mailto:&#x2d;&#x67;&#105;&#x74;&#64;&#x67;&#105;&#116;&#x68;&#x75;&#98;&#46;&#99;&#111;&#x6d;">&#x2d;&#x67;&#105;&#x74;&#64;&#x67;&#105;&#116;&#x68;&#x75;&#98;&#46;&#99;&#111;&#x6d;</a></p>
-</li>
-</ol>
-<h3 id="第六步：-发布到Github"><a href="#第六步：-发布到Github" class="headerlink" title="第六步： 发布到Github"></a>第六步： 发布到Github</h3><ol>
-<li><p>安装<a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo-deployer-git">hexo-deployer-git</a>自动部署发布工具</p>
-<p>在MyBlog下使用Git Bush Here</p>
-<p>键入命令<code>npm install hexo-deployer-git --save</code></p>
-</li>
-<li><p>发布到github中</p>
-<p>键入命令<code>hexo clean &amp;&amp; hexo g &amp;&amp; hexo d</code></p>
-<p>注意：第一次登录需要验证邮箱密码</p>
-</li>
-</ol>
-<p><img src="https://upload-images.jianshu.io/upload_images/1531909-5fdbcdab2249c01e.png" alt="img"></p>
-<ol start="3">
-<li><p>访问测试</p>
-<p>一般生成的博客主页地址为下面的形式，username是GitHub的name</p>
-<p><a target="_blank" rel="noopener" href="https://username.github.io/">https://username.github.io/</a></p>
-</li>
-</ol>
-<h3 id="第七步：-域名映射"><a href="#第七步：-域名映射" class="headerlink" title="第七步： 域名映射"></a>第七步： 域名映射</h3><ol>
-<li>在腾讯云（或阿里云）购买一个域名，进行实名认证等一系列操作，直到在控制台可见正常为止</li>
-</ol>
-<p><img src="image-20211208160045288.png" alt="image-20211208160045288"></p>
-<ol start="2">
-<li><p>解析域名</p>
-<p><img src="image-20211208160140464.png" alt="image-20211208160140464"></p>
-<p>主机ip获取</p>
-<p>在Win+R中输入cmd，打开命令提示符</p>
-<p>输入<code>ping Github名称.github.io</code>即可得到</p>
-<p>注意下面的类型，A类型的为ip地址，CNAME类型的为Github名称.github.io</p>
-<p><img src="image-20211208160334511.png" alt="image-20211208160334511"></p>
-</li>
-<li><p>在source文件夹下，新建CNAME.txt，其内容为你的域名，然后删掉后缀即可</p>
-</li>
-</ol>
-<p><img src="image-20211208160515059.png" alt="image-20211208160515059"></p>
-<ol start="4">
-<li>重新在MyBlog路径下Bush，重新<code>hexo clean &amp;&amp; hexo g &amp;&amp; hexo d</code>发布即可使用自己的域名进行登录了。</li>
-</ol>
+<h2 id="改"><a href="#改" class="headerlink" title="改"></a>改</h2><pre><code class="java">//修改操作
+@Test
+public void updateUser()&#123;
+    User user = new User();
+    user.setId(1496441284989927425L);
+    user.setName(&quot;newLuck&quot;);
+    int update = userMapper.updateById(user);
+    System.out.println(update);
+&#125;
+</code></pre>
+<h2 id="删"><a href="#删" class="headerlink" title="删"></a>删</h2><pre><code class="java">//删除操作
+@Test
+public void delectById()&#123;
+    int i = userMapper.deleteById(1496453291331940354L);
+&#125;
+</code></pre>
+<h1 id="自动填充"><a href="#自动填充" class="headerlink" title="自动填充"></a>自动填充</h1><p>1、添加两个datetime类型字段create_time和update_time</p>
+<p>2、实体类更新</p>
+<pre><code class="java">private Date createTime;
+private Date updateTime;
+</code></pre>
+<p>3、添加注解</p>
+<pre><code class="java">@TableField(fill = FieldFill.INSERT)//添加
+private Date createTime;
+
+@TableField(fill = FieldFill.INSERT_UPDATE)//修改
+private Date updateTime;
+</code></pre>
+<p>4、创建类实现接口MetaObjectHandler,重写其中的两个方法，实现自动填充</p>
+<pre><code class="java">@Component
+public class MyMetaObjectHandler implements MetaObjectHandler &#123;
+
+    //mp执行添加操作
+    @Override
+    public void insertFill(MetaObject metaObject) &#123;
+        this.setFieldValByName(&quot;createTime&quot;,new Date(),metaObject);
+        this.setFieldValByName(&quot;updateTime&quot;,new Date(),metaObject);
+    &#125;
+
+    //mp执行修改操作
+    @Override
+    public void updateFill(MetaObject metaObject) &#123;
+        this.setFieldValByName(&quot;updateTime&quot;,new Date(),metaObject);
+    &#125;
+&#125;
+</code></pre>
+<h1 id="乐观锁CAS"><a href="#乐观锁CAS" class="headerlink" title="乐观锁CAS"></a>乐观锁CAS</h1><p>适用场景：当需要更新一条记录的时候，希望这条记录不会被别人更新，也就是说实现线程安全的数据更新。比如==抢票==环境。</p>
+<p>CAS解决ABA问题，通过增加版本号</p>
+<p>mp实现</p>
+<p>1、表里添加字段version，实体类添加对应属性</p>
+<p>2、在实体类版本号属性上添加注解@Version以及自动填充注解</p>
+<pre><code class="java">@Version
+@TableField(fill = FieldFill.INSERT)//添加
+private Integer version;
+</code></pre>
+<p>3、创建配置类，配置乐观锁插件</p>
+<pre><code class="java">@Configuration
+@MapperScan(&quot;com.tunan.mpdemo.mapper&quot;)
+public class MpConfig &#123;
+
+    /*
+     * 乐观锁插件
+     */
+    @Bean
+    public OptimisticLockerInterceptor optimisticLockerInterceptor()&#123;
+        return new OptimisticLockerInterceptor();
+    &#125;
+
+&#125;
+</code></pre>
+<p>注意要去MyMetaObjectHandler类中增加一条映射，。</p>
+<p>4、测试乐观锁</p>
+<pre><code class="java">//测试乐观锁
+@Test
+public void optimisticLocker()&#123;
+    //查
+    User user = userMapper.selectById(1496453291331940354L);
+    //改
+    user.setName(&quot;乐观锁&quot;);
+    int i = userMapper.updateById(user);
+&#125;
+</code></pre>
+<p>这里mp配置好之后，给做了version的自增操作，因此不需要修改的时候执行自动填充</p>
+<h1 id="逻辑删除"><a href="#逻辑删除" class="headerlink" title="逻辑删除"></a>逻辑删除</h1><p>在表中添加字段，作为逻辑删除标志，，每次删除时候修改标志位：0未删 1已删</p>
+<p>1、表里添加字段deleted，实体类添加属性</p>
+<pre><code class="java">@TableLogic
+@TableField(fill = FieldFill.INSERT)//添加
+private Integer deleted;
+</code></pre>
+<p>2、在mp3.1版本以下的，需要增加如下配置</p>
+<pre><code class="java">/*
+     * 逻辑删除插件
+     */
+@Bean
+public ISqlInjector sqlInjector() &#123;
+    return new LogicSqlInjector();
+&#125;
+</code></pre>
+<p>然后执行删除操作就是逻辑删除了，执行的是Update</p>
+<h1 id="分页查询"><a href="#分页查询" class="headerlink" title="分页查询"></a>分页查询</h1><p>复杂查询可以用wrapper，这里暂时不作详解</p>
  
       <!-- reward -->
       
@@ -292,12 +381,12 @@ hexo server(or s) # 启动本地服务器，可以在localhost:4000查看网站�
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/12/08/%E5%8D%9A%E5%AE%A2%E5%88%9B%E5%BB%BA%E8%AE%B0%E5%BD%95%E5%8F%8AMarkdown%E6%B5%8B%E8%AF%95/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2022/02/01/MyBatisPlus%E4%BD%BF%E7%94%A8/" alt="微信分享二维码">
     </div>
 </div>
 
 <div id="share-mask"></div>  
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%B0%E5%BD%95/" rel="tag">记录</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Mybatis/" rel="tag">Mybatis</a></li></ul>
 
     </footer>
   </div>
@@ -305,19 +394,19 @@ hexo server(or s) # 启动本地服务器，可以在localhost:4000查看网站�
    
   <nav class="article-nav">
     
-      <a href="/2021/12/12/%E5%85%B3%E4%BA%8EMybatis%E6%8C%81%E4%B9%85%E5%8C%96%E7%9A%84%E6%BC%94%E8%BF%9B%E8%BF%87%E7%A8%8B%E9%98%90%E8%BF%B0/" class="article-nav-link">
+      <a href="/2022/03/16/%E9%A1%B9%E7%9B%AE%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%E2%80%94%E2%80%94%E5%8C%BB%E9%99%A2%E8%AE%BE%E7%BD%AE/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
-            关于Mybatis持久化的演进过程阐述
+            项目需求分析——医院设置
           
         </div>
       </a>
     
     
-      <a href="/2021/12/07/hello-world/" class="article-nav-link">
+      <a href="/2022/01/11/JVM%E5%88%9D%E6%8E%A2/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">Hello World</div>
+        <div class="article-nav-title">JVM初探</div>
       </a>
     
   </nav>

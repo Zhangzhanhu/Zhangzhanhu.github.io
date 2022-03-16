@@ -13,7 +13,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>博客创建记录及Markdown测试 |  Tunan`s Blog</title>
+      <title>前端搭建记录1 |  Tunan`s Blog</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/favicon.ico" />
@@ -56,7 +56,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-博客创建记录及Markdown测试"
+  id="post-前端搭建记录"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -67,7 +67,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  博客创建记录及Markdown测试
+  前端搭建记录1
 </h1>
  
 
@@ -75,11 +75,11 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/12/08/%E5%8D%9A%E5%AE%A2%E5%88%9B%E5%BB%BA%E8%AE%B0%E5%BD%95%E5%8F%8AMarkdown%E6%B5%8B%E8%AF%95/" class="article-date">
-  <time datetime="2021-12-08T07:03:10.000Z" itemprop="datePublished">2021-12-08</time>
+      <a href="/2022/03/16/%E5%89%8D%E7%AB%AF%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%95/" class="article-date">
+  <time datetime="2022-03-16T13:06:07.000Z" itemprop="datePublished">2022-03-16</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Web/">Web</a>
+    <a class="article-category-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a>
   </div>
   
 <div class="word_count">
@@ -87,7 +87,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">865</span>
+            <span class="post-count">1.7k</span>
         </span>
     </span>
 
@@ -96,7 +96,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">3 min</span>
+            <span class="post-count">7 min</span>
         </span>
     </span>
 </div>
@@ -111,123 +111,159 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <h3 id="第一步：-环境准备"><a href="#第一步：-环境准备" class="headerlink" title="第一步： 环境准备"></a>第一步： 环境准备</h3><ul>
-<li><p>Windows 64位操作系统</p>
-</li>
-<li><p>已安装Node.js    </p>
-</li>
-</ul>
-<ul>
-<li>已安装Git  </li>
-</ul>
-<p>安装完成后查看对应的版本信息，测试是否安装正确，在命令提示符中分别输入<span id="more"></span></p>
-<pre><code class="shell">node -v #查看node版本
-npm -v #查看npm版本
-git --version #查看git版本
+  <h1 id="前端搭建记录"><a href="#前端搭建记录" class="headerlink" title="前端搭建记录"></a>前端搭建记录</h1><h2 id="ECMAScript-6"><a href="#ECMAScript-6" class="headerlink" title="ECMAScript 6"></a>ECMAScript 6</h2><p>ECMAScript 6.0（简称 ES6）是 JavaScript 语言的下一代标准，使得 JavaScript 语言可以用来编写复杂的大型应用程序，成为企业级开发语言。</p>
+<p>ECMAScript 和 JavaScript 的关系是，前者是后者的规格，后者是前者的一种实现（另外的 ECMAScript 方言还有 Jscript 和 ActionScript）。</p>
+<p>基本语法</p>
+<pre><code class="javaScript">// var 声明的变量没有局部作用域  可以声明多次
+// let 声明的变量  有局部作用域  只能声明一次
+&#123;
+    var a = 1;
+    let b = 2;
+&#125;
+
+// const声明常量  声明之后不允许改变   一但声明必须初始化，否则会报错  
+const PI = &quot;3.1415926&quot;
+
+//数组解构
+let a = 1, b = 2, c = 3
+let [x, y, z] = [1, 2, 3]
+
+//对象解构
+let user = &#123;name: &#39;Helen&#39;, age: 18&#125;
+let &#123; name, age &#125; =  user  //注意：结构的变量必须是user中的属性
+console.log(name, age)
+
+//字符串插入变量和表达式。变量名写在 $&#123;&#125; 中，$&#123;&#125; 中可以放入 JavaScript 表达式。
+let name = &quot;lucy&quot;
+let age = 20
+let info = `My name is $&#123;name&#125; ,I am $&#123;age+1&#125;`
+
+//对象复制
+let person1 = &#123;name: &quot;Amy&quot;, age: 15&#125;
+let someone1 = &#123; ...person1&#125; //拓展运算符（...）
+// 用于取出参数对象所有可遍历属性然后拷贝到当前对象
+
+//对象合并
+let age = &#123;age: 15&#125;
+let name = &#123;name: &quot;Amy&quot;&#125;
+let person2 = &#123;...age, ...name&#125;
+console.log(person2)
+
+//es6使用箭头函数定义
+//一般函数定义
+var f3 = function(m,n) &#123;
+    return m+n //当只有一行语句，并且需要返回结果时，可以省略 &#123;&#125;
+&#125;
+// es6这样写 参数 =&gt; 函数体
+var f4 = (m,n) =&gt; m+n
 </code></pre>
-<p>运行效果如图所示</p>
-<p><img src="image-20211208151328399.png" alt="image-20211208151328399"></p>
-<h3 id="第二步：-Hexo下载与初始化"><a href="#第二步：-Hexo下载与初始化" class="headerlink" title="第二步： Hexo下载与初始化"></a>第二步： Hexo下载与初始化</h3><p>新建一个文件夹，作为博客的主体，可以取名为MyBlog</p>
-<p><img src="image-20211208152004239.png" alt="image-20211208152004239"></p>
-<p>进入到该文件夹下，右击鼠标右键，点击Git Bush Here</p>
-<p>键入命令<code>npm install -g hexo</code>进行Hexo下载</p>
-<p><img src="image-20211208152406968.png" alt="image-20211208152406968"></p>
-<p>该过程稍微有点久（可能会存在墙），解决办法可以自行百度，正常情况下稍等即可完成下载。</p>
-<p>键入命令<code>hexo init</code>进行Hexo初始化，等待即可</p>
-<p><img src="image-20211208152744234.png" alt="image-20211208152744234"></p>
-<p>目录分析：</p>
-<p>安装后目录如下：</p>
-<p><img src="image-20211208152900205.png" alt="image-20211208152900205"></p>
-<p>​    </p>
-<ul>
-<li><p>node_modules 是Hexo插件位置</p>
-</li>
-<li><p>scaffolds 是模板文件</p>
-</li>
-<li><p>source 是微博正文和其他源文件所在位置，其中_ posts存放正文，_ drafts存放草稿</p>
-</li>
-<li><p>themes 是主题文件，可以自己下载更换</p>
-</li>
-<li><p>_ config.yml 是全局配置文件</p>
-</li>
-</ul>
-<p>​    </p>
-<h3 id="第三步：-本地运行Hexo"><a href="#第三步：-本地运行Hexo" class="headerlink" title="第三步： 本地运行Hexo"></a>第三步： 本地运行Hexo</h3><p>下面三条Shell语句十分常用</p>
-<pre><code class="shell">hexo clean # 清空已有hexo网站文件
-hexo generate(or g) # 依据网页文本与新的CSS样式生成新网站文件
-hexo server(or s) # 启动本地服务器，可以在localhost:4000查看网站修改效果
+<h2 id="Vue入门"><a href="#Vue入门" class="headerlink" title="Vue入门"></a>Vue入门</h2><h3 id="1-VUE-js是什么"><a href="#1-VUE-js是什么" class="headerlink" title="1.VUE.js是什么"></a>1.VUE.js是什么</h3><p>在为 AngularJS 工作之后，Vue 的作者尤雨溪开发出了这一框架。他声称自己的思路是提取 Angular 中为自己所喜欢的部分，构建出一款相当轻量的框架。Vue 最早发布于 2014 年 2 月。作者在 Hacker News、Echo JS 与 Reddit 的 javascript 版块发布了最早的版本。一天之内，Vue 就登上了这三个网站的首页。Vue 是 Github 上最受欢迎的开源项目之一。同时，在 JavaScript 框架/函数库中，Vue 所获得的星标数已超过 React，并高于 Backbone.js、Angular 2、jQuery 等项目。</p>
+<p>Vue.js 是一款流行的 JavaScript 前端框架，目的是简化 Web 开发。Vue 所关注的核心是 MVC 模式中的视图层，同时，它也能方便地获取数据更新，实现视图与模型的交互。</p>
+<h3 id="hello-Vue"><a href="#hello-Vue" class="headerlink" title="hello Vue"></a>hello Vue</h3><pre><code class="js">&lt;body&gt;
+    &lt;script src=&quot;vue.min.js&quot;&gt;&lt;/script&gt;
+    &lt;div id=&quot;app&quot;&gt;
+        &lt;!-- 插值表达式--&gt;
+        &#123;&#123;message&#125;&#125;
+    &lt;/div&gt;
+    &lt;script&gt;
+        new Vue(&#123;
+            el:&#39;#app&#39;,
+            data: &#123;
+                message:&#39;hello vue&#39;
+            &#125;
+        &#125;)
+    &lt;/script&gt;
+&lt;/body&gt;
 </code></pre>
-<p><img src="image-20211208153751650.png" alt="image-20211208153751650"></p>
-<p>在<a target="_blank" rel="noopener" href="http://localhost:4000/%E4%B8%8A%E8%AF%95%E7%9D%80%E8%BF%90%E8%A1%8C%E5%90%A7%EF%BC%81">http://localhost:4000/上试着运行吧！</a></p>
-<p><img src="image-20211208153703858.png" alt="image-20211208153703858"></p>
-<h3 id="第四步：Github仓库配置"><a href="#第四步：Github仓库配置" class="headerlink" title="第四步：Github仓库配置"></a>第四步：Github仓库配置</h3><ol>
-<li> 新建一个Repository</li>
-</ol>
-<p>   注意： Repository name要与Owner一样</p>
-<p><img src="image-20211208154432036.png" alt="image-20211208154432036"></p>
-<ol start="2">
-<li><p>在 _config.yml 中进行配置</p>
-<p>注意：每一个冒号都要为英文冒号，且后面接的内容与冒号之间存在一个空格</p>
-<p>repository ：仓库地址</p>
-<p><img src="image-20211208154641166.png" alt="image-20211208154641166"></p>
-</li>
-</ol>
-<h3 id="第五步：-生成密钥绑定密钥"><a href="#第五步：-生成密钥绑定密钥" class="headerlink" title="第五步： 生成密钥绑定密钥"></a>第五步： 生成密钥绑定密钥</h3><p>生成步骤</p>
-<ol>
-<li><p>在桌面右击鼠标，Git Bush Here</p>
-</li>
-<li><p>执行下面的命令：</p>
-<p>ssh : 检查是否存在ssh，这个电脑一般都是会设置好的</p>
-<p>ssh-keygen -t rsa -C “邮箱地址” ： 这里的邮箱地址应该是github注册的邮箱地址</p>
-</li>
-<li><p>然后在c盘用户目录下，进入.ssh文件，右击打开id_rsa.pub（推荐使用Notdpad++），Ctrl+A Ctrl+C保证复制完整</p>
-</li>
-</ol>
-<p>绑定步骤</p>
-<ol>
-<li><p>在github主页，进入右上角的setting中，在SSH and GPGKeys中添加上即可</p>
-</li>
-<li><p>检查是否绑定成功</p>
-<p>在刚才的Bash中输入 ssh -T <a href="mailto:&#x2d;&#x67;&#105;&#x74;&#64;&#x67;&#105;&#116;&#x68;&#x75;&#98;&#46;&#99;&#111;&#x6d;">&#x2d;&#x67;&#105;&#x74;&#64;&#x67;&#105;&#116;&#x68;&#x75;&#98;&#46;&#99;&#111;&#x6d;</a></p>
-</li>
-</ol>
-<h3 id="第六步：-发布到Github"><a href="#第六步：-发布到Github" class="headerlink" title="第六步： 发布到Github"></a>第六步： 发布到Github</h3><ol>
-<li><p>安装<a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo-deployer-git">hexo-deployer-git</a>自动部署发布工具</p>
-<p>在MyBlog下使用Git Bush Here</p>
-<p>键入命令<code>npm install hexo-deployer-git --save</code></p>
-</li>
-<li><p>发布到github中</p>
-<p>键入命令<code>hexo clean &amp;&amp; hexo g &amp;&amp; hexo d</code></p>
-<p>注意：第一次登录需要验证邮箱密码</p>
-</li>
-</ol>
-<p><img src="https://upload-images.jianshu.io/upload_images/1531909-5fdbcdab2249c01e.png" alt="img"></p>
-<ol start="3">
-<li><p>访问测试</p>
-<p>一般生成的博客主页地址为下面的形式，username是GitHub的name</p>
-<p><a target="_blank" rel="noopener" href="https://username.github.io/">https://username.github.io/</a></p>
-</li>
-</ol>
-<h3 id="第七步：-域名映射"><a href="#第七步：-域名映射" class="headerlink" title="第七步： 域名映射"></a>第七步： 域名映射</h3><ol>
-<li>在腾讯云（或阿里云）购买一个域名，进行实名认证等一系列操作，直到在控制台可见正常为止</li>
-</ol>
-<p><img src="image-20211208160045288.png" alt="image-20211208160045288"></p>
-<ol start="2">
-<li><p>解析域名</p>
-<p><img src="image-20211208160140464.png" alt="image-20211208160140464"></p>
-<p>主机ip获取</p>
-<p>在Win+R中输入cmd，打开命令提示符</p>
-<p>输入<code>ping Github名称.github.io</code>即可得到</p>
-<p>注意下面的类型，A类型的为ip地址，CNAME类型的为Github名称.github.io</p>
-<p><img src="image-20211208160334511.png" alt="image-20211208160334511"></p>
-</li>
-<li><p>在source文件夹下，新建CNAME.txt，其内容为你的域名，然后删掉后缀即可</p>
-</li>
-</ol>
-<p><img src="image-20211208160515059.png" alt="image-20211208160515059"></p>
-<ol start="4">
-<li>重新在MyBlog路径下Bush，重新<code>hexo clean &amp;&amp; hexo g &amp;&amp; hexo d</code>发布即可使用自己的域名进行登录了。</li>
-</ol>
+<p>这就是声明式渲染：Vue.js 的核心是一个允许采用简洁的模板语法来声明式地将数据渲染进 DOM 的系统</p>
+<h3 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h3><pre><code class="html">&lt;!--单向绑定 --&gt;
+&lt;div v-bind:style=&quot;msg&quot;&gt;单向绑定&lt;/div&gt;
+&lt;div :style=&quot;msg&quot;&gt;单向绑定&lt;/div&gt;
+
+&lt;!--双向绑定 --&gt;
+&lt;input type=&quot;text&quot; v-model=&quot;keyword&quot;/&gt;
+
+&lt;!--什么是双向数据绑定？
+当数据发生变化的时候，视图也会跟着发生变化
+数据模型发生了改变，会直接显示在页面上
+当视图发生变化的时候，数据也会跟着同步变化
+用户在页面上的修改，会自动同步到数据模型中去--&gt;  
+
+
+&lt;!--事件绑定 --&gt;
+&lt;button v-on:click=&quot;show()&quot;&gt;鼠标点击1&lt;/button&gt;
+&lt;button @click=&quot;show()&quot;&gt;鼠标点击2&lt;/button&gt;
+
+&lt;!--条件渲染 --&gt;
+&lt;div v-if=&quot;ok&quot;&gt;选中了&lt;/div&gt;
+&lt;div v-else&gt;没有选中&lt;/div&gt;
+
+&lt;!--列表渲染 --&gt;
+&lt;div v-for=&quot;user in userList&quot;&gt; &#123;&#123;user.name&#125;&#125; -- &#123;&#123;user.age&#125;&#125; &lt;/div&gt;
+&lt;div v-for=&quot;(user,index) in userList&quot;&gt;
+    &#123;&#123;index&#125;&#125; -- &#123;&#123;user.name&#125;&#125; -- &#123;&#123;user.age&#125;&#125;
+&lt;/div&gt;
+</code></pre>
+<h3 id="实例的生命周期"><a href="#实例的生命周期" class="headerlink" title="实例的生命周期"></a>实例的生命周期</h3><p><img src="1.png" alt="实例的生命周期"></p>
+<h2 id="axios"><a href="#axios" class="headerlink" title="axios"></a>axios</h2><p>axios是独立于vue的一个项目，可以用于浏览器和node.js中发送ajax请求</p>
+<p>创建axios.html<br>引入js</p>
+<pre><code class="html">&lt;script src=&quot;vue.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;axios.min.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+<p>编写js</p>
+<pre><code class="html">&lt;div id=&quot;app&quot;&gt;
+    &lt;table&gt;
+        &lt;tr v-for=&quot;user in userList&quot;&gt;
+            &lt;td&gt;&#123;&#123;user.name&#125;&#125;&lt;/td&gt;
+            &lt;td&gt;&#123;&#123;user.age&#125;&#125;&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/table&gt;
+&lt;/div&gt;
+&lt;script src=&quot;vue.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;axios.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+    new Vue(&#123;
+        el: &#39;#app&#39;,
+        data: &#123;
+            userList:[]
+        &#125;,
+        created() &#123; //在页面渲染之前执行
+            //调用方法，得到返回json数据
+            this.getList()
+        &#125;,
+        methods:&#123;
+            getList() &#123;
+                //使用axios方式ajax请求
+                axios.get(&quot;user.json&quot;)
+                    .then(response =&gt; &#123;//请求成功
+                        //console.log(response)
+                        this.userList =  response.data.data.items
+                        console.log(this.userList)
+                    &#125;) 
+                    .catch(error =&gt; &#123;
+                        console.log(error)
+                    &#125;) //请求失败
+            &#125;
+        &#125;
+    &#125;)
+&lt;/script&gt;
+</code></pre>
+<h2 id="Element-ui"><a href="#Element-ui" class="headerlink" title="Element-ui"></a>Element-ui</h2><p>Element-ui 是饿了么前端出品的基于 Vue.js的 后台组件库，方便程序员进行页面快速布局和构建</p>
+<h2 id="Node-js"><a href="#Node-js" class="headerlink" title="Node.js"></a>Node.js</h2><p>浏览器的内核包括两部分核心：</p>
+<ul>
+<li>DOM渲染引擎</li>
+<li>JavaScript解析引擎</li>
+</ul>
+<p>比如：Chrome浏览器内置V8引擎，V8引擎执行Javascript的速度非常快，性能非常好。</p>
+<p>脱离浏览器环境也可以运行JavaScript，只要有JavaScript引擎就可以。<br>Node.js是一个基于Chrome V8引擎的JavaScript运行环境：即Node.js内置了Chrome的V8 引擎，可以在Node.js环境中直接运行JavaScript程序。</p>
+<p>在Node.js中写JavaScript和在Chrome浏览器中写JavaScript基本没有什么不一样。哪里不一样呢？</p>
+<pre><code>Node.js没有浏览器API，即document，window的等。
+加了许多Node.js 专属API，例如文件系统，进程，http功能。
+</code></pre>
+<p>Node.js会被用来作一个BFF层，即 Backend For Frontend（服务于前端的后端），通俗的说是一个专门用于为前端业务提供数据的后端程序.</p>
+<p>一个前端页面向 Service A、Service B 以及 Service C发送请求，不同的微服务返回的值用于渲染页面中不同的组件。此时，每次访问该页面都需要发送 3 个请求。我们需要一个服务来聚合Service A、Service B 以及 Service C响应的数据，这个服务层叫做BFF。</p>
+<p>BFF层的作用是让前端有能力自由组装后台数据，减少大量的业务沟通成本，加快业务的迭代速度。</p>
+<h2 id="NPM-包管理器"><a href="#NPM-包管理器" class="headerlink" title="NPM 包管理器"></a>NPM 包管理器</h2><p>NPM全称Node Package Manager，是Node.js包管理工具，是全球最大的模块生态系统，里面所有的模块都是开源免费的；也是Node.js的包管理工具，相当于前端的Maven 。</p>
  
       <!-- reward -->
       
@@ -292,12 +328,12 @@ hexo server(or s) # 启动本地服务器，可以在localhost:4000查看网站�
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/12/08/%E5%8D%9A%E5%AE%A2%E5%88%9B%E5%BB%BA%E8%AE%B0%E5%BD%95%E5%8F%8AMarkdown%E6%B5%8B%E8%AF%95/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2022/03/16/%E5%89%8D%E7%AB%AF%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%95/" alt="微信分享二维码">
     </div>
 </div>
 
 <div id="share-mask"></div>  
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%B0%E5%BD%95/" rel="tag">记录</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%A2%84%E7%BA%A6%E7%B3%BB%E7%BB%9F/" rel="tag">预约系统</a></li></ul>
 
     </footer>
   </div>
@@ -305,19 +341,19 @@ hexo server(or s) # 启动本地服务器，可以在localhost:4000查看网站�
    
   <nav class="article-nav">
     
-      <a href="/2021/12/12/%E5%85%B3%E4%BA%8EMybatis%E6%8C%81%E4%B9%85%E5%8C%96%E7%9A%84%E6%BC%94%E8%BF%9B%E8%BF%87%E7%A8%8B%E9%98%90%E8%BF%B0/" class="article-nav-link">
+      <a href="/2022/03/16/%E5%89%8D%E7%AB%AF%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%952/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
-            关于Mybatis持久化的演进过程阐述
+            前端搭建记录2
           
         </div>
       </a>
     
     
-      <a href="/2021/12/07/hello-world/" class="article-nav-link">
+      <a href="/2022/03/16/%E9%A1%B9%E7%9B%AE%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%E2%80%94%E2%80%94%E5%8C%BB%E9%99%A2%E8%AE%BE%E7%BD%AE/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">Hello World</div>
+        <div class="article-nav-title">项目需求分析——医院设置</div>
       </a>
     
   </nav>

@@ -165,6 +165,993 @@
     
     
     <article
+  id="post-前端搭建记录2"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/03/16/%E5%89%8D%E7%AB%AF%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%952/"
+    >前端搭建记录2</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/03/16/%E5%89%8D%E7%AB%AF%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%952/" class="article-date">
+  <time datetime="2022-03-16T13:40:52.000Z" itemprop="datePublished">2022-03-16</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>本项目基于vue-admin-template二次开发，vue-admin-template在线地址：<a target="_blank" rel="noopener" href="https://github.com/PanJiaChen/vue-admin-template">https://github.com/PanJiaChen/vue-admin-template</a></p>
+<h2 id="关键文件："><a href="#关键文件：" class="headerlink" title="关键文件："></a>关键文件：</h2><p>package.js</p>
+<ul>
+<li>npm项目的核心配置文件，包含项目信息，项目依赖，项目启动相关脚本<br>启动项目的命令： npm run dev</li>
+</ul>
+<p>build/webpack.dev.conf.js</p>
+<ul>
+<li>webpack配置文件，包含项目在开发环境打包和运行的相关配置</li>
+</ul>
+<p>index.html</p>
+<ul>
+<li>项目默认的html页面</li>
+</ul>
+<p>main.js</p>
+<ul>
+<li>项目js入口文件，项目的所有前端功能都在这个文件中引入和定义，并初始化全局的Vue对象</li>
+</ul>
+<p>src/utils/request.js</p>
+<ul>
+<li>引入axios模块，定义全局的axios实例，并导出模块</li>
+</ul>
+<p>src/router/index.js</p>
+<ul>
+<li>项目路由设置</li>
+</ul>
+<pre><code class="js">&#123;
+path: &#39;/hosp&#39;,
+component: Layout,
+redirect: &#39;/hosp/hospital/list&#39;,
+name: &#39;hospital&#39;,
+meta: &#123; title: &#39;医院管理&#39;, icon: &#39;table&#39; &#125;,
+children: [
+    &#123;
+path: &#39;hospitalSet/list&#39;,
+name: &#39;医院设置&#39;,
+component: () =&gt;import(&#39;@/views/hosp/hospitalSet/list&#39;),
+meta: &#123; title: &#39;医院设置&#39; &#125;
+    &#125;,
+    &#123;
+path: &#39;hospitalSet/add&#39;,
+name: &#39;EduTeacherCreate&#39;,
+component: () =&gt;import(&#39;@/views/hosp/hospitalSet/form&#39;),
+meta: &#123; title: &#39;添加&#39; &#125;,
+hidden: true
+&#125;,
+    &#123;
+path: &#39;hospitalSet/edit/:id&#39;,
+name: &#39;EduTeacherEdit&#39;,
+component: () =&gt;import(&#39;@/views/hosp/hospitalSet/form&#39;),
+meta: &#123; title: &#39;编辑&#39;, noCache: true &#125;,
+hidden: true
+&#125;
+  ]
+&#125;
+</code></pre>
+<h2 id="前端项目开发流程"><a href="#前端项目开发流程" class="headerlink" title="前端项目开发流程"></a>前端项目开发流程</h2><p><img src="1.png"></p>
+<h2 id="跨域问题"><a href="#跨域问题" class="headerlink" title="跨域问题"></a>跨域问题</h2><p>跨域：浏览器对于javascript的同源策略的限制</p>
+<p>以下情况都属于跨域：</p>
+<ul>
+<li>域名不同:    <a target="_blank" rel="noopener" href="http://www.jd.com/">www.jd.com</a> 与 <a target="_blank" rel="noopener" href="http://www.taobao.com/">www.taobao.com</a></li>
+<li>域名相同，端口不同:    <a target="_blank" rel="noopener" href="http://www.jd.com:8080/">www.jd.com:8080</a> 与 <a target="_blank" rel="noopener" href="http://www.jd.com:8081/">www.jd.com:8081</a></li>
+<li>二级域名不同:    item.jd.com 与 miaosha.jd.com</li>
+</ul>
+<p>所以从前端的3000端口去访问本地的8201端口，就产生了跨域问题<br>Spring提供了解决方案，我们只需要在对应controller上添加一个标签就可以了@CrossOrigin</p>
+<h2 id="配置nginx"><a href="#配置nginx" class="headerlink" title="配置nginx"></a>配置nginx</h2><p>由于我们后端有很多服务模块，每个模块都有对应的访问路径与端口，为了提供统一的api接口，所以使用nginx作为反向代理服务器；</p>
+<p>反向代理，其实客户端对代理是无感知的，因为客户端不需要任何配置就可以访问，我们只需要将请求发送到反向代理服务器，由反向代理服务器去选择目标服务器获取数据后，在返回给客户端，此时反向代理服务器和目标服务器对外就是一个服务器，暴露的是代理服务器地址，隐藏了真实服务器IP地址</p>
+<p>下载nginx<br>配置nginx</p>
+<pre><code class="xml">server &#123;
+    listen 80;
+    server_name localhost;
+    location /api/hosp/ &#123;           
+        proxy_pass http://localhost:8201;
+    &#125;
+    location /api/cmn/ &#123;           
+        proxy_pass http://localhost:8205;
+    &#125;
+...
+&#125;
+</code></pre>
+<p>运行nginx</p>
+<pre><code>在nginx.exe所在目录下打开cmd，执行`nginx.exe`
+</code></pre>
+<p>后续我们将了Spring Cloud Gateway网关，将替代nginx网关</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%A2%84%E7%BA%A6%E7%B3%BB%E7%BB%9F/" rel="tag">预约系统</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-前端搭建记录"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/03/16/%E5%89%8D%E7%AB%AF%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%95/"
+    >前端搭建记录1</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/03/16/%E5%89%8D%E7%AB%AF%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%95/" class="article-date">
+  <time datetime="2022-03-16T13:06:07.000Z" itemprop="datePublished">2022-03-16</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="前端搭建记录"><a href="#前端搭建记录" class="headerlink" title="前端搭建记录"></a>前端搭建记录</h1><h2 id="ECMAScript-6"><a href="#ECMAScript-6" class="headerlink" title="ECMAScript 6"></a>ECMAScript 6</h2><p>ECMAScript 6.0（简称 ES6）是 JavaScript 语言的下一代标准，使得 JavaScript 语言可以用来编写复杂的大型应用程序，成为企业级开发语言。</p>
+<p>ECMAScript 和 JavaScript 的关系是，前者是后者的规格，后者是前者的一种实现（另外的 ECMAScript 方言还有 Jscript 和 ActionScript）。</p>
+<p>基本语法</p>
+<pre><code class="javaScript">// var 声明的变量没有局部作用域  可以声明多次
+// let 声明的变量  有局部作用域  只能声明一次
+&#123;
+    var a = 1;
+    let b = 2;
+&#125;
+
+// const声明常量  声明之后不允许改变   一但声明必须初始化，否则会报错  
+const PI = &quot;3.1415926&quot;
+
+//数组解构
+let a = 1, b = 2, c = 3
+let [x, y, z] = [1, 2, 3]
+
+//对象解构
+let user = &#123;name: &#39;Helen&#39;, age: 18&#125;
+let &#123; name, age &#125; =  user  //注意：结构的变量必须是user中的属性
+console.log(name, age)
+
+//字符串插入变量和表达式。变量名写在 $&#123;&#125; 中，$&#123;&#125; 中可以放入 JavaScript 表达式。
+let name = &quot;lucy&quot;
+let age = 20
+let info = `My name is $&#123;name&#125; ,I am $&#123;age+1&#125;`
+
+//对象复制
+let person1 = &#123;name: &quot;Amy&quot;, age: 15&#125;
+let someone1 = &#123; ...person1&#125; //拓展运算符（...）
+// 用于取出参数对象所有可遍历属性然后拷贝到当前对象
+
+//对象合并
+let age = &#123;age: 15&#125;
+let name = &#123;name: &quot;Amy&quot;&#125;
+let person2 = &#123;...age, ...name&#125;
+console.log(person2)
+
+//es6使用箭头函数定义
+//一般函数定义
+var f3 = function(m,n) &#123;
+    return m+n //当只有一行语句，并且需要返回结果时，可以省略 &#123;&#125;
+&#125;
+// es6这样写 参数 =&gt; 函数体
+var f4 = (m,n) =&gt; m+n
+</code></pre>
+<h2 id="Vue入门"><a href="#Vue入门" class="headerlink" title="Vue入门"></a>Vue入门</h2><h3 id="1-VUE-js是什么"><a href="#1-VUE-js是什么" class="headerlink" title="1.VUE.js是什么"></a>1.VUE.js是什么</h3><p>在为 AngularJS 工作之后，Vue 的作者尤雨溪开发出了这一框架。他声称自己的思路是提取 Angular 中为自己所喜欢的部分，构建出一款相当轻量的框架。Vue 最早发布于 2014 年 2 月。作者在 Hacker News、Echo JS 与 Reddit 的 javascript 版块发布了最早的版本。一天之内，Vue 就登上了这三个网站的首页。Vue 是 Github 上最受欢迎的开源项目之一。同时，在 JavaScript 框架/函数库中，Vue 所获得的星标数已超过 React，并高于 Backbone.js、Angular 2、jQuery 等项目。</p>
+<p>Vue.js 是一款流行的 JavaScript 前端框架，目的是简化 Web 开发。Vue 所关注的核心是 MVC 模式中的视图层，同时，它也能方便地获取数据更新，实现视图与模型的交互。</p>
+<h3 id="hello-Vue"><a href="#hello-Vue" class="headerlink" title="hello Vue"></a>hello Vue</h3><pre><code class="js">&lt;body&gt;
+    &lt;script src=&quot;vue.min.js&quot;&gt;&lt;/script&gt;
+    &lt;div id=&quot;app&quot;&gt;
+        &lt;!-- 插值表达式--&gt;
+        &#123;&#123;message&#125;&#125;
+    &lt;/div&gt;
+    &lt;script&gt;
+        new Vue(&#123;
+            el:&#39;#app&#39;,
+            data: &#123;
+                message:&#39;hello vue&#39;
+            &#125;
+        &#125;)
+    &lt;/script&gt;
+&lt;/body&gt;
+</code></pre>
+<p>这就是声明式渲染：Vue.js 的核心是一个允许采用简洁的模板语法来声明式地将数据渲染进 DOM 的系统</p>
+<h3 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h3><pre><code class="html">&lt;!--单向绑定 --&gt;
+&lt;div v-bind:style=&quot;msg&quot;&gt;单向绑定&lt;/div&gt;
+&lt;div :style=&quot;msg&quot;&gt;单向绑定&lt;/div&gt;
+
+&lt;!--双向绑定 --&gt;
+&lt;input type=&quot;text&quot; v-model=&quot;keyword&quot;/&gt;
+
+&lt;!--什么是双向数据绑定？
+当数据发生变化的时候，视图也会跟着发生变化
+数据模型发生了改变，会直接显示在页面上
+当视图发生变化的时候，数据也会跟着同步变化
+用户在页面上的修改，会自动同步到数据模型中去--&gt;  
+
+
+&lt;!--事件绑定 --&gt;
+&lt;button v-on:click=&quot;show()&quot;&gt;鼠标点击1&lt;/button&gt;
+&lt;button @click=&quot;show()&quot;&gt;鼠标点击2&lt;/button&gt;
+
+&lt;!--条件渲染 --&gt;
+&lt;div v-if=&quot;ok&quot;&gt;选中了&lt;/div&gt;
+&lt;div v-else&gt;没有选中&lt;/div&gt;
+
+&lt;!--列表渲染 --&gt;
+&lt;div v-for=&quot;user in userList&quot;&gt; &#123;&#123;user.name&#125;&#125; -- &#123;&#123;user.age&#125;&#125; &lt;/div&gt;
+&lt;div v-for=&quot;(user,index) in userList&quot;&gt;
+    &#123;&#123;index&#125;&#125; -- &#123;&#123;user.name&#125;&#125; -- &#123;&#123;user.age&#125;&#125;
+&lt;/div&gt;
+</code></pre>
+<h3 id="实例的生命周期"><a href="#实例的生命周期" class="headerlink" title="实例的生命周期"></a>实例的生命周期</h3><p><img src="1.png" alt="实例的生命周期"></p>
+<h2 id="axios"><a href="#axios" class="headerlink" title="axios"></a>axios</h2><p>axios是独立于vue的一个项目，可以用于浏览器和node.js中发送ajax请求</p>
+<p>创建axios.html<br>引入js</p>
+<pre><code class="html">&lt;script src=&quot;vue.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;axios.min.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+<p>编写js</p>
+<pre><code class="html">&lt;div id=&quot;app&quot;&gt;
+    &lt;table&gt;
+        &lt;tr v-for=&quot;user in userList&quot;&gt;
+            &lt;td&gt;&#123;&#123;user.name&#125;&#125;&lt;/td&gt;
+            &lt;td&gt;&#123;&#123;user.age&#125;&#125;&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/table&gt;
+&lt;/div&gt;
+&lt;script src=&quot;vue.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;axios.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+    new Vue(&#123;
+        el: &#39;#app&#39;,
+        data: &#123;
+            userList:[]
+        &#125;,
+        created() &#123; //在页面渲染之前执行
+            //调用方法，得到返回json数据
+            this.getList()
+        &#125;,
+        methods:&#123;
+            getList() &#123;
+                //使用axios方式ajax请求
+                axios.get(&quot;user.json&quot;)
+                    .then(response =&gt; &#123;//请求成功
+                        //console.log(response)
+                        this.userList =  response.data.data.items
+                        console.log(this.userList)
+                    &#125;) 
+                    .catch(error =&gt; &#123;
+                        console.log(error)
+                    &#125;) //请求失败
+            &#125;
+        &#125;
+    &#125;)
+&lt;/script&gt;
+</code></pre>
+<h2 id="Element-ui"><a href="#Element-ui" class="headerlink" title="Element-ui"></a>Element-ui</h2><p>Element-ui 是饿了么前端出品的基于 Vue.js的 后台组件库，方便程序员进行页面快速布局和构建</p>
+<h2 id="Node-js"><a href="#Node-js" class="headerlink" title="Node.js"></a>Node.js</h2><p>浏览器的内核包括两部分核心：</p>
+<ul>
+<li>DOM渲染引擎</li>
+<li>JavaScript解析引擎</li>
+</ul>
+<p>比如：Chrome浏览器内置V8引擎，V8引擎执行Javascript的速度非常快，性能非常好。</p>
+<p>脱离浏览器环境也可以运行JavaScript，只要有JavaScript引擎就可以。<br>Node.js是一个基于Chrome V8引擎的JavaScript运行环境：即Node.js内置了Chrome的V8 引擎，可以在Node.js环境中直接运行JavaScript程序。</p>
+<p>在Node.js中写JavaScript和在Chrome浏览器中写JavaScript基本没有什么不一样。哪里不一样呢？</p>
+<pre><code>Node.js没有浏览器API，即document，window的等。
+加了许多Node.js 专属API，例如文件系统，进程，http功能。
+</code></pre>
+<p>Node.js会被用来作一个BFF层，即 Backend For Frontend（服务于前端的后端），通俗的说是一个专门用于为前端业务提供数据的后端程序.</p>
+<p>一个前端页面向 Service A、Service B 以及 Service C发送请求，不同的微服务返回的值用于渲染页面中不同的组件。此时，每次访问该页面都需要发送 3 个请求。我们需要一个服务来聚合Service A、Service B 以及 Service C响应的数据，这个服务层叫做BFF。</p>
+<p>BFF层的作用是让前端有能力自由组装后台数据，减少大量的业务沟通成本，加快业务的迭代速度。</p>
+<h2 id="NPM-包管理器"><a href="#NPM-包管理器" class="headerlink" title="NPM 包管理器"></a>NPM 包管理器</h2><p>NPM全称Node Package Manager，是Node.js包管理工具，是全球最大的模块生态系统，里面所有的模块都是开源免费的；也是Node.js的包管理工具，相当于前端的Maven 。</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%A2%84%E7%BA%A6%E7%B3%BB%E7%BB%9F/" rel="tag">预约系统</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-项目需求分析——医院设置"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/03/16/%E9%A1%B9%E7%9B%AE%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%E2%80%94%E2%80%94%E5%8C%BB%E9%99%A2%E8%AE%BE%E7%BD%AE/"
+    >项目需求分析——医院设置</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/03/16/%E9%A1%B9%E7%9B%AE%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%E2%80%94%E2%80%94%E5%8C%BB%E9%99%A2%E8%AE%BE%E7%BD%AE/" class="article-date">
+  <time datetime="2022-03-16T12:29:08.000Z" itemprop="datePublished">2022-03-16</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="医院设置接口"><a href="#医院设置接口" class="headerlink" title="医院设置接口"></a>医院设置接口</h1><p>主要是用来保存、添加医院的一些基本信息，每个医院一条信息，保存了医院编号（平台分配，全局唯一）和接口调用相关的签名key等信息，是整个流程的第一步，只有开通了医院设置信息，才可以上传医院相关信息。</p>
+<p>我们所开发的功能就是基于单表的一个CRUD、锁定/解锁和发送签名信息这些基本功能。</p>
+<p>首先在mapper/xml文件夹下，创建HospitalSetMapper.xml</p>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!DOCTYPE mapper PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
+      &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
+&lt;mapper namespace=&quot;com.tangbao.xtglxt.hosp.mapper.HospitalSetMapper&quot;&gt;
+
+&lt;/mapper&gt;
+</code></pre>
+<h2 id="CRUD方法"><a href="#CRUD方法" class="headerlink" title="CRUD方法"></a>CRUD方法</h2><p>添加HospitalSetController类</p>
+<pre><code class="java">@RestController
+@RequestMapping(&quot;/admin/hosp/hospitalSet&quot;)
+public class HospitalSetController &#123;
+
+    //注入service
+    @Autowired
+    private HospitalSetService hospitalSetService;
+
+    //1 查询医院设置表所有信息
+    @ApiOperation(value = &quot;获取所有医院设置&quot;)
+    @GetMapping(&quot;findAll&quot;)
+    public Result findAllHospitalSet() &#123;
+        //调用service的方法
+        List&lt;HospitalSet&gt; list = hospitalSetService.list();
+        return Result.ok(list);
+    &#125;
+
+    //2 逻辑删除医院设置
+    @ApiOperation(value = &quot;逻辑删除医院设置&quot;)
+    @DeleteMapping(&quot;&#123;id&#125;&quot;)
+    public Result removeHospSet(@PathVariable Long id) &#123;
+        boolean flag = hospitalSetService.removeById(id);
+        if(flag) &#123;
+            return Result.ok();
+        &#125; else &#123;
+            return Result.fail();
+        &#125;
+    &#125;
+
+    //3 条件查询带分页
+    @PostMapping(&quot;findPageHospSet/&#123;current&#125;/&#123;limit&#125;&quot;)
+    public Result findPageHospSet(@PathVariable long current,
+                                  @PathVariable long limit,
+                                  @RequestBody
+(required = false) HospitalSetQueryVo hospitalSetQueryVo) &#123;
+        //创建page对象，传递当前页，每页记录数
+        Page&lt;HospitalSet&gt; page = new Page&lt;&gt;(current,limit);
+        //构建条件
+        QueryWrapper&lt;HospitalSet&gt; wrapper = new QueryWrapper&lt;&gt;();
+        String hosname = hospitalSetQueryVo.getHosname();//医院名称
+        String hoscode = hospitalSetQueryVo.getHoscode();//医院编号
+        if(!StringUtils.isEmpty(hosname)) &#123;
+            wrapper.like(&quot;hosname&quot;,hospitalSetQueryVo.getHosname());
+        &#125;
+        if(!StringUtils.isEmpty(hoscode)) &#123;
+            wrapper.eq(&quot;hoscode&quot;,hospitalSetQueryVo.getHoscode());
+        &#125;
+        //调用方法实现分页查询
+        Page&lt;HospitalSet&gt; pageHospitalSet = hospitalSetService.page(page, wrapper);
+        //返回结果
+        return Result.ok(pageHospitalSet);
+    &#125;
+
+    //4 添加医院设置
+    @PostMapping(&quot;saveHospitalSet&quot;)
+    public Result saveHospitalSet(@RequestBody HospitalSet hospitalSet) &#123;
+        //设置状态 1 使用 0 不能使用
+        hospitalSet.setStatus(1);
+        //签名秘钥
+        Random random = new Random();
+        hospitalSet.setSignKey(MD5.encrypt(System.currentTimeMillis()+&quot;&quot;+random.nextInt(1000)));
+        //调用service
+        boolean save = hospitalSetService.save(hospitalSet);
+        if(save) &#123;
+            return Result.ok();
+        &#125; else &#123;
+            return Result.fail();
+        &#125;
+    &#125;
+
+    //5 根据id获取医院设置
+    @GetMapping(&quot;getHospSet/&#123;id&#125;&quot;)
+    public Result getHospSet(@PathVariable Long id) &#123;
+        HospitalSet hospitalSet = hospitalSetService.getById(id);
+        return Result.ok(hospitalSet);
+    &#125;
+
+    //6 修改医院设置
+    @PostMapping(&quot;updateHospitalSet&quot;)
+    public Result updateHospitalSet(@RequestBody HospitalSet hospitalSet) &#123;
+        boolean flag = hospitalSetService.updateById(hospitalSet);
+        if(flag) &#123;
+            return Result.ok();
+        &#125; else &#123;
+            return Result.fail();
+        &#125;
+    &#125;
+
+    //7 批量删除医院设置
+    @DeleteMapping(&quot;batchRemove&quot;)
+    public Result batchRemoveHospitalSet(@RequestBody List&lt;Long&gt; idList) &#123;
+        hospitalSetService.removeByIds(idList);
+        return Result.ok();
+    &#125;
+
+
+&#125;
+</code></pre>
+<p>添加HospitalSetService接口，并写出它的实现类HospitalSetServiceImpl<br>其中，Impl继承ServiceImpl&lt;HospitalSetMapper, HospitalSet&gt;实现HospitalSetService</p>
+<h2 id="集成Swagger2"><a href="#集成Swagger2" class="headerlink" title="集成Swagger2"></a>集成Swagger2</h2><p>本项目后端调试中使用Swagger2进行接口调试，编写和维护接口文档是每个程序员的职责，根据Swagger2可以快速帮助我们编写最新的API接口文档，可以和团队其他人更快速有效的沟通。</p>
+<p>常用注解如下</p>
+<pre><code>@Api：修饰整个类，描述Controller的作用
+@ApiOperation：描述一个类的一个方法，或者说一个接口
+@ApiParam：单个参数描述
+@ApiModel：用对象来接收参数
+@ApiModelProperty：用对象接收参数时，描述对象的一个字段
+@ApiImplicitParam：一个请求参数
+@ApiImplicitParams：多个请求参数
+</code></pre>
+<p>使用swagger2需要引入依赖</p>
+<pre><code class="pom">&lt;!--swagger--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;io.springfox&lt;/groupId&gt;
+    &lt;artifactId&gt;springfox-swagger2&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;io.springfox&lt;/groupId&gt;
+    &lt;artifactId&gt;springfox-swagger-ui&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>在配置类文件夹service-util下加上swagger的配置类</p>
+<pre><code class="java">/**
+ * Swagger2配置信息
+ */
+@Configuration
+@EnableSwagger2
+public class Swagger2Config &#123;
+    @Bean
+    public Docket webApiConfig()&#123;
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName(&quot;webApi&quot;)
+                .apiInfo(webApiInfo())
+                .select()
+                //只显示api路径下的页面
+                .paths(Predicates.and(PathSelectors.regex(&quot;/api/.*&quot;)))
+                .build();
+    &#125;
+
+
+    private ApiInfo webApiInfo()&#123;
+        return new ApiInfoBuilder()
+                .title(&quot;网站-API文档&quot;)
+                .description(&quot;本文档描述了网站接口定义&quot;)
+                .version(&quot;1.0&quot;)
+                .contact(new Contact(&quot;tangbao&quot;, &quot;http://tangbao.com&quot;, &quot;493211102@qq.com&quot;))
+                .build();
+    &#125;
+&#125;
+</code></pre>
+<p>使用Swagger：<br>在访问路径后面加上/swagger-ui.html<br>比如：<br><a target="_blank" rel="noopener" href="http://localhost:8080/swagger-ui.html">http://localhost:8080/swagger-ui.html</a></p>
+<h2 id="锁定与解锁"><a href="#锁定与解锁" class="headerlink" title="锁定与解锁"></a>锁定与解锁</h2><p>方法实现(修改操作：先查再改)</p>
+<pre><code class="java">//8 医院设置锁定和解锁
+@PutMapping(&quot;lockHospitalSet/&#123;id&#125;/&#123;status&#125;&quot;)
+public Result lockHospitalSet(@PathVariable Long id,
+                              @PathVariable Integer status) &#123;
+    //根据id查询医院设置信息
+    HospitalSet hospitalSet = hospitalSetService.getById(id);
+    //设置状态
+    hospitalSet.setStatus(status);
+    //调用方法
+    hospitalSetService.updateById(hospitalSet);
+    return Result.ok();
+&#125;
+</code></pre>
+<h2 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h2><p>本项目使用SpringBoot作为基本框架，spring boot内部使用Logback作为日志实现的框架，Logback和log4j非常相似，在resources目录下配置logback-spring.xml文件</p>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;configuration  scan=&quot;true&quot; scanPeriod=&quot;10 seconds&quot;&gt;
+    &lt;!-- 日志级别从低到高分为TRACE &lt; DEBUG &lt; INFO &lt; WARN &lt; ERROR &lt; FATAL，如果设置为WARN，则低于WARN的信息都不会输出 --&gt;
+    &lt;!-- scan:当此属性设置为true时，配置文件如果发生改变，将会被重新加载，默认值为true --&gt;
+    &lt;!-- scanPeriod:设置监测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒。当scan为true时，此属性生效。默认的时间间隔为1分钟。 --&gt;
+    &lt;!-- debug:当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。 --&gt;
+    &lt;contextName&gt;logback&lt;/contextName&gt;
+    &lt;!-- name的值是变量的名称，value的值时变量定义的值。通过定义的值会被插入到logger上下文中。定义变量后，可以使“$&#123;&#125;”来使用变量。 --&gt;
+    &lt;property name=&quot;log.path&quot; value=&quot;D:/yygh_log/edu&quot; /&gt;
+    &lt;!-- 彩色日志 --&gt;
+    &lt;!-- 配置格式变量：CONSOLE_LOG_PATTERN 彩色日志格式 --&gt;
+    &lt;!-- magenta:洋红 --&gt;
+    &lt;!-- boldMagenta:粗红--&gt;
+    &lt;!-- cyan:青色 --&gt;
+    &lt;!-- white:白色 --&gt;
+    &lt;!-- magenta:洋红 --&gt;
+    &lt;property name=&quot;CONSOLE_LOG_PATTERN&quot;
+              value=&quot;%yellow(%date&#123;yyyy-MM-dd HH:mm:ss&#125;) |%highlight(%-5level) |%blue(%thread) |%blue(%file:%line) |%green(%logger) |%cyan(%msg%n)&quot;/&gt;
+    &lt;!--输出到控制台--&gt;
+    &lt;appender name=&quot;CONSOLE&quot; class=&quot;ch.qos.logback.core.ConsoleAppender&quot;&gt;
+        &lt;!--此日志appender是为开发使用，只配置最底级别，控制台输出的日志级别是大于或等于此级别的日志信息--&gt;
+        &lt;!-- 例如：如果此处配置了INFO级别，则后面其他位置即使配置了DEBUG级别的日志，也不会被输出 --&gt;
+        &lt;filter class=&quot;ch.qos.logback.classic.filter.ThresholdFilter&quot;&gt;
+            &lt;level&gt;INFO&lt;/level&gt;
+        &lt;/filter&gt;
+        &lt;encoder&gt;
+            &lt;Pattern&gt;$&#123;CONSOLE_LOG_PATTERN&#125;&lt;/Pattern&gt;
+            &lt;!-- 设置字符集 --&gt;
+            &lt;charset&gt;UTF-8&lt;/charset&gt;
+        &lt;/encoder&gt;
+    &lt;/appender&gt;
+    &lt;!--输出到文件--&gt;
+    &lt;!-- 时间滚动输出 level为 INFO 日志 --&gt;
+    &lt;appender name=&quot;INFO_FILE&quot; class=&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;&gt;
+        &lt;!-- 正在记录的日志文件的路径及文件名 --&gt;
+        &lt;file&gt;$&#123;log.path&#125;/log_info.log&lt;/file&gt;
+        &lt;!--日志文件输出格式--&gt;
+        &lt;encoder&gt;
+            &lt;pattern&gt;%d&#123;yyyy-MM-dd HH:mm:ss.SSS&#125; [%thread] %-5level %logger&#123;50&#125; - %msg%n&lt;/pattern&gt;
+            &lt;charset&gt;UTF-8&lt;/charset&gt;
+        &lt;/encoder&gt;
+        &lt;!-- 日志记录器的滚动策略，按日期，按大小记录 --&gt;
+        &lt;rollingPolicy class=&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;&gt;
+            &lt;!-- 每天日志归档路径以及格式 --&gt;
+            &lt;fileNamePattern&gt;$&#123;log.path&#125;/info/log-info-%d&#123;yyyy-MM-dd&#125;.%i.log&lt;/fileNamePattern&gt;
+            &lt;timeBasedFileNamingAndTriggeringPolicy class=&quot;ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP&quot;&gt;
+                &lt;maxFileSize&gt;100MB&lt;/maxFileSize&gt;
+            &lt;/timeBasedFileNamingAndTriggeringPolicy&gt;
+            &lt;!--日志文件保留天数--&gt;
+            &lt;maxHistory&gt;15&lt;/maxHistory&gt;
+        &lt;/rollingPolicy&gt;
+        &lt;!-- 此日志文件只记录info级别的 --&gt;
+        &lt;filter class=&quot;ch.qos.logback.classic.filter.LevelFilter&quot;&gt;
+            &lt;level&gt;INFO&lt;/level&gt;
+            &lt;onMatch&gt;ACCEPT&lt;/onMatch&gt;
+            &lt;onMismatch&gt;DENY&lt;/onMismatch&gt;
+        &lt;/filter&gt;
+    &lt;/appender&gt;
+
+    &lt;!-- 时间滚动输出 level为 WARN 日志 --&gt;
+    &lt;appender name=&quot;WARN_FILE&quot; class=&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;&gt;
+        &lt;!-- 正在记录的日志文件的路径及文件名 --&gt;
+        &lt;file&gt;$&#123;log.path&#125;/log_warn.log&lt;/file&gt;
+        &lt;!--日志文件输出格式--&gt;
+        &lt;encoder&gt;
+            &lt;pattern&gt;%d&#123;yyyy-MM-dd HH:mm:ss.SSS&#125; [%thread] %-5level %logger&#123;50&#125; - %msg%n&lt;/pattern&gt;
+            &lt;charset&gt;UTF-8&lt;/charset&gt; &lt;!-- 此处设置字符集 --&gt;
+        &lt;/encoder&gt;
+        &lt;!-- 日志记录器的滚动策略，按日期，按大小记录 --&gt;
+        &lt;rollingPolicy class=&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;&gt;
+            &lt;fileNamePattern&gt;$&#123;log.path&#125;/warn/log-warn-%d&#123;yyyy-MM-dd&#125;.%i.log&lt;/fileNamePattern&gt;
+            &lt;timeBasedFileNamingAndTriggeringPolicy class=&quot;ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP&quot;&gt;
+                &lt;maxFileSize&gt;100MB&lt;/maxFileSize&gt;
+            &lt;/timeBasedFileNamingAndTriggeringPolicy&gt;
+            &lt;!--日志文件保留天数--&gt;
+            &lt;maxHistory&gt;15&lt;/maxHistory&gt;
+        &lt;/rollingPolicy&gt;
+        &lt;!-- 此日志文件只记录warn级别的 --&gt;
+        &lt;filter class=&quot;ch.qos.logback.classic.filter.LevelFilter&quot;&gt;
+            &lt;level&gt;warn&lt;/level&gt;
+            &lt;onMatch&gt;ACCEPT&lt;/onMatch&gt;
+            &lt;onMismatch&gt;DENY&lt;/onMismatch&gt;
+        &lt;/filter&gt;
+    &lt;/appender&gt;
+
+
+    &lt;!-- 时间滚动输出 level为 ERROR 日志 --&gt;
+    &lt;appender name=&quot;ERROR_FILE&quot; class=&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;&gt;
+        &lt;!-- 正在记录的日志文件的路径及文件名 --&gt;
+        &lt;file&gt;$&#123;log.path&#125;/log_error.log&lt;/file&gt;
+        &lt;!--日志文件输出格式--&gt;
+        &lt;encoder&gt;
+            &lt;pattern&gt;%d&#123;yyyy-MM-dd HH:mm:ss.SSS&#125; [%thread] %-5level %logger&#123;50&#125; - %msg%n&lt;/pattern&gt;
+            &lt;charset&gt;UTF-8&lt;/charset&gt; &lt;!-- 此处设置字符集 --&gt;
+        &lt;/encoder&gt;
+        &lt;!-- 日志记录器的滚动策略，按日期，按大小记录 --&gt;
+        &lt;rollingPolicy class=&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;&gt;
+            &lt;fileNamePattern&gt;$&#123;log.path&#125;/error/log-error-%d&#123;yyyy-MM-dd&#125;.%i.log&lt;/fileNamePattern&gt;
+            &lt;timeBasedFileNamingAndTriggeringPolicy class=&quot;ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP&quot;&gt;
+                &lt;maxFileSize&gt;100MB&lt;/maxFileSize&gt;
+            &lt;/timeBasedFileNamingAndTriggeringPolicy&gt;
+            &lt;!--日志文件保留天数--&gt;
+            &lt;maxHistory&gt;15&lt;/maxHistory&gt;
+        &lt;/rollingPolicy&gt;
+        &lt;!-- 此日志文件只记录ERROR级别的 --&gt;
+        &lt;filter class=&quot;ch.qos.logback.classic.filter.LevelFilter&quot;&gt;
+            &lt;level&gt;ERROR&lt;/level&gt;
+            &lt;onMatch&gt;ACCEPT&lt;/onMatch&gt;
+            &lt;onMismatch&gt;DENY&lt;/onMismatch&gt;
+        &lt;/filter&gt;
+    &lt;/appender&gt;
+
+    &lt;!--
+        &lt;logger&gt;用来设置某一个包或者具体的某一个类的日志打印级别、以及指定&lt;appender&gt;。
+        &lt;logger&gt;仅有一个name属性，
+        一个可选的level和一个可选的addtivity属性。
+        name:用来指定受此logger约束的某一个包或者具体的某一个类。
+        level:用来设置打印级别，大小写无关：TRACE, DEBUG, INFO, WARN, ERROR, ALL 和 OFF，
+              如果未设置此属性，那么当前logger将会继承上级的级别。
+    --&gt;
+    &lt;!--
+        使用mybatis的时候，sql语句是debug下才会打印，而这里我们只配置了info，所以想要查看sql语句的话，有以下两种操作：
+        第一种把&lt;root level=&quot;INFO&quot;&gt;改成&lt;root level=&quot;DEBUG&quot;&gt;这样就会打印sql，不过这样日志那边会出现很多其他消息
+        第二种就是单独给mapper下目录配置DEBUG模式，代码如下，这样配置sql语句会打印，其他还是正常DEBUG级别：
+     --&gt;
+    &lt;!--开发环境:打印控制台--&gt;
+    &lt;springProfile name=&quot;dev&quot;&gt;
+        &lt;!--可以输出项目中的debug日志，包括mybatis的sql日志--&gt;
+        &lt;logger name=&quot;com.guli&quot; level=&quot;INFO&quot; /&gt;
+
+        &lt;!--
+            root节点是必选节点，用来指定最基础的日志输出级别，只有一个level属性
+            level:用来设置打印级别，大小写无关：TRACE, DEBUG, INFO, WARN, ERROR, ALL 和 OFF，默认是DEBUG
+            可以包含零个或多个appender元素。
+        --&gt;
+        &lt;root level=&quot;INFO&quot;&gt;
+            &lt;appender-ref ref=&quot;CONSOLE&quot; /&gt;
+            &lt;appender-ref ref=&quot;INFO_FILE&quot; /&gt;
+            &lt;appender-ref ref=&quot;WARN_FILE&quot; /&gt;
+            &lt;appender-ref ref=&quot;ERROR_FILE&quot; /&gt;
+        &lt;/root&gt;
+    &lt;/springProfile&gt;
+
+
+    &lt;!--生产环境:输出到文件--&gt;
+    &lt;springProfile name=&quot;pro&quot;&gt;
+
+        &lt;root level=&quot;INFO&quot;&gt;
+            &lt;appender-ref ref=&quot;CONSOLE&quot; /&gt;
+            &lt;appender-ref ref=&quot;DEBUG_FILE&quot; /&gt;
+            &lt;appender-ref ref=&quot;INFO_FILE&quot; /&gt;
+            &lt;appender-ref ref=&quot;ERROR_FILE&quot; /&gt;
+            &lt;appender-ref ref=&quot;WARN_FILE&quot; /&gt;
+        &lt;/root&gt;
+    &lt;/springProfile&gt;
+&lt;/configuration&gt;
+</code></pre>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%A2%84%E7%BA%A6%E7%B3%BB%E7%BB%9F/" rel="tag">预约系统</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-MyBatisPlus使用"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/02/01/MyBatisPlus%E4%BD%BF%E7%94%A8/"
+    >MyBatisPlus使用</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/02/01/MyBatisPlus%E4%BD%BF%E7%94%A8/" class="article-date">
+  <time datetime="2022-02-01T11:26:47.000Z" itemprop="datePublished">2022-02-01</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Mybatis/">Mybatis</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="mp是什么"><a href="#mp是什么" class="headerlink" title="mp是什么"></a>mp是什么</h1><p>是MyBatis的增强工具。</p>
+<h1 id="mp入门"><a href="#mp入门" class="headerlink" title="mp入门"></a>mp入门</h1><p>1、添加SpringBoot项目的依赖</p>
+<pre><code class="xml">&lt;!--Mybatis-plus--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;com.baomidou&lt;/groupId&gt;
+    &lt;artifactId&gt;mybatis-plus-boot-starter&lt;/artifactId&gt;
+    &lt;version&gt;3.0.5&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;!--Mysql--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;mysql&lt;/groupId&gt;
+    &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+&lt;/dependency&gt;
+
+&lt;!--Lombok--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
+    &lt;artifactId&gt;lombok&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>2、配置application.properties</p>
+<pre><code class="properties">spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.url=jdbc:mysql://localhost:3306/mybaties?serverTimezone=UTC&amp;useUnicode=true&amp;characterEncoding=utf-8
+spring.datasource.username=root
+spring.datasource.password=123456
+
+# Mybatis Plus 日志 # 控制台输出
+mybatis-plus.configuration.log-impl=org.apache.ibatis.logging.stdout.StdOutImpl
+</code></pre>
+<p>3、编写实体类以及核心接口代码</p>
+<p>主要是继承这个BaseMapper类，这里面有各种增删改查操作</p>
+<pre><code class="java">@Repository
+public interface UserMapper extends BaseMapper&lt;User&gt; &#123;
+&#125;
+</code></pre>
+<p>4、测试</p>
+<pre><code class="java">@SpringBootTest
+class MpdemoApplicationTests &#123;
+    
+    @Autowired
+    private UserMapper userMapper;
+
+    @Test
+    public void findAll()&#123;
+        List&lt;User&gt; users = userMapper.selectList(null);
+        System.out.println(users);
+
+    &#125;
+
+&#125;
+</code></pre>
+<h1 id="实现增删改查"><a href="#实现增删改查" class="headerlink" title="实现增删改查"></a>实现增删改查</h1><h2 id="查"><a href="#查" class="headerlink" title="查"></a>查</h2><pre><code class="java">//查询操作
+@Test
+public void findAll()&#123;
+    List&lt;User&gt; users = userMapper.selectList(null);
+    System.out.println(users);
+
+&#125;
+</code></pre>
+<p>分页查询：<br>1、配置插件</p>
+<pre><code class="java">/*
+     * 分页查询插件
+     */
+@Bean
+public PaginationInterceptor paginationInterceptor()&#123;
+    return new PaginationInterceptor();
+&#125;
+</code></pre>
+<p>2、分页查询代码</p>
+<p>1）插件Page对象，传入两个参数：当前页和每页记录数</p>
+<p>2）调用mp函数</p>
+<pre><code class="java">//分页查询
+@Test
+public void selectByPage()&#123;
+    Page&lt;User&gt; page = new Page&lt;&gt;(1,3);
+    IPage&lt;User&gt; userPage = userMapper.selectPage(page, null);
+
+    //返回对象得到分页的所有数据
+    long pages = userPage.getPages(); //得到分页总页数
+    long current = userPage.getCurrent(); //当前页
+    List&lt;User&gt; records = userPage.getRecords(); //查询数据集合
+    long total = userPage.getTotal(); //总记录数
+&#125;
+</code></pre>
+<h2 id="增"><a href="#增" class="headerlink" title="增"></a>增</h2><pre><code class="java">//添加操作
+@Test
+public void addUser()&#123;
+    User user = new User();
+    user.setName(&quot;Luck2&quot;);
+    user.setPwd(&quot;2222&quot;);
+    int insert = userMapper.insert(user);
+    System.out.println(insert);
+&#125;
+</code></pre>
+<p>这里面并没有设置Id，因为Mp有自己的主键自增策略，这里简单做一下记录：</p>
+<p><img src="image-20220223190931938.png"></p>
+<p>单一应用时，我们一般设置主键自增，即使用@TableId(type=IdType.AUTO)， 数据库中的主键为：</p>
+<p><img src="image-20220223190955125.png"></p>
+<p>分布式应用时，我们需要生成分布式ID，可以选择使用@TableId(type=IdType.ID_WORKER)，数据库中的主键为：</p>
+<p><img src="image-20220223191009190.png"></p>
+<p>==注意：==</p>
+<ol>
+<li>这里如果采用主键自增，需要在建表时检查是否设置了主键自增；如果采用分布式ID，则在实体类中采用Long类型来声明id，在建表时采用bigint类型建立id。</li>
+<li>如果想要切换主键生成策略，最好在切换之前对数据表执行<code>TRUNCATE TABLE &#39;table name&#39;</code>操作</li>
+</ol>
+<h2 id="改"><a href="#改" class="headerlink" title="改"></a>改</h2><pre><code class="java">//修改操作
+@Test
+public void updateUser()&#123;
+    User user = new User();
+    user.setId(1496441284989927425L);
+    user.setName(&quot;newLuck&quot;);
+    int update = userMapper.updateById(user);
+    System.out.println(update);
+&#125;
+</code></pre>
+<h2 id="删"><a href="#删" class="headerlink" title="删"></a>删</h2><pre><code class="java">//删除操作
+@Test
+public void delectById()&#123;
+    int i = userMapper.deleteById(1496453291331940354L);
+&#125;
+</code></pre>
+<h1 id="自动填充"><a href="#自动填充" class="headerlink" title="自动填充"></a>自动填充</h1><p>1、添加两个datetime类型字段create_time和update_time</p>
+<p>2、实体类更新</p>
+<pre><code class="java">private Date createTime;
+private Date updateTime;
+</code></pre>
+<p>3、添加注解</p>
+<pre><code class="java">@TableField(fill = FieldFill.INSERT)//添加
+private Date createTime;
+
+@TableField(fill = FieldFill.INSERT_UPDATE)//修改
+private Date updateTime;
+</code></pre>
+<p>4、创建类实现接口MetaObjectHandler,重写其中的两个方法，实现自动填充</p>
+<pre><code class="java">@Component
+public class MyMetaObjectHandler implements MetaObjectHandler &#123;
+
+    //mp执行添加操作
+    @Override
+    public void insertFill(MetaObject metaObject) &#123;
+        this.setFieldValByName(&quot;createTime&quot;,new Date(),metaObject);
+        this.setFieldValByName(&quot;updateTime&quot;,new Date(),metaObject);
+    &#125;
+
+    //mp执行修改操作
+    @Override
+    public void updateFill(MetaObject metaObject) &#123;
+        this.setFieldValByName(&quot;updateTime&quot;,new Date(),metaObject);
+    &#125;
+&#125;
+</code></pre>
+<h1 id="乐观锁CAS"><a href="#乐观锁CAS" class="headerlink" title="乐观锁CAS"></a>乐观锁CAS</h1><p>适用场景：当需要更新一条记录的时候，希望这条记录不会被别人更新，也就是说实现线程安全的数据更新。比如==抢票==环境。</p>
+<p>CAS解决ABA问题，通过增加版本号</p>
+<p>mp实现</p>
+<p>1、表里添加字段version，实体类添加对应属性</p>
+<p>2、在实体类版本号属性上添加注解@Version以及自动填充注解</p>
+<pre><code class="java">@Version
+@TableField(fill = FieldFill.INSERT)//添加
+private Integer version;
+</code></pre>
+<p>3、创建配置类，配置乐观锁插件</p>
+<pre><code class="java">@Configuration
+@MapperScan(&quot;com.tunan.mpdemo.mapper&quot;)
+public class MpConfig &#123;
+
+    /*
+     * 乐观锁插件
+     */
+    @Bean
+    public OptimisticLockerInterceptor optimisticLockerInterceptor()&#123;
+        return new OptimisticLockerInterceptor();
+    &#125;
+
+&#125;
+</code></pre>
+<p>注意要去MyMetaObjectHandler类中增加一条映射，。</p>
+<p>4、测试乐观锁</p>
+<pre><code class="java">//测试乐观锁
+@Test
+public void optimisticLocker()&#123;
+    //查
+    User user = userMapper.selectById(1496453291331940354L);
+    //改
+    user.setName(&quot;乐观锁&quot;);
+    int i = userMapper.updateById(user);
+&#125;
+</code></pre>
+<p>这里mp配置好之后，给做了version的自增操作，因此不需要修改的时候执行自动填充</p>
+<h1 id="逻辑删除"><a href="#逻辑删除" class="headerlink" title="逻辑删除"></a>逻辑删除</h1><p>在表中添加字段，作为逻辑删除标志，，每次删除时候修改标志位：0未删 1已删</p>
+<p>1、表里添加字段deleted，实体类添加属性</p>
+<pre><code class="java">@TableLogic
+@TableField(fill = FieldFill.INSERT)//添加
+private Integer deleted;
+</code></pre>
+<p>2、在mp3.1版本以下的，需要增加如下配置</p>
+<pre><code class="java">/*
+     * 逻辑删除插件
+     */
+@Bean
+public ISqlInjector sqlInjector() &#123;
+    return new LogicSqlInjector();
+&#125;
+</code></pre>
+<p>然后执行删除操作就是逻辑删除了，执行的是Update</p>
+<h1 id="分页查询"><a href="#分页查询" class="headerlink" title="分页查询"></a>分页查询</h1><p>复杂查询可以用wrapper，这里暂时不作详解</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Mybatis/" rel="tag">Mybatis</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
   id="post-JVM初探"
   class="article article-type-post"
   itemscope
@@ -529,67 +1516,14 @@
 </article>
 
     
-    <article
-  id="post-hello-world"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/12/07/hello-world/"
-    >Hello World</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/12/07/hello-world/" class="article-date">
-  <time datetime="2021-12-07T07:55:50.705Z" itemprop="datePublished">2021-12-07</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a> 
-      <a class="article-more-link" href="/2021/12/07/hello-world/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
   </article>
   
 
+  
+  <nav class="page-nav">
+    
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">下一页</a>
+  </nav>
   
 </section>
 </div>

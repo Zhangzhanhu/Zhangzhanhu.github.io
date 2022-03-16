@@ -144,8 +144,29 @@
 <li>执行具体的Sql语句<code>statement.executeQuery(sql)</code></li>
 <li>依据创建顺序，依次关闭释放连接</li>
 </ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ClassNotFoundException, SQLException </span>&#123;</span><br><span class="line">    <span class="comment">// 1.加载驱动(固定写法)</span></span><br><span class="line">    Class.forName(<span class="string">&quot;com.mysql.jdbc.Driver&quot;</span>);<span class="comment">// 注意加载新的驱动，旧的弃用了</span></span><br><span class="line">    <span class="comment">// 2.用户信息和url</span></span><br><span class="line">    String url = <span class="string">&quot;jdbc:mysql://localhost:3306/school?serverTimezone=UTC&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;useSSl=true&quot;</span>;<span class="comment">// 注意添加时区参数</span></span><br><span class="line">    String userName = <span class="string">&quot;root&quot;</span>;</span><br><span class="line">    String passWord = <span class="string">&quot;123456&quot;</span>;</span><br><span class="line">    <span class="comment">// 3.连接成功，数据库对象</span></span><br><span class="line">    Connection connection = DriverManager.getConnection(url, userName, passWord);</span><br><span class="line">    <span class="comment">// 4.执行sql的对象</span></span><br><span class="line">    Statement statement = connection.createStatement();</span><br><span class="line">    <span class="comment">// 5.执行sql</span></span><br><span class="line">    String sql= <span class="string">&quot;SELECT * FROM student&quot;</span>;</span><br><span class="line">    ResultSet resultSet = statement.executeQuery(sql);</span><br><span class="line">    <span class="keyword">while</span> (resultSet.next())&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;name=&quot;</span>+resultSet.getObject(<span class="string">&quot;name&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 6.释放链接</span></span><br><span class="line">    resultSet.close();</span><br><span class="line">    statement.close();</span><br><span class="line">    connection.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">public static void main(String[] args) throws ClassNotFoundException, SQLException &#123;
+    // 1.加载驱动(固定写法)
+    Class.forName(&quot;com.mysql.jdbc.Driver&quot;);// 注意加载新的驱动，旧的弃用了
+    // 2.用户信息和url
+    String url = &quot;jdbc:mysql://localhost:3306/school?serverTimezone=UTC&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;useSSl=true&quot;;// 注意添加时区参数
+    String userName = &quot;root&quot;;
+    String passWord = &quot;123456&quot;;
+    // 3.连接成功，数据库对象
+    Connection connection = DriverManager.getConnection(url, userName, passWord);
+    // 4.执行sql的对象
+    Statement statement = connection.createStatement();
+    // 5.执行sql
+    String sql= &quot;SELECT * FROM student&quot;;
+    ResultSet resultSet = statement.executeQuery(sql);
+    while (resultSet.next())&#123;
+        System.out.println(&quot;name=&quot;+resultSet.getObject(&quot;name&quot;));
+    &#125;
+    // 6.释放链接
+    resultSet.close();
+    statement.close();
+    connection.close();
+&#125;
+</code></pre>
 <p>JDBC的一些问题：</p>
 <ul>
 <li>数据库链接创建、释放频繁造成系统资源浪费从而影响系统性能</li>
@@ -158,22 +179,145 @@
 <p>操作步骤为：</p>
 <ol>
 <li><p>导入Mybatis jar包</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--导入依赖--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--mysql驱动--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.1.47<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">   </span><br><span class="line">    <span class="comment">&lt;!--mybaties--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.5.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">   </span><br><span class="line">   </span><br><span class="line">    <span class="comment">&lt;!--junit--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.11<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<pre><code class="xml">    &lt;!--导入依赖--&gt;
+    &lt;dependencies&gt;
+        &lt;!--mysql驱动--&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;mysql&lt;/groupId&gt;
+            &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+            &lt;version&gt;5.1.47&lt;/version&gt;
+        &lt;/dependency&gt;
+
+        &lt;!--mybaties--&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.mybatis&lt;/groupId&gt;
+            &lt;artifactId&gt;mybatis&lt;/artifactId&gt;
+            &lt;version&gt;3.5.2&lt;/version&gt;
+        &lt;/dependency&gt;
+
+
+        &lt;!--junit--&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;junit&lt;/groupId&gt;
+            &lt;artifactId&gt;junit&lt;/artifactId&gt;
+            &lt;version&gt;4.11&lt;/version&gt;
+            &lt;scope&gt;test&lt;/scope&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+</code></pre>
+</li>
 <li><p>建立mybatis-config.xml核心配置文件</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">configuration</span></span></span><br><span class="line"><span class="meta">        <span class="meta-keyword">PUBLIC</span> <span class="meta-string">&quot;-//mybatis.org//DTD Config 3.0//EN&quot;</span></span></span><br><span class="line"><span class="meta">        <span class="meta-string">&quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--核心配置文件--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">environments</span> <span class="attr">default</span>=<span class="string">&quot;development&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">environment</span> <span class="attr">id</span>=<span class="string">&quot;development&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">transactionManager</span> <span class="attr">type</span>=<span class="string">&quot;JDBC&quot;</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">dataSource</span> <span class="attr">type</span>=<span class="string">&quot;POOLED&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;driver&quot;</span> <span class="attr">value</span>=<span class="string">&quot;com.mysql.jdbc.Driver&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;url&quot;</span> <span class="attr">value</span>=<span class="string">&quot;jdbc:mysql://localhost:3306/mybaties?useSSL=true<span class="symbol">&amp;amp;</span>useUnicode=true<span class="symbol">&amp;amp;</span>characterEncoding=UTF-8&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;username&quot;</span> <span class="attr">value</span>=<span class="string">&quot;root&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span> <span class="attr">value</span>=<span class="string">&quot;123456&quot;</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">dataSource</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">environment</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">environments</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!DOCTYPE configuration
+        PUBLIC &quot;-//mybatis.org//DTD Config 3.0//EN&quot;
+        &quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;&gt;
+
+
+&lt;!--核心配置文件--&gt;
+&lt;configuration&gt;
+    &lt;environments default=&quot;development&quot;&gt;
+        &lt;environment id=&quot;development&quot;&gt;
+            &lt;transactionManager type=&quot;JDBC&quot;/&gt;
+            &lt;dataSource type=&quot;POOLED&quot;&gt;
+                &lt;property name=&quot;driver&quot; value=&quot;com.mysql.jdbc.Driver&quot;/&gt;
+                &lt;property name=&quot;url&quot; value=&quot;jdbc:mysql://localhost:3306/mybaties?useSSL=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=UTF-8&quot;/&gt;
+                &lt;property name=&quot;username&quot; value=&quot;root&quot;/&gt;
+                &lt;property name=&quot;password&quot; value=&quot;123456&quot;/&gt;
+            &lt;/dataSource&gt;
+        &lt;/environment&gt;
+    &lt;/environments&gt;
+&lt;/configuration&gt;
+</code></pre>
+</li>
 <li><p>建立mybatis的工具类MybatisUtils.java</p>
 <p>通过mybatis环境等配置信息构造SqlSessionFactory即会话工厂，创建数据库连接等操作都交给sqlSessionFactory来操作</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MybatiesUtils</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> SqlSessionFactory sqlSessionFactory;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//第一步，获取SqlSessionFactory对象</span></span><br><span class="line">            String resource = <span class="string">&quot;mybaties-config.xml&quot;</span>;</span><br><span class="line">            InputStream inputStream = Resources.getResourceAsStream(resource);</span><br><span class="line">            sqlSessionFactory = <span class="keyword">new</span> SqlSessionFactoryBuilder().build(inputStream);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//获得SqlSession实例，SqlSession完全包含了面向数据库执行SQL命令所需的所有方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SqlSession <span class="title">getSqlSession</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> sqlSessionFactory.openSession();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li><p>创建POJO对应的Mapper接口及对应的Mapper.xml文件。我们在阶段一需要写Mapper的实现类，需要大量的JDBC操作代码，这里我们通过Mapper.xml文件实现，满足SqlSession的调用。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">StudentMapper</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 查询全部学生</span></span><br><span class="line">    <span class="function">List&lt;Student&gt; <span class="title">getStudentList</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 根据id查询学生</span></span><br><span class="line">    <span class="function">Student <span class="title">getStudentById</span><span class="params">(<span class="keyword">int</span> id)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 插入一个学生</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">addUser</span><span class="params">(Student student)</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">public class MybatiesUtils &#123;
 
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">mapper</span></span></span><br><span class="line"><span class="meta">        <span class="meta-keyword">PUBLIC</span> <span class="meta-string">&quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;</span></span></span><br><span class="line"><span class="meta">        <span class="meta-string">&quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--这里的namespace要与dao下的Mapper名称一一对应--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">&quot;com.tioxy.dao.StudentMapper&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--id对应的是Mapper接口中对应的方法--&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--resultType是SQL语句的返回值--&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--parameterType参数类型--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;getStudentList&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;com.tioxy.pojo.Student&quot;</span>&gt;</span></span><br><span class="line">        select * from school.student</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;getStudentById&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;com.tioxy.pojo.Student&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;int&quot;</span>&gt;</span></span><br><span class="line">        select * from school.student where id = #&#123;id&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">insert</span> <span class="attr">id</span>=<span class="string">&quot;addUser&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;com.tioxy.pojo.Student&quot;</span> &gt;</span></span><br><span class="line">        insert into school.student (id,name,password,sex,birthd,address,email) values (#&#123;id&#125;,#&#123;name&#125;,#&#123;password&#125;,#&#123;sex&#125;,#&#123;birthd&#125;,#&#123;address&#125;,#&#123;email&#125;);</span><br><span class="line">    <span class="tag">&lt;/<span class="name">insert</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+    private static SqlSessionFactory sqlSessionFactory;
+
+    static&#123;
+        try &#123;
+            //第一步，获取SqlSessionFactory对象
+            String resource = &quot;mybaties-config.xml&quot;;
+            InputStream inputStream = Resources.getResourceAsStream(resource);
+            sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+        &#125; catch (IOException e) &#123;
+            e.printStackTrace();
+        &#125;
+    &#125;
+
+    //获得SqlSession实例，SqlSession完全包含了面向数据库执行SQL命令所需的所有方法
+    public static SqlSession getSqlSession()&#123;
+        return sqlSessionFactory.openSession();
+    &#125;
+&#125;
+</code></pre>
+</li>
+<li><p>创建POJO对应的Mapper接口及对应的Mapper.xml文件。我们在阶段一需要写Mapper的实现类，需要大量的JDBC操作代码，这里我们通过Mapper.xml文件实现，满足SqlSession的调用。</p>
+<pre><code class="java">public interface StudentMapper &#123;
+    // 查询全部学生
+    List&lt;Student&gt; getStudentList();
+
+    // 根据id查询学生
+    Student getStudentById(int id);
+
+    // 插入一个学生
+    int addUser(Student student);
+
+&#125;
+</code></pre>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!DOCTYPE mapper
+        PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
+        &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
+&lt;!--这里的namespace要与dao下的Mapper名称一一对应--&gt;
+&lt;mapper namespace=&quot;com.tioxy.dao.StudentMapper&quot;&gt;
+    &lt;!--id对应的是Mapper接口中对应的方法--&gt;
+    &lt;!--resultType是SQL语句的返回值--&gt;
+    &lt;!--parameterType参数类型--&gt;
+    &lt;select id=&quot;getStudentList&quot; resultType=&quot;com.tioxy.pojo.Student&quot;&gt;
+        select * from school.student
+    &lt;/select&gt;
+
+    &lt;select id=&quot;getStudentById&quot; resultType=&quot;com.tioxy.pojo.Student&quot; parameterType=&quot;int&quot;&gt;
+        select * from school.student where id = #&#123;id&#125;
+    &lt;/select&gt;
+
+    &lt;insert id=&quot;addUser&quot; parameterType=&quot;com.tioxy.pojo.Student&quot; &gt;
+        insert into school.student (id,name,password,sex,birthd,address,email) values (#&#123;id&#125;,#&#123;name&#125;,#&#123;password&#125;,#&#123;sex&#125;,#&#123;birthd&#125;,#&#123;address&#125;,#&#123;email&#125;);
+    &lt;/insert&gt;
+&lt;/mapper&gt;
+</code></pre>
+</li>
 </ol>
 <ol start="5">
 <li><p>在核心配置文件中注册Mapper,目的需要告诉 MyBatis 到哪里去找到这些执行Sql语句</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--每一个Mapper.xml都需要在Mybaties核心配置文件中注册--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mappers</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">mapper</span> <span class="attr">resource</span>=<span class="string">&quot;com/tunan/Dao/UserMapper.xml&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mappers</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<pre><code class="xml">&lt;!--每一个Mapper.xml都需要在Mybaties核心配置文件中注册--&gt;
+&lt;mappers&gt;
+    &lt;mapper resource=&quot;com/tunan/Dao/UserMapper.xml&quot;/&gt;
+&lt;/mappers&gt;
+</code></pre>
+</li>
 <li><p>通过 <code>sqlSession.getMapper()</code>获取接口对应的执行方法及结果,关闭连接</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">// 第一步，获取sqlSession对象</span></span><br><span class="line">    SqlSession sqlSession= MybatisUtils.getSqlSession();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 方式一，getMapper</span></span><br><span class="line">        StudentMapper mapper = sqlSession.getMapper(StudentMapper.class);</span><br><span class="line">        List&lt;Student&gt; studentList = mapper.getStudentList();</span><br><span class="line">        <span class="keyword">for</span> (Student student : studentList) &#123;</span><br><span class="line">            System.out.println(student);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="comment">// 关闭sqlSession</span></span><br><span class="line">        sqlSession.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<pre><code class="java">public void test()&#123;
+    // 第一步，获取sqlSession对象
+    SqlSession sqlSession= MybatisUtils.getSqlSession();
+    try &#123;
+        // 方式一，getMapper
+        StudentMapper mapper = sqlSession.getMapper(StudentMapper.class);
+        List&lt;Student&gt; studentList = mapper.getStudentList();
+        for (Student student : studentList) &#123;
+            System.out.println(student);
+        &#125;
+    &#125;catch (Exception e)&#123;
+        e.printStackTrace();
+    &#125;finally &#123;
+        // 关闭sqlSession
+        sqlSession.close();
+    &#125;
+&#125;
+</code></pre>
+</li>
 </ol>
 <h2 id="阶段三：-Spring中整合Mybatis"><a href="#阶段三：-Spring中整合Mybatis" class="headerlink" title="阶段三： Spring中整合Mybatis"></a>阶段三： Spring中整合Mybatis</h2><p>MyBatis-Spring 会帮助你将 MyBatis 代码无缝地整合到 Spring 中。它将允许 MyBatis 参与到 Spring 的事务管理之中，创建映射器 mapper 和 SqlSession 并注入到 bean 中，以及将 Mybatis 的异常转换为 Spring 的 DataAccessException。最终，可以做到应用代码不依赖于 MyBatis，Spring 或 MyBatis-Spring。</p>
 <p>操作步骤如下：</p>
@@ -181,43 +325,123 @@
 <li><p>导入<code>mybatis-spring</code>依赖包</p>
 </li>
 <li><p>在Spring xml文件中通过Spring数据源<code>DriverManagerDataSource</code>替换第二阶段中Mybatis的数据源</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--DataSources:使用Spring的数据源替换Mybatis的配置</span></span><br><span class="line"><span class="comment">    这里使用Spring提供的JDBC</span></span><br><span class="line"><span class="comment">    --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;dataSource&quot;</span> <span class="attr">class</span>=<span class="string">&quot;org.springframework.jdbc.datasource.DriverManagerDataSource&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;driverClassName&quot;</span> <span class="attr">value</span>=<span class="string">&quot;com.mysql.jdbc.Driver&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;url&quot;</span> <span class="attr">value</span>=<span class="string">&quot;jdbc:mysql://localhost:3306/school?serverTimezone=UTC<span class="symbol">&amp;amp;</span>useUnicode=true<span class="symbol">&amp;amp;</span>characterEncoding=utf-8<span class="symbol">&amp;amp;</span>useSSL=True&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;username&quot;</span> <span class="attr">value</span>=<span class="string">&quot;root&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span> <span class="attr">value</span>=<span class="string">&quot;123456&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<pre><code class="xml">&lt;!--DataSources:使用Spring的数据源替换Mybatis的配置
+    这里使用Spring提供的JDBC
+    --&gt;
+&lt;bean id=&quot;dataSource&quot; class=&quot;org.springframework.jdbc.datasource.DriverManagerDataSource&quot;&gt;
+    &lt;property name=&quot;driverClassName&quot; value=&quot;com.mysql.jdbc.Driver&quot;/&gt;
+    &lt;property name=&quot;url&quot; value=&quot;jdbc:mysql://localhost:3306/school?serverTimezone=UTC&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8&amp;amp;useSSL=True&quot;/&gt;
+    &lt;property name=&quot;username&quot; value=&quot;root&quot;/&gt;
+    &lt;property name=&quot;password&quot; value=&quot;123456&quot;/&gt;
+&lt;/bean&gt;
+</code></pre>
+</li>
 <li><p>构建 <code>SqlSessionFactoryBean</code> ,在第二阶段Mybatis的学习中，需要构建 SqlSessionFactory ，通过 SqlSessionFactory 构建 SqlSession 进行数据库的操作CURD。我们这里使用SqlSessionFactoryBean来创建 SqlSessionFactory，在Spring 的 XML 配置如下</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;sqlSessionFactory&quot;</span> <span class="attr">class</span>=<span class="string">&quot;org.mybatis.spring.SqlSessionFactoryBean&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;dataSource&quot;</span> <span class="attr">ref</span>=<span class="string">&quot;dataSource&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<pre><code class="xml">&lt;bean id=&quot;sqlSessionFactory&quot; class=&quot;org.mybatis.spring.SqlSessionFactoryBean&quot;&gt;
+    &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot; /&gt;
+&lt;/bean&gt;
+</code></pre>
+</li>
 <li><p>同阶段二编写POJO类及Mapper接口及Mapper.xml文件并在配置文件中注册Mapper</p>
 <p>与基础的 MyBatis 不同的是，需要创建Mapper接口的实现类，并继承 <code>SqlSessionDaoSupport</code>，目的是不需要管理SqlSession，而且对事务的支持更加友好</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.tioxy.pojo.User;</span><br><span class="line"><span class="keyword">import</span> org.mybatis.spring.support.SqlSessionDaoSupport;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserMapperImpl2</span> <span class="keyword">extends</span> <span class="title">SqlSessionDaoSupport</span> <span class="keyword">implements</span> <span class="title">UserMapper</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;User&gt; <span class="title">selectUser</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> getSqlSession().getMapper(UserMapper.class).selectUser();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<pre><code class="java">import com.tioxy.pojo.User;
+import org.mybatis.spring.support.SqlSessionDaoSupport;
+
+import java.util.List;
+
+public class UserMapperImpl2 extends SqlSessionDaoSupport implements UserMapper&#123;
+    @Override
+    public List&lt;User&gt; selectUser() &#123;
+        return getSqlSession().getMapper(UserMapper.class).selectUser();
+    &#125;
+&#125;
+</code></pre>
+</li>
 <li><p>注册实现类bean，并关联sqlSessionFactory</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean id=<span class="string">&quot;userMapper2&quot;</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">&quot;com.tioxy.mapper.UserMapperImpl2&quot;</span>&gt;</span><br><span class="line">    &lt;property name=<span class="string">&quot;sqlSessionFactory&quot;</span> ref=<span class="string">&quot;sqlSessionFactory&quot;</span>/&gt;</span><br><span class="line">&lt;/bean&gt;</span><br></pre></td></tr></table></figure></li>
+<pre><code class="java">&lt;bean id=&quot;userMapper2&quot; class=&quot;com.tioxy.mapper.UserMapperImpl2&quot;&gt;
+    &lt;property name=&quot;sqlSessionFactory&quot; ref=&quot;sqlSessionFactory&quot;/&gt;
+&lt;/bean&gt;
+</code></pre>
+</li>
 <li><p>通过 <code>ApplicationContext</code> 的 getBean()方法获取接口并执行方法并返回结果。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">selectUserTest</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    ApplicationContext context = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">&quot;applicationContext.xml&quot;</span>);</span><br><span class="line">    UserMapper userMapper = context.getBean(<span class="string">&quot;userMapper2&quot;</span>, UserMapper.class);</span><br><span class="line">    <span class="keyword">for</span> (User user : userMapper.selectUser()) &#123;</span><br><span class="line">        System.out.println(user);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<pre><code class="java">public void selectUserTest() throws IOException &#123;
+    ApplicationContext context = new ClassPathXmlApplicationContext(&quot;applicationContext.xml&quot;);
+    UserMapper userMapper = context.getBean(&quot;userMapper2&quot;, UserMapper.class);
+    for (User user : userMapper.selectUser()) &#123;
+        System.out.println(user);
+    &#125;
+&#125;
+</code></pre>
+</li>
 </ol>
 <p>其中第4步，原理是内置使用了 <code>SqlSessionTemplate</code> ,<code>SqlSessionTemplate</code> 是 MyBatis-Spring 的核心。作为 SqlSession 的一个实现，这意味着可以使用它无缝代替你代码中已经在使用的 SqlSession。<code>SqlSessionTemplate</code> 是线程安全的，可以被多个 DAO 或映射器所共享使用。</p>
 <p>总的来说，就是 Mybatis 的操作被Spring接管，通过一个个Spring Bean来实现持久层操作。</p>
 <h2 id="阶段四：-SSM中整合Mybatis"><a href="#阶段四：-SSM中整合Mybatis" class="headerlink" title="阶段四： SSM中整合Mybatis"></a>阶段四： SSM中整合Mybatis</h2><p>本阶段已经多数使用注解进行Mybatis操作了，这里为了说明，使用配置方式进行演示</p>
 <p>在这一阶段与第三阶段中使用Mybatis并没有很大的差别,前四步与第三阶段相同，其最大的改进是在Spring注册bean <code>MapperScannerConfigurer</code>,其最大的作用是通过反射的方式自动的帮我们构造Mapper的实现类，省去我们手动编写。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--配置dao接口扫描包，动态的实现Dao接口可以注入到Spring容器中--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">&quot;org.mybatis.spring.mapper.MapperScannerConfigurer&quot;</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--注入 sqlSessionFactory--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;sqlSessionFactoryBeanName&quot;</span> <span class="attr">value</span>=<span class="string">&quot;sqlSessionFactory&quot;</span>/&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--要扫描的包--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;ssmPackage&quot;</span> <span class="attr">value</span>=<span class="string">&quot;com.tunan.mapper&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
+<pre><code class="xml">&lt;!--配置dao接口扫描包，动态的实现Dao接口可以注入到Spring容器中--&gt;
+    &lt;bean class=&quot;org.mybatis.spring.mapper.MapperScannerConfigurer&quot;&gt;
+        &lt;!--注入 sqlSessionFactory--&gt;
+        &lt;property name=&quot;sqlSessionFactoryBeanName&quot; value=&quot;sqlSessionFactory&quot;/&gt;
+        &lt;!--要扫描的包--&gt;
+        &lt;property name=&quot;ssmPackage&quot; value=&quot;com.tunan.mapper&quot;/&gt;
+    &lt;/bean&gt;
+</code></pre>
 <p>接下来就是通过Service层调用来实现具体的业务。</p>
 <p>所以这一阶段与阶段三并没有太大的差别与提升。可能有的小伙伴说，这一阶段使用阶段三也是可以的，的确如此。其实对于我来说，可能这一阶段使用了 <code>MapperScannerConfigurer</code>,算作上一阶段的简化，所以拿出作为阶段四，同理，我将使用注解的方式作为第四阶段的简化，所以放作下一阶段五。</p>
 <h2 id="阶段五：-SpringBoot整合Mybatis"><a href="#阶段五：-SpringBoot整合Mybatis" class="headerlink" title="阶段五： SpringBoot整合Mybatis"></a>阶段五： SpringBoot整合Mybatis</h2><p>在这一阶段使用注解进行开发，大大简化了各项配置，使得更加专注于业务及Sql的操作，避免了大量繁琐的配置。</p>
 <p>大致步骤：</p>
 <ol>
 <li><p>导入mybatis的启动器 <code>mybatis-spring-boot-starter</code> </p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis.spring.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.1.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<pre><code class="xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.mybatis.spring.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;mybatis-spring-boot-starter&lt;/artifactId&gt;
+    &lt;version&gt;2.1.3&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+</li>
 <li><p>在 application.yaml 文件中配置数据源,同前几阶段在xml中配置数据源一样</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">datasource:</span></span><br><span class="line">    <span class="attr">username:</span> <span class="string">root</span></span><br><span class="line">    <span class="attr">password:</span> <span class="number">123456</span></span><br><span class="line">    <span class="attr">url:</span> <span class="string">jdbc:mysql://localhost:3306/school?serverTimezone=UTC&amp;useUnicode=true&amp;characterEncoding=utf-8</span></span><br><span class="line">    <span class="attr">driver-class-name:</span> <span class="string">com.mysql.jdbc.Driver</span></span><br></pre></td></tr></table></figure></li>
+<pre><code class="yaml">spring:
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/school?serverTimezone=UTC&amp;useUnicode=true&amp;characterEncoding=utf-8
+    driver-class-name: com.mysql.jdbc.Driver
+</code></pre>
+</li>
 <li><p>编写POJO类及Mapper接口及Mapper.xml文件并在配置文件中添加Mapper.xml的扫描配置</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 整合Mybatis</span><br><span class="line">mybatis:</span><br><span class="line">  # 别名</span><br><span class="line">  type-aliases-package: com.tunan.pojo</span><br><span class="line">  # 原来dao与mapper.xml在同一路径，现在不在同一路径需要设置下面的参数，目的就是告诉*.xml文件的路径</span><br><span class="line">  mapper-locations: classpath:mybatis/mapper/*.xml</span><br></pre></td></tr></table></figure>
-
+<pre><code class="xml"># 整合Mybatis
+mybatis:
+  # 别名
+  type-aliases-package: com.tunan.pojo
+  # 原来dao与mapper.xml在同一路径，现在不在同一路径需要设置下面的参数，目的就是告诉*.xml文件的路径
+  mapper-locations: classpath:mybatis/mapper/*.xml
+</code></pre>
 <p>在前阶段的构建 <code>SqlSessionFactoryBean</code> 以及 <code>SqlSession</code> 全都由Spring帮我们实现，所以这里我们省去了这几项配置，只需在Mapper接口上添加<code>@Mapper</code> 注解，表示了这是一个 mybatis 的mapper 类，由Spring帮我们设置，而且也省去了阶段四种使用 <code>MapperScannerConfigurer</code> 来创建Mapper对应的接口</p>
 <p>这里我使用Mapper.xml编写SQL语句，也可以使用注解方式，两种方式都可以，看个人喜好。我选择xml文件的原因是编写SQL语句灵活、扩展性好</p>
 <p>如果使用注解方式编写Sql，则不需要Mapper.xml文件，也不要设置Mapper.xml的扫描配置，直接在接口的方法中使用 <code>@Select</code>、<code>@Insert</code>等注解</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Mapper</span></span><br><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserMapper</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 查询所有的用户</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Select(&quot;select * from User&quot;)</span></span><br><span class="line">    <span class="function">List&lt;User&gt; <span class="title">queryUserList</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">@Mapper
+@Repository
+public interface UserMapper &#123;
+    /**
+     * 查询所有的用户
+     * @return
+     */
+    @Select(&quot;select * from User&quot;)
+    List&lt;User&gt; queryUserList();
+&#125;
+</code></pre>
 <p>这里面 <code>@Repository</code>，是告诉Spring，这是一个Spring组件，类似于 <code>@Controller</code>、<code>@Service</code>一样</p>
 <p>如果不想在每个方法中都加上 <code>@Mapper</code> 注解，可以直接在SpringBoot主启动类上添加 <code>@MapperScan</code>注解</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@MapperScan(&quot;com.tunan.mapper&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringBootMybatisApplication</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(SpringBootMybatisApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<pre><code class="java">@SpringBootApplication
+@MapperScan(&quot;com.tunan.mapper&quot;)
+public class SpringBootMybatisApplication &#123;
+
+    public static void main(String[] args) &#123;
+        SpringApplication.run(SpringBootMybatisApplication.class, args);
+    &#125;
+&#125;
+</code></pre>
+</li>
 <li><p>最后就是通过 <code>@Autowired</code> 自动装配，获取接口的各个业务方法进行持久层操作</p>
 </li>
 </ol>
