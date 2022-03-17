@@ -13,7 +13,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>前端搭建记录2 |  Tunan`s Blog</title>
+      <title>项目集成 Spring Cache + Redis 缓存数据 |  Tunan`s Blog</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/favicon.ico" />
@@ -56,7 +56,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-前端搭建记录2"
+  id="post-Spring-Cache-Redis-缓存数据"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -67,7 +67,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  前端搭建记录2
+  项目集成 Spring Cache + Redis 缓存数据
 </h1>
  
 
@@ -75,8 +75,8 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2022/03/16/%E5%89%8D%E7%AB%AF%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%952/" class="article-date">
-  <time datetime="2022-03-16T13:40:52.000Z" itemprop="datePublished">2022-03-16</time>
+      <a href="/2022/03/17/Spring-Cache-Redis-%E7%BC%93%E5%AD%98%E6%95%B0%E6%8D%AE/" class="article-date">
+  <time datetime="2022-03-17T01:50:55.000Z" itemprop="datePublished">2022-03-17</time>
 </a> 
   <div class="article-category">
     <a class="article-category-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a>
@@ -87,7 +87,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">688</span>
+            <span class="post-count">1.4k</span>
         </span>
     </span>
 
@@ -96,7 +96,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">2 min</span>
+            <span class="post-count">6 min</span>
         </span>
     </span>
 </div>
@@ -111,89 +111,227 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <p>本项目基于vue-admin-template二次开发，vue-admin-template在线地址：<a target="_blank" rel="noopener" href="https://github.com/PanJiaChen/vue-admin-template">https://github.com/PanJiaChen/vue-admin-template</a></p>
-<h2 id="关键文件："><a href="#关键文件：" class="headerlink" title="关键文件："></a>关键文件：</h2><p>package.js</p>
-<ul>
-<li>npm项目的核心配置文件，包含项目信息，项目依赖，项目启动相关脚本<br>启动项目的命令： npm run dev<span id="more"></span></li>
-</ul>
-<p>build/webpack.dev.conf.js</p>
-<ul>
-<li>webpack配置文件，包含项目在开发环境打包和运行的相关配置</li>
-</ul>
-<p>index.html</p>
-<ul>
-<li>项目默认的html页面</li>
-</ul>
-<p>main.js</p>
-<ul>
-<li>项目js入口文件，项目的所有前端功能都在这个文件中引入和定义，并初始化全局的Vue对象</li>
-</ul>
-<p>src/utils/request.js</p>
-<ul>
-<li>引入axios模块，定义全局的axios实例，并导出模块</li>
-</ul>
-<p>src/router/index.js</p>
-<ul>
-<li>项目路由设置</li>
-</ul>
-<pre><code class="js">&#123;
-path: &#39;/hosp&#39;,
-component: Layout,
-redirect: &#39;/hosp/hospital/list&#39;,
-name: &#39;hospital&#39;,
-meta: &#123; title: &#39;医院管理&#39;, icon: &#39;table&#39; &#125;,
-children: [
-    &#123;
-path: &#39;hospitalSet/list&#39;,
-name: &#39;医院设置&#39;,
-component: () =&gt;import(&#39;@/views/hosp/hospitalSet/list&#39;),
-meta: &#123; title: &#39;医院设置&#39; &#125;
-    &#125;,
-    &#123;
-path: &#39;hospitalSet/add&#39;,
-name: &#39;EduTeacherCreate&#39;,
-component: () =&gt;import(&#39;@/views/hosp/hospitalSet/form&#39;),
-meta: &#123; title: &#39;添加&#39; &#125;,
-hidden: true
-&#125;,
-    &#123;
-path: &#39;hospitalSet/edit/:id&#39;,
-name: &#39;EduTeacherEdit&#39;,
-component: () =&gt;import(&#39;@/views/hosp/hospitalSet/form&#39;),
-meta: &#123; title: &#39;编辑&#39;, noCache: true &#125;,
-hidden: true
-&#125;
-  ]
-&#125;
+  <p>Spring Cache 是一个非常优秀的缓存组件。自Spring 3.1起，提供了类似于@Transactional注解事务的注解Cache支持，且提供了Cache抽象，方便切换各种底层Cache（如：redis）</p>
+<p>使用Spring Cache的好处：</p>
+<p>  1，提供基本的Cache抽象，方便切换各种底层Cache；<span id="more"></span></p>
+<p>  2，通过注解Cache可以实现类似于事务一样，缓存逻辑透明的应用到我们的业务代码上，且只需要更少的代码就可以完成；</p>
+<p>  3，提供事务回滚时也自动回滚缓存；</p>
+<p>  4，支持比较复杂的缓存逻辑；</p>
+<h1 id="项目集成Spring-Cache-Redis"><a href="#项目集成Spring-Cache-Redis" class="headerlink" title="项目集成Spring Cache + Redis"></a>项目集成Spring Cache + Redis</h1><p>因为缓存也是公共使用，所有的service模块都有可能使用缓存，所以我们把依赖与部分配置加在service-util模块，这样其他service模块都可以使用了</p>
+<h2 id="service-util添加依赖"><a href="#service-util添加依赖" class="headerlink" title="service-util添加依赖"></a>service-util添加依赖</h2><p>在service-util模块的pom.xml添加依赖</p>
+<pre><code class="xml">&lt;!-- redis --&gt;
+&lt;dependency&gt;
+&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+&lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;
+&lt;/dependency&gt;
+
+&lt;!-- spring2.X集成redis所需common-pool2--&gt;
+&lt;dependency&gt;
+&lt;groupId&gt;org.apache.commons&lt;/groupId&gt;
+&lt;artifactId&gt;commons-pool2&lt;/artifactId&gt;
+&lt;version&gt;2.6.0&lt;/version&gt;
+&lt;/dependency&gt;
 </code></pre>
-<h2 id="前端项目开发流程"><a href="#前端项目开发流程" class="headerlink" title="前端项目开发流程"></a>前端项目开发流程</h2><p><img src="1.png"></p>
-<h2 id="跨域问题"><a href="#跨域问题" class="headerlink" title="跨域问题"></a>跨域问题</h2><p>跨域：浏览器对于javascript的同源策略的限制</p>
-<p>以下情况都属于跨域：</p>
-<ul>
-<li>域名不同:    <a target="_blank" rel="noopener" href="http://www.jd.com/">www.jd.com</a> 与 <a target="_blank" rel="noopener" href="http://www.taobao.com/">www.taobao.com</a></li>
-<li>域名相同，端口不同:    <a target="_blank" rel="noopener" href="http://www.jd.com:8080/">www.jd.com:8080</a> 与 <a target="_blank" rel="noopener" href="http://www.jd.com:8081/">www.jd.com:8081</a></li>
-<li>二级域名不同:    item.jd.com 与 miaosha.jd.com</li>
-</ul>
-<p>所以从前端的3000端口去访问本地的8201端口，就产生了跨域问题<br>Spring提供了解决方案，我们只需要在对应controller上添加一个标签就可以了@CrossOrigin</p>
-<h2 id="配置nginx"><a href="#配置nginx" class="headerlink" title="配置nginx"></a>配置nginx</h2><p>由于我们后端有很多服务模块，每个模块都有对应的访问路径与端口，为了提供统一的api接口，所以使用nginx作为反向代理服务器；</p>
-<p>反向代理，其实客户端对代理是无感知的，因为客户端不需要任何配置就可以访问，我们只需要将请求发送到反向代理服务器，由反向代理服务器去选择目标服务器获取数据后，在返回给客户端，此时反向代理服务器和目标服务器对外就是一个服务器，暴露的是代理服务器地址，隐藏了真实服务器IP地址</p>
-<p>下载nginx<br>配置nginx</p>
-<pre><code class="xml">server &#123;
-    listen 80;
-    server_name localhost;
-    location /api/hosp/ &#123;           
-        proxy_pass http://localhost:8201;
+<h2 id="service-util添加配置类"><a href="#service-util添加配置类" class="headerlink" title="service-util添加配置类"></a>service-util添加配置类</h2><pre><code class="java">@Configuration
+@EnableCaching
+public class RedisConfig &#123;
+
+/**
+     * 自定义key规则
+     * @return
+*/
+@Bean
+public KeyGenerator keyGenerator() &#123;
+return new KeyGenerator() &#123;
+@Override
+public Object generate(Object target, Method method, Object... params) &#123;
+                StringBuilder sb = new StringBuilder();
+                sb.append(target.getClass().getName());
+                sb.append(method.getName());
+for (Object obj : params) &#123;
+                    sb.append(obj.toString());
+                &#125;
+return sb.toString();
+            &#125;
+        &#125;;
     &#125;
-    location /api/cmn/ &#123;           
-        proxy_pass http://localhost:8205;
+
+/**
+     * 设置RedisTemplate规则
+     * @param redisConnectionFactory
+* @return
+*/
+@Bean
+public RedisTemplate&lt;Object, Object&gt; redisTemplate(RedisConnectionFactory redisConnectionFactory) &#123;
+        RedisTemplate&lt;Object, Object&gt; redisTemplate = new RedisTemplate&lt;&gt;();
+        redisTemplate.setConnectionFactory(redisConnectionFactory);
+        Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
+
+//解决查询缓存转换异常的问题
+ObjectMapper om = new ObjectMapper();
+// 指定要序列化的域，field,get和set,以及修饰符范围，ANY是都有包括private和public
+om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+// 指定序列化输入的类型，类必须是非final修饰的，final修饰的类，比如String,Integer等会跑出异常
+om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+        jackson2JsonRedisSerializer.setObjectMapper(om);
+
+//序列号key value
+redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);
+
+        redisTemplate.afterPropertiesSet();
+return redisTemplate;
     &#125;
-...
+
+/**
+     * 设置CacheManager缓存规则
+     * @param factory
+* @return
+*/
+@Bean
+public CacheManager cacheManager(RedisConnectionFactory factory) &#123;
+        RedisSerializer&lt;String&gt; redisSerializer = new StringRedisSerializer();
+        Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
+
+//解决查询缓存转换异常的问题
+ObjectMapper om = new ObjectMapper();
+        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+        jackson2JsonRedisSerializer.setObjectMapper(om);
+
+// 配置序列化（解决乱码的问题）,过期时间600秒
+RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
+                .entryTtl(Duration.ofSeconds(600))
+                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer))
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer))
+                .disableCachingNullValues();
+
+        RedisCacheManager cacheManager = RedisCacheManager.builder(factory)
+                .cacheDefaults(config)
+                .build();
+return cacheManager;
+    &#125;
 &#125;
 </code></pre>
-<p>运行nginx</p>
-<pre><code>在nginx.exe所在目录下打开cmd，执行`nginx.exe`
+<p>说明：</p>
+<p>@EnableCaching：标记注解 @EnableCaching，开启缓存，并配置Redis缓存管理器。<a target="_blank" rel="noopener" href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/cache/annotation/EnableCaching.html">@EnableCaching</a> 注释触发后置处理器, 检查每一个Spring bean 的 public 方法是否存在缓存注解。如果找到这样的一个注释, 自动创建一个代理拦截方法调用和处理相应的缓存行为。</p>
+<h2 id="service-cmn添加redis配置"><a href="#service-cmn添加redis配置" class="headerlink" title="service-cmn添加redis配置"></a>service-cmn添加redis配置</h2><pre><code class="properties">spring.redis.host=192.168.44.165
+spring.redis.port=6379
+spring.redis.database= 0
+spring.redis.timeout=1800000
+
+spring.redis.lettuce.pool.max-active=20
+spring.redis.lettuce.pool.max-wait=-1
+#最大阻塞等待时间(负数表示没限制)
+spring.redis.lettuce.pool.max-idle=5
+spring.redis.lettuce.pool.min-idle=0
 </code></pre>
-<p>后续我们将了Spring Cloud Gateway网关，将替代nginx网关</p>
+<h1 id="使用Spring-Cache"><a href="#使用Spring-Cache" class="headerlink" title="使用Spring Cache"></a>使用Spring Cache</h1><h2 id="常用缓存标签"><a href="#常用缓存标签" class="headerlink" title="常用缓存标签"></a>常用缓存标签</h2><h3 id="缓存-Cacheable"><a href="#缓存-Cacheable" class="headerlink" title="缓存@Cacheable"></a>缓存@Cacheable</h3><p>根据方法对其返回结果进行缓存，下次请求时，如果缓存存在，则直接读取缓存数据返回；如果缓存不存在，则执行方法，并把返回的结果存入缓存中。一般用在查询方法上。</p>
+<p>查看源码，属性值如下：</p>
+<table>
+<thead>
+<tr>
+<th>属性/方法名</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>value</td>
+<td>缓存名，必填，它指定了你的缓存存放在哪块命名空间</td>
+</tr>
+<tr>
+<td>cacheNames</td>
+<td>与 value 差不多，二选一即可</td>
+</tr>
+<tr>
+<td>key</td>
+<td>可选属性，可以使用 SpEL 标签自定义缓存的key</td>
+</tr>
+</tbody></table>
+<h3 id="缓存-CachePut"><a href="#缓存-CachePut" class="headerlink" title="缓存@CachePut"></a>缓存@CachePut</h3><p>使用该注解标志的方法，每次都会执行，并将结果存入指定的缓存中。其他方法可以直接从响应的缓存中读取缓存数据，而不需要再去查询数据库。一般用在新增方法上。</p>
+<p>查看源码，属性值如下：</p>
+<table>
+<thead>
+<tr>
+<th>属性/方法名</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>value</td>
+<td>缓存名，必填，它指定了你的缓存存放在哪块命名空间</td>
+</tr>
+<tr>
+<td>cacheNames</td>
+<td>与 value 差不多，二选一即可</td>
+</tr>
+<tr>
+<td>key</td>
+<td>可选属性，可以使用 SpEL 标签自定义缓存的key</td>
+</tr>
+</tbody></table>
+<h3 id="缓存-CacheEvict"><a href="#缓存-CacheEvict" class="headerlink" title="缓存@CacheEvict"></a>缓存@CacheEvict</h3><p>使用该注解标志的方法，会清空指定的缓存。一般用在更新或者删除方法上</p>
+<p>查看源码，属性值如下：</p>
+<table>
+<thead>
+<tr>
+<th>属性/方法名</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>value</td>
+<td>缓存名，必填，它指定了你的缓存存放在哪块命名空间</td>
+</tr>
+<tr>
+<td>cacheNames</td>
+<td>与 value 差不多，二选一即可</td>
+</tr>
+<tr>
+<td>key</td>
+<td>可选属性，可以使用 SpEL 标签自定义缓存的key</td>
+</tr>
+<tr>
+<td>allEntries</td>
+<td>是否清空所有缓存，默认为  false。如果指定为 true，则方法调用后将立即清空所有的缓存</td>
+</tr>
+<tr>
+<td>beforeInvocation</td>
+<td>是否在方法执行前就清空，默认为  false。如果指定为 true，则在方法执行前就会清空缓存</td>
+</tr>
+</tbody></table>
+<h2 id="数据字典应用"><a href="#数据字典应用" class="headerlink" title="数据字典应用"></a>数据字典应用</h2><p>改造Impl方法，加入Cacheable和CacheEvict注解</p>
+<pre><code class="java">/**
+ * 根据上级id获取子节点数据列表
+ * @param parentId
+*/
+@Cacheable(value = &quot;dict&quot;,keyGenerator = &quot;keyGenerator&quot;)
+@Override
+public List&lt;Dict&gt; findByParentId(Long parentId) &#123;
+       List&lt;Dict&gt; dictList = dictMapper.selectList(new QueryWrapper&lt;Dict&gt;().eq(&quot;parent_id&quot;, parentId));
+       dictList.stream().forEach(dict -&gt; &#123;
+boolean isHasChildren = this.isHasChildren(dict.getId());
+           dict.setHasChildren(isHasChildren);
+       &#125;);
+return dictList;
+&#125;
+/**
+ * 导入
+ * allEntries = true: 方法调用后清空所有缓存
+ * @param file
+*/
+@CacheEvict(value = &quot;dict&quot;, allEntries=true)
+@Override
+public void importData(MultipartFile file) &#123;
+   ExcelHelper fileHelper = new ExcelHelper(DictEeVo.class);
+   List&lt;DictEeVo&gt; dictVoList = fileHelper.importExcel(file);
+if(!CollectionUtils.isEmpty(dictVoList)) &#123;
+dictMapper.insertBatch(dictVoList);
+   &#125;
+&#125;
+</code></pre>
  
       <!-- reward -->
       
@@ -258,7 +396,7 @@ hidden: true
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2022/03/16/%E5%89%8D%E7%AB%AF%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%952/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2022/03/17/Spring-Cache-Redis-%E7%BC%93%E5%AD%98%E6%95%B0%E6%8D%AE/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -271,19 +409,19 @@ hidden: true
    
   <nav class="article-nav">
     
-      <a href="/2022/03/17/%E6%95%B0%E6%8D%AE%E5%AD%97%E5%85%B8%E8%AE%BE%E8%AE%A1/" class="article-nav-link">
+      <a href="/2022/03/17/MongoDB%E4%BD%BF%E7%94%A8/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
-            数据字典设计
+            MongoDB使用
           
         </div>
       </a>
     
     
-      <a href="/2022/03/16/%E5%89%8D%E7%AB%AF%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%95/" class="article-nav-link">
+      <a href="/2022/03/17/%E6%95%B0%E6%8D%AE%E5%AD%97%E5%85%B8%E8%AE%BE%E8%AE%A1/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">前端搭建记录1</div>
+        <div class="article-nav-title">数据字典设计</div>
       </a>
     
   </nav>

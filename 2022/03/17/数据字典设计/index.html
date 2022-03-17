@@ -13,7 +13,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>前端搭建记录2 |  Tunan`s Blog</title>
+      <title>数据字典设计 |  Tunan`s Blog</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/favicon.ico" />
@@ -56,7 +56,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-前端搭建记录2"
+  id="post-数据字典设计"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -67,7 +67,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  前端搭建记录2
+  数据字典设计
 </h1>
  
 
@@ -75,8 +75,8 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2022/03/16/%E5%89%8D%E7%AB%AF%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%952/" class="article-date">
-  <time datetime="2022-03-16T13:40:52.000Z" itemprop="datePublished">2022-03-16</time>
+      <a href="/2022/03/17/%E6%95%B0%E6%8D%AE%E5%AD%97%E5%85%B8%E8%AE%BE%E8%AE%A1/" class="article-date">
+  <time datetime="2022-03-17T01:29:12.000Z" itemprop="datePublished">2022-03-17</time>
 </a> 
   <div class="article-category">
     <a class="article-category-link" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a>
@@ -87,7 +87,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">688</span>
+            <span class="post-count">939</span>
         </span>
     </span>
 
@@ -96,7 +96,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">2 min</span>
+            <span class="post-count">4 min</span>
         </span>
     </span>
 </div>
@@ -111,89 +111,168 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <p>本项目基于vue-admin-template二次开发，vue-admin-template在线地址：<a target="_blank" rel="noopener" href="https://github.com/PanJiaChen/vue-admin-template">https://github.com/PanJiaChen/vue-admin-template</a></p>
-<h2 id="关键文件："><a href="#关键文件：" class="headerlink" title="关键文件："></a>关键文件：</h2><p>package.js</p>
-<ul>
-<li>npm项目的核心配置文件，包含项目信息，项目依赖，项目启动相关脚本<br>启动项目的命令： npm run dev<span id="more"></span></li>
-</ul>
-<p>build/webpack.dev.conf.js</p>
-<ul>
-<li>webpack配置文件，包含项目在开发环境打包和运行的相关配置</li>
-</ul>
-<p>index.html</p>
-<ul>
-<li>项目默认的html页面</li>
-</ul>
-<p>main.js</p>
-<ul>
-<li>项目js入口文件，项目的所有前端功能都在这个文件中引入和定义，并初始化全局的Vue对象</li>
-</ul>
-<p>src/utils/request.js</p>
-<ul>
-<li>引入axios模块，定义全局的axios实例，并导出模块</li>
-</ul>
-<p>src/router/index.js</p>
-<ul>
-<li>项目路由设置</li>
-</ul>
-<pre><code class="js">&#123;
-path: &#39;/hosp&#39;,
-component: Layout,
-redirect: &#39;/hosp/hospital/list&#39;,
-name: &#39;hospital&#39;,
-meta: &#123; title: &#39;医院管理&#39;, icon: &#39;table&#39; &#125;,
-children: [
-    &#123;
-path: &#39;hospitalSet/list&#39;,
-name: &#39;医院设置&#39;,
-component: () =&gt;import(&#39;@/views/hosp/hospitalSet/list&#39;),
-meta: &#123; title: &#39;医院设置&#39; &#125;
+  <h2 id="什么是数据字典"><a href="#什么是数据字典" class="headerlink" title="什么是数据字典"></a>什么是数据字典</h2><p>数据字典就是管理系统常用的分类数据或者一些固定数据，例如：省市区三级联动数据、民族数据、行业数据、学历数据等，由于该系统大量使用这种数据，所以我们要做一个数据管理方便管理系统数据，一般系统基本都会做数据管理。</p>
+<p>数据字典是树形展示，由于数据众多，我们使用“树形数据与懒加载”的方式展现数据列表，其他就是对数据的新增、修改与删除操作，因此需要提供的接口如下：<span id="more"></span></p>
+<ol>
+<li>根据上级id获取下级数据（构造树形数据），参考文档：<a target="_blank" rel="noopener" href="https://element.eleme.cn/#/zh-CN/component/table%EF%BC%8C%E9%A1%B5%E9%9D%A2%E6%90%9C%E7%B4%A2%EF%BC%9A%E6%A0%91%E5%BD%A2%E6%95%B0%E6%8D%AE%E4%B8%8E%E6%87%92%E5%8A%A0%E8%BD%BD">https://element.eleme.cn/#/zh-CN/component/table，页面搜索：树形数据与懒加载</a></li>
+<li>导入接口</li>
+<li>导出接口</li>
+</ol>
+<h2 id="程序设计"><a href="#程序设计" class="headerlink" title="程序设计"></a>程序设计</h2><p>根据element组件要求，返回列表数据必须包含hasChildren字典</p>
+<p><img src="image-20220317093247494.png"></p>
+<p>因此我们model中的实体类应该设计为</p>
+<pre><code class="java">@Data
+@ApiModel(description = &quot;数据字典&quot;)
+@TableName(&quot;dict&quot;)
+public class Dict extends BaseEntity &#123;
+
+    private static final long serialVersionUID = 1L;
+
+    @ApiModelProperty(value = &quot;上级id&quot;)
+    @TableField(&quot;parent_id&quot;)
+    private Long parentId;
+
+    @ApiModelProperty(value = &quot;名称&quot;)
+    @TableField(&quot;name&quot;)
+    private String name;
+
+    @ApiModelProperty(value = &quot;值&quot;)
+    @TableField(&quot;value&quot;)
+    private String value;
+
+    @ApiModelProperty(value = &quot;编码&quot;)
+    @TableField(&quot;dict_code&quot;)
+    private String dictCode;
+
+    @ApiModelProperty(value = &quot;是否包含子节点&quot;)
+    @TableField(exist = false)
+    private boolean hasChildren;
+&#125;
+</code></pre>
+<p>在实现类中的写法是</p>
+<pre><code class="java">    //根据数据id查询子数据列表
+    @Override
+    public List&lt;Dict&gt; findChlidData(Long id) &#123;
+        QueryWrapper&lt;Dict&gt; wrapper = new QueryWrapper&lt;&gt;();
+        wrapper.eq(&quot;parent_id&quot;,id);
+        List&lt;Dict&gt; dictList = baseMapper.selectList(wrapper);
+        //向list集合每个dict对象中设置hasChildren
+        for (Dict dict:dictList) &#123;
+            Long dictId = dict.getId();
+            boolean isChild = this.isChildren(dictId);
+            dict.setHasChildren(isChild);
+        &#125;
+        return dictList;
+    &#125;
+
+    //判断id下面是否有子节点
+    private boolean isChildren(Long id) &#123;
+        QueryWrapper&lt;Dict&gt; wrapper = new QueryWrapper&lt;&gt;();
+        wrapper.eq(&quot;parent_id&quot;,id);
+        Integer count = baseMapper.selectCount(wrapper);
+        // 0&gt;0    1&gt;0
+        return count&gt;0;
+    &#125;
+</code></pre>
+<p>前端的方法调用</p>
+<pre><code class="javascript">&lt;script&gt;
+import dict from &#39;@/api/dict&#39;
+export default &#123;
+    data() &#123;
+        return &#123;
+            list:[] //数据字典列表数组
+        &#125;
     &#125;,
-    &#123;
-path: &#39;hospitalSet/add&#39;,
-name: &#39;EduTeacherCreate&#39;,
-component: () =&gt;import(&#39;@/views/hosp/hospitalSet/form&#39;),
-meta: &#123; title: &#39;添加&#39; &#125;,
-hidden: true
-&#125;,
-    &#123;
-path: &#39;hospitalSet/edit/:id&#39;,
-name: &#39;EduTeacherEdit&#39;,
-component: () =&gt;import(&#39;@/views/hosp/hospitalSet/form&#39;),
-meta: &#123; title: &#39;编辑&#39;, noCache: true &#125;,
-hidden: true
-&#125;
-  ]
-&#125;
-</code></pre>
-<h2 id="前端项目开发流程"><a href="#前端项目开发流程" class="headerlink" title="前端项目开发流程"></a>前端项目开发流程</h2><p><img src="1.png"></p>
-<h2 id="跨域问题"><a href="#跨域问题" class="headerlink" title="跨域问题"></a>跨域问题</h2><p>跨域：浏览器对于javascript的同源策略的限制</p>
-<p>以下情况都属于跨域：</p>
-<ul>
-<li>域名不同:    <a target="_blank" rel="noopener" href="http://www.jd.com/">www.jd.com</a> 与 <a target="_blank" rel="noopener" href="http://www.taobao.com/">www.taobao.com</a></li>
-<li>域名相同，端口不同:    <a target="_blank" rel="noopener" href="http://www.jd.com:8080/">www.jd.com:8080</a> 与 <a target="_blank" rel="noopener" href="http://www.jd.com:8081/">www.jd.com:8081</a></li>
-<li>二级域名不同:    item.jd.com 与 miaosha.jd.com</li>
-</ul>
-<p>所以从前端的3000端口去访问本地的8201端口，就产生了跨域问题<br>Spring提供了解决方案，我们只需要在对应controller上添加一个标签就可以了@CrossOrigin</p>
-<h2 id="配置nginx"><a href="#配置nginx" class="headerlink" title="配置nginx"></a>配置nginx</h2><p>由于我们后端有很多服务模块，每个模块都有对应的访问路径与端口，为了提供统一的api接口，所以使用nginx作为反向代理服务器；</p>
-<p>反向代理，其实客户端对代理是无感知的，因为客户端不需要任何配置就可以访问，我们只需要将请求发送到反向代理服务器，由反向代理服务器去选择目标服务器获取数据后，在返回给客户端，此时反向代理服务器和目标服务器对外就是一个服务器，暴露的是代理服务器地址，隐藏了真实服务器IP地址</p>
-<p>下载nginx<br>配置nginx</p>
-<pre><code class="xml">server &#123;
-    listen 80;
-    server_name localhost;
-    location /api/hosp/ &#123;           
-        proxy_pass http://localhost:8201;
+    created() &#123;
+        this.getDictList(1)
+    &#125;,
+    methods: &#123;
+        //数据字典列表
+        getDictList(id) &#123;
+            dict.dictList(id)
+                .then(response =&gt; &#123;
+                    this.list = response.data
+                &#125;)
+        &#125;,
+        getChildrens(tree, treeNode, resolve) &#123;
+            dict.dictList(tree.id).then(response =&gt; &#123;
+                resolve(response.data)
+            &#125;)
+        &#125;
     &#125;
-    location /api/cmn/ &#123;           
-        proxy_pass http://localhost:8205;
-    &#125;
-...
+&#125;
+&lt;/script&gt;
+</code></pre>
+<h2 id="EasyExcel-字典导出"><a href="#EasyExcel-字典导出" class="headerlink" title="EasyExcel 字典导出"></a>EasyExcel 字典导出</h2><p>EasyExcel是一个基于Java的简单、省内存的读写Excel的开源项目。在尽可能节约内存的情况下支持读写百M的Excel。</p>
+<p>文档地址：<a target="_blank" rel="noopener" href="https://alibaba-easyexcel.github.io/index.html">https://alibaba-easyexcel.github.io/index.html</a></p>
+<p>github地址：<a target="_blank" rel="noopener" href="https://github.com/alibaba/easyexcel">https://github.com/alibaba/easyexcel</a></p>
+<p>添加依赖</p>
+<pre><code class="pom">&lt;dependencies&gt;
+    &lt;!-- https://mvnrepository.com/artifact/com.alibaba/easyexcel --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;com.alibaba&lt;/groupId&gt;
+        &lt;artifactId&gt;easyexcel&lt;/artifactId&gt;
+        &lt;version&gt;2.1.1&lt;/version&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+</code></pre>
+<p>接口实现类写法</p>
+<pre><code class="java">@Override
+public void exportData(HttpServletResponse response) &#123;
+try &#123;
+      response.setContentType(&quot;application/vnd.ms-excel&quot;);
+      response.setCharacterEncoding(&quot;utf-8&quot;);
+// 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
+String fileName = URLEncoder.encode(&quot;数据字典&quot;, &quot;UTF-8&quot;);
+      response.setHeader(&quot;Content-disposition&quot;, &quot;attachment;filename=&quot;+ fileName + &quot;.xlsx&quot;);
+
+      List&lt;Dict&gt; dictList = dictMapper.selectList(null);
+      List&lt;DictEeVo&gt; dictVoList = new ArrayList&lt;&gt;(dictList.size());
+for(Dict dict : dictList) &#123;
+         DictEeVo dictVo = new DictEeVo();
+         BeanUtils.copyBean(dict, dictVo, DictEeVo.class);
+         dictVoList.add(dictVo);
+      &#125;
+
+      EasyExcel.write(response.getOutputStream(), DictEeVo.class).sheet(&quot;数据字典&quot;).doWrite(dictVoList);
+   &#125; catch (IOException e) &#123;
+      e.printStackTrace();
+   &#125;
 &#125;
 </code></pre>
-<p>运行nginx</p>
-<pre><code>在nginx.exe所在目录下打开cmd，执行`nginx.exe`
+<h2 id="字典导入"><a href="#字典导入" class="headerlink" title="字典导入"></a>字典导入</h2><p> 创建回调监听器</p>
+<pre><code class="java">public class DictListener extends AnalysisEventListener&lt;DictEeVo&gt; &#123;
+
+    private DictMapper dictMapper;
+    public DictListener(DictMapper dictMapper) &#123;
+        this.dictMapper = dictMapper;
+    &#125;
+
+    //一行一行读取
+    @Override
+    public void invoke(DictEeVo dictEeVo, AnalysisContext analysisContext) &#123;
+        //调用方法添加数据库
+        Dict dict = new Dict();
+        BeanUtils.copyProperties(dictEeVo,dict);
+        dictMapper.insert(dict);
+    &#125;
+    @Override
+    public void doAfterAllAnalysed(AnalysisContext analysisContext) &#123;
+
+    &#125;
+&#125;
 </code></pre>
-<p>后续我们将了Spring Cloud Gateway网关，将替代nginx网关</p>
+<p>service方法</p>
+<pre><code class="java">//导入数据字典
+@Override
+public void importDictData(MultipartFile file) &#123;
+    try &#123;
+        EasyExcel.read(file.getInputStream(),DictEeVo.class,new DictListener(baseMapper)).sheet().doRead();
+    &#125; catch (IOException e) &#123;
+        e.printStackTrace();
+    &#125;
+&#125;
+</code></pre>
  
       <!-- reward -->
       
@@ -258,12 +337,12 @@ hidden: true
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2022/03/16/%E5%89%8D%E7%AB%AF%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%952/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2022/03/17/%E6%95%B0%E6%8D%AE%E5%AD%97%E5%85%B8%E8%AE%BE%E8%AE%A1/" alt="微信分享二维码">
     </div>
 </div>
 
 <div id="share-mask"></div>  
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%A2%84%E7%BA%A6%E7%B3%BB%E7%BB%9F/" rel="tag">预约系统</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%AD%97%E5%85%B8/" rel="tag">数据字典</a></li></ul>
 
     </footer>
   </div>
@@ -271,19 +350,19 @@ hidden: true
    
   <nav class="article-nav">
     
-      <a href="/2022/03/17/%E6%95%B0%E6%8D%AE%E5%AD%97%E5%85%B8%E8%AE%BE%E8%AE%A1/" class="article-nav-link">
+      <a href="/2022/03/17/Spring-Cache-Redis-%E7%BC%93%E5%AD%98%E6%95%B0%E6%8D%AE/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
-            数据字典设计
+            项目集成 Spring Cache + Redis 缓存数据
           
         </div>
       </a>
     
     
-      <a href="/2022/03/16/%E5%89%8D%E7%AB%AF%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%95/" class="article-nav-link">
+      <a href="/2022/03/16/%E5%89%8D%E7%AB%AF%E6%90%AD%E5%BB%BA%E8%AE%B0%E5%BD%952/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">前端搭建记录1</div>
+        <div class="article-nav-title">前端搭建记录2</div>
       </a>
     
   </nav>
