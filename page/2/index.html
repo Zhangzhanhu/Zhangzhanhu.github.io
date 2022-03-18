@@ -165,6 +165,123 @@
     
     
     <article
+  id="post-Java对象创建过程详解"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/01/05/Java%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA%E8%BF%87%E7%A8%8B%E8%AF%A6%E8%A7%A3/"
+    >Java对象创建过程详解</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/01/05/Java%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA%E8%BF%87%E7%A8%8B%E8%AF%A6%E8%A7%A3/" class="article-date">
+  <time datetime="2022-01-05T02:37:42.000Z" itemprop="datePublished">2022-01-05</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/JVM/">JVM</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="详解对象的创建"><a href="#详解对象的创建" class="headerlink" title="详解对象的创建"></a>详解对象的创建</h1><h2 id="1、类加载检查"><a href="#1、类加载检查" class="headerlink" title="1、类加载检查"></a>1、类加载检查</h2><p>虚拟机遇到一条new指令时，首先将去检查这个指令的参数是否能在常量池中定位到这个类的引用，并且检查这个符号引用代表的类是否已被加载、解析和初始化过；如果没有，必须执行相应的类加载过程。</p>
+<h3 id="类的加载过程"><a href="#类的加载过程" class="headerlink" title="类的加载过程"></a>类的加载过程</h3><p>类的加载机制:如果没有相应类的class，则加载class到方法区。对应着加载-&gt;验证-&gt;准备-&gt;解析–&gt;初始化阶段： 
+      <a class="article-more-link" href="/2022/01/05/Java%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA%E8%BF%87%E7%A8%8B%E8%AF%A6%E8%A7%A3/"
+        >阅读更多...</a
+      >
+       
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-反射机制的理解与学习"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/01/04/%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6%E7%9A%84%E7%90%86%E8%A7%A3%E4%B8%8E%E5%AD%A6%E4%B9%A0/"
+    >反射机制的理解与学习</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/01/04/%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6%E7%9A%84%E7%90%86%E8%A7%A3%E4%B8%8E%E5%AD%A6%E4%B9%A0/" class="article-date">
+  <time datetime="2022-01-04T01:37:10.000Z" itemprop="datePublished">2022-01-04</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java%E5%9F%BA%E7%A1%80/">Java基础</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="何为反射"><a href="#何为反射" class="headerlink" title="何为反射"></a>何为反射</h2><p>反射被称之为框架的灵魂，因为反射机制赋予了我们在运行程序时分析类以及执行类中方法的能力。</p>
+<p>我们可以通过反射获取任意一个类的所有属性和方法，并且可以通过一些手段调用这些方法和属性。</p>
+<h2 id="反射应用场景"><a href="#反射应用场景" class="headerlink" title="反射应用场景"></a>反射应用场景</h2><p>平时所做的CRUD业务代码，很少会直接接触到使用反射的场景，但反射的作用绝对不可以忽视，正是因为反射才能轻松使用各种框架，像Spring、Spring Boot、MyBatis等框架中都大量的使用了动态代理，而动态代理的实现也依赖于反射机制。 
+      <a class="article-more-link" href="/2022/01/04/%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6%E7%9A%84%E7%90%86%E8%A7%A3%E4%B8%8E%E5%AD%A6%E4%B9%A0/"
+        >阅读更多...</a
+      >
+       
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%8F%8D%E5%B0%84/" rel="tag">反射</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
   id="post-《芬奇》——-关于末日的爱与责任"
   class="article article-type-post"
   itemscope
