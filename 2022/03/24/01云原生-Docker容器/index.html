@@ -13,7 +13,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>Spring源码之BeanFactory创建流程 |  Tunan`s Blog</title>
+      <title>01云原生--Docker容器 |  Tunan`s Blog</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/favicon.ico" />
@@ -56,7 +56,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-Spring源码之BeanFactory创建流程"
+  id="post-01云原生-Docker容器"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -67,7 +67,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  Spring源码之BeanFactory创建流程
+  01云原生--Docker容器
 </h1>
  
 
@@ -75,11 +75,11 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2022/03/19/Spring%E6%BA%90%E7%A0%81%E4%B9%8BBeanFactory%E5%88%9B%E5%BB%BA%E6%B5%81%E7%A8%8B/" class="article-date">
-  <time datetime="2022-03-19T08:00:57.000Z" itemprop="datePublished">2022-03-19</time>
+      <a href="/2022/03/24/01%E4%BA%91%E5%8E%9F%E7%94%9F-Docker%E5%AE%B9%E5%99%A8/" class="article-date">
+  <time datetime="2022-03-24T01:50:04.000Z" itemprop="datePublished">2022-03-24</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">源码剖析</a>
+    <a class="article-category-link" href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/">云原生</a>
   </div>
   
 <div class="word_count">
@@ -87,7 +87,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">340</span>
+            <span class="post-count">1.3k</span>
         </span>
     </span>
 
@@ -96,7 +96,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">1 min</span>
+            <span class="post-count">5 min</span>
         </span>
     </span>
 </div>
@@ -111,44 +111,233 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <h1 id="BeanFactory创建流程"><a href="#BeanFactory创建流程" class="headerlink" title="BeanFactory创建流程"></a>BeanFactory创建流程</h1><h2 id="获取BeanFactory⼦流程"><a href="#获取BeanFactory⼦流程" class="headerlink" title="获取BeanFactory⼦流程"></a>获取BeanFactory⼦流程</h2><p>时序图如下<span id="more"></span></p>
-<p><img src="image-20220319160213156.png"></p>
-<h2 id="BeanDefinition加载解析及注册⼦流程"><a href="#BeanDefinition加载解析及注册⼦流程" class="headerlink" title="BeanDefinition加载解析及注册⼦流程"></a>BeanDefinition加载解析及注册⼦流程</h2><p>（1）该⼦流程涉及到如下⼏个关键步骤</p>
-<ul>
-<li><strong>Resource定位</strong>：指对BeanDefinition的资源定位过程。通俗讲就是找到定义Javabean信息的XML⽂<br>件，并将其封装成Resource对象。</li>
-<li><strong>BeanDefinition载⼊</strong> ：把⽤户定义好的Javabean表示为IoC容器内部的数据结构，这个容器内部的数<br>据结构就是BeanDefinition。</li>
-<li><strong>注册BeanDefinition到 IoC 容器</strong></li>
+  <h1 id="Docker基础"><a href="#Docker基础" class="headerlink" title="Docker基础"></a>Docker基础</h1><h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>Docker本身是一个容器运行载体或称之为管理引擎，基于Go语言开发的。我们把应用程序和配置依赖打包好，形成一个可交付的运行环境，这个打包好的运行环境，就是image镜像文件。只有通过这个镜像文件才能生成Docker容器。image文件可以看作是容器的模板。Docker根据image文件生成容器实例，同一个镜像文件，可以生成多个同时运行的容器实例。<span id="more"></span></p>
+<h3 id="统一标准"><a href="#统一标准" class="headerlink" title="统一标准"></a>统一标准</h3><p>Docker做到了应用构建的统一标准，不管是Java、C++还是JavaScript的应用，都可以通过run build 【镜像名】打包成镜像，解决了之前在云上部署应用的不同形式（jar、dict等）；并且docker可以将所有软件的镜像放到一个统一的仓库docker hub，就像maven仓库一样；最后运行也很简单，执行统一标准的镜像，使用docker run命令即可。</p>
+<h3 id="资源隔离"><a href="#资源隔离" class="headerlink" title="资源隔离"></a>资源隔离</h3><ul>
+<li>cpu、memory资源隔离与限制</li>
+<li>访问设备隔离与限制</li>
+<li>网络隔离与限制</li>
+<li>用户、用户组隔离限制</li>
+<li>……</li>
 </ul>
-<p>（2）过程分析</p>
-<p>step1：⼦流程⼊⼝在 AbstractRefreshableApplicationContext#refreshBeanFactory ⽅法中</p>
-<p><img src="image-20220319160643622.png"></p>
-<p>step2：依次调⽤多个类的 loadBeanDefinitions ⽅法  —&gt; AbstractXmlApplicationContext  —&gt;<br>AbstractBeanDefinitionReader —&gt; XmlBeanDefinitionReader  ⼀直执⾏到</p>
-<p>XmlBeanDefinitionReader 的 doLoadBeanDefinitions ⽅法</p>
-<p><img src="image-20220319161027979.png"></p>
-<p>step3：我们重点观察XmlBeanDefinitionReader 类的 registerBeanDefinitions ⽅法，期间产⽣了多<br>次重载调⽤，我们定位到最后⼀个</p>
-<p><img src="image-20220319161105508.png"></p>
-<p>此处我们关注两个地⽅：⼀个createRederContext⽅法，⼀个是DefaultBeanDefinitionDocumentReader类的registerBeanDefinitions⽅法，先进⼊createRederContext ⽅法看看</p>
-<p><img src="image-20220319161418949.png"></p>
-<p>我们可以看到，此处 Spring ⾸先完成了 NamespaceHandlerResolver 的初始化。</p>
-<p>我们再进⼊ registerBeanDefinitions ⽅法中追踪，调⽤了<br>DefaultBeanDefinitionDocumentReader#registerBeanDefinitions ⽅法</p>
-<p><img src="image-20220319161447726.png"></p>
-<p>进⼊ doRegisterBeanDefinitions ⽅法</p>
-<p><img src="image-20220319161518364.png"></p>
-<p>进⼊ parseBeanDefinitions ⽅法</p>
-<p><img src="image-20220319161543870.png"></p>
-<p>进⼊ parseDefaultElement ⽅法</p>
-<p><img src="image-20220319161604674.png"></p>
-<p>进⼊ processBeanDefinition ⽅法</p>
-<p><img src="image-20220319161640856.png"></p>
-<p>⾄此，注册流程结束，我们发现，所谓的注册就是把封装的 XML 中定义的 Bean信息封装为BeanDefinition 对象之后放⼊⼀个Map中，BeanFactory 是以 Map 的结构组织这些 BeanDefinition的。</p>
-<p><img src="image-20220319161715802.png"></p>
-<p>可以在DefaultListableBeanFactory中看到此Map的定义</p>
-<pre><code class="java">/** Map of bean definition objects, keyed by bean name. */
-private final Map&lt;String, BeanDefinition&gt; beanDefinitionMap = new 
-ConcurrentHashMap&lt;&gt;(256);
+<h2 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h2><p><img src="image-20220324095745622.png"></p>
+<ul>
+<li><p>Docker_Host：</p>
+</li>
+<li><ul>
+<li>安装Docker的主机</li>
+</ul>
+</li>
+<li><p>Docker Daemon：</p>
+</li>
+<li><ul>
+<li>运行在Docker主机上的Docker后台进程</li>
+</ul>
+</li>
+<li><p>Client：</p>
+</li>
+<li><ul>
+<li>操作Docker主机的客户端（命令行、UI等）</li>
+</ul>
+</li>
+<li><p>Registry：</p>
+</li>
+<li><ul>
+<li>镜像仓库</li>
+<li>Docker Hub</li>
+</ul>
+</li>
+<li><p>Images：</p>
+</li>
+<li><ul>
+<li>镜像，带环境打包好的程序，可以直接启动运行</li>
+</ul>
+</li>
+<li><p>Containers：</p>
+</li>
+<li><ul>
+<li>容器，由镜像启动起来正在运行中的程序</li>
+</ul>
+</li>
+</ul>
+<p><strong>交互逻辑</strong> ： 装好<strong>Docker</strong>，然后去 <strong>软件市场</strong> 寻找<strong>镜像</strong>，下载并运行，查看<strong>容器</strong>状态日志等排错</p>
+<h2 id="Docker安装"><a href="#Docker安装" class="headerlink" title="Docker安装"></a>Docker安装</h2><h3 id="1、移除以前的包"><a href="#1、移除以前的包" class="headerlink" title="1、移除以前的包"></a>1、移除以前的包</h3><pre><code class="bash">sudo yum remove docker \
+                  docker-client \
+                  docker-client-latest \
+                  docker-common \
+                  docker-latest \
+                  docker-latest-logrotate \
+                  docker-logrotate \
+                  docker-engine
 </code></pre>
-<p>（3）时序图</p>
-<p><img src="image-20220319161805633.png"></p>
+<h3 id="2、配置yum源"><a href="#2、配置yum源" class="headerlink" title="2、配置yum源"></a>2、配置yum源</h3><pre><code class="bash">sudo yum install -y yum-utils
+sudo yum-config-manager \
+--add-repo \
+http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+</code></pre>
+<h3 id="3、安装docker"><a href="#3、安装docker" class="headerlink" title="3、安装docker"></a>3、安装docker</h3><pre><code class="bash">sudo yum install -y docker-ce docker-ce-cli containerd.io
+</code></pre>
+<h3 id="4、启动"><a href="#4、启动" class="headerlink" title="4、启动"></a>4、启动</h3><pre><code class="bash">systemctl enable docker --now
+</code></pre>
+<h3 id="5、配置加速"><a href="#5、配置加速" class="headerlink" title="5、配置加速"></a>5、配置加速</h3><pre><code class="bash">sudo mkdir -p /etc/docker
+sudo tee /etc/docker/daemon.json &lt;&lt;-&#39;EOF&#39;
+&#123;
+  &quot;registry-mirrors&quot;: [&quot;https://82m9ar63.mirror.aliyuncs.com&quot;],
+  &quot;exec-opts&quot;: [&quot;native.cgroupdriver=systemd&quot;],
+  &quot;log-driver&quot;: &quot;json-file&quot;,
+  &quot;log-opts&quot;: &#123;
+    &quot;max-size&quot;: &quot;100m&quot;
+  &#125;,
+  &quot;storage-driver&quot;: &quot;overlay2&quot;
+&#125;
+EOF
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+</code></pre>
+<h1 id="Docker实战"><a href="#Docker实战" class="headerlink" title="Docker实战"></a>Docker实战</h1><h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><p><img src="image-20220324100143464.png"></p>
+<h3 id="1、找镜像"><a href="#1、找镜像" class="headerlink" title="1、找镜像"></a>1、找镜像</h3><p>去<a target="_blank" rel="noopener" href="http://hub.docker.com/">docker hub</a>，找到nginx镜像</p>
+<pre><code class="bash">docker pull nginx  #下载最新版
+
+镜像名:版本名（标签）
+
+docker pull nginx:1.20.1
+
+
+docker pull redis  #下载最新
+docker pull redis:6.2.4
+
+## 下载来的镜像都在本地
+docker images  #查看所有镜像
+
+redis = redis:latest
+
+docker rmi 镜像名:版本号/镜像id
+</code></pre>
+<h3 id="2、启动容器"><a href="#2、启动容器" class="headerlink" title="2、启动容器"></a>2、启动容器</h3><p>启动nginx应用容器，并映射88端口，测试的访问</p>
+<pre><code class="bash">docker run [OPTIONS] IMAGE [COMMAND] [ARG...]
+
+【docker run  设置项   镜像名  】 镜像启动运行的命令（镜像里面默认有的，一般不会写）
+
+# -d：后台运行
+# --restart=always: 开机自启
+docker run --name=mynginx   -d  --restart=always -p  88:80   nginx
+
+
+# 查看正在运行的容器
+docker ps
+# 查看所有
+docker ps -a
+# 删除停止的容器
+docker rm  容器id/名字
+docker rm -f mynginx   #强制删除正在运行中的
+
+#停止容器
+docker stop 容器id/名字
+#再次启动
+docker start 容器id/名字
+
+#应用开机自启
+docker update 容器id/名字 --restart=always
+</code></pre>
+<h3 id="3、修改容器内容"><a href="#3、修改容器内容" class="headerlink" title="3、修改容器内容"></a>3、修改容器内容</h3><pre><code class="bash"># 进入容器内部的系统，修改容器内容
+docker exec -it 容器id  /bin/bash
+
+# 挂载数据到外部修改
+docker run --name=mynginx   \
+-d  --restart=always \
+-p  88:80 -v /data/html:/usr/share/nginx/html:ro  \
+nginx
+
+# 修改页面只需要去 主机的 /data/html
+</code></pre>
+<h3 id="4、提交改变"><a href="#4、提交改变" class="headerlink" title="4、提交改变"></a>4、提交改变</h3><pre><code class="java">docker commit [OPTIONS] CONTAINER [REPOSITORY[:TAG]]
+
+docker commit -a &quot;leifengyang&quot;  -m &quot;首页变化&quot; 341d81f7504f guignginx:v1.0
+    
+# 将镜像保存成压缩包
+docker save -o abc.tar guignginx:v1.0
+
+# 别的机器加载这个镜像
+docker load -i abc.tar
+
+
+# 离线安装
+</code></pre>
+<h3 id="5、推送远程仓库"><a href="#5、推送远程仓库" class="headerlink" title="5、推送远程仓库"></a>5、推送远程仓库</h3><pre><code class="bash">docker tag local-image:tagname new-repo:tagname
+docker push new-repo:tagname
+
+# 把旧镜像的名字，改成仓库要求的新版名字
+docker tag guignginx:v1.0 leifengyang/guignginx:v1.0
+
+# 登录到docker hub
+docker login       
+
+
+docker logout（推送完成镜像后退出）
+
+# 推送
+docker push leifengyang/guignginx:v1.0
+
+
+# 别的机器下载
+docker pull leifengyang/guignginx:v1.0
+</code></pre>
+<h2 id="HelloWorld实战"><a href="#HelloWorld实战" class="headerlink" title="HelloWorld实战"></a>HelloWorld实战</h2><p>1、编写一个使用redis缓存网站访问人数的springboot应用</p>
+<pre><code class="java">@RestController
+public class CounterController &#123;
+    @Autowired
+    StringRedisTemplate redisTemplate;
+
+    @GetMapping(&quot;/hello&quot;)
+    public String count()&#123;
+
+        Long increment = redisTemplate.opsForValue().increment(&quot;count-people&quot;);
+        return &quot;有 【&quot;+ increment +&quot;】 人访问了这个页面&quot;;
+    &#125;
+&#125;
+</code></pre>
+<p>2、添加文件Dockerfile</p>
+<p><img src="image-20220324100941327.png"></p>
+<p>文件内容</p>
+<pre><code class="dockerfile">FROM openjdk:8-jdk-slim
+LABEL maintainer=leifengyang
+
+COPY target/*.jar   /app.jar
+
+ENTRYPOINT [&quot;java&quot;,&quot;-jar&quot;,&quot;/app.jar&quot;]
+</code></pre>
+<p>3、通过lifecycle中clean、package命令进行打包</p>
+<p><img src="image-20220324101049019.png"></p>
+<p>4、将得到的jar包和Dockerfile文件单独保存（降低文件夹大小）</p>
+<p><img src="image-20220324101219413.png"></p>
+<p>路径为：</p>
+<p>|SpringBootDemo</p>
+<p>|—Dockerfile</p>
+<p>|—target</p>
+<p>|——java-demo-0.0.1-SNAPSHOT.jar</p>
+<p>5、通过Xshell远程连接后，通过Xftp将SpringBootDemo文件夹上传到/Root目录下</p>
+<p>6、进入到Root目录</p>
+<p>执行</p>
+<pre><code class="bash">docker build -t java-demo:v1.0 .
+</code></pre>
+<p>注意最后的 .不要忘记</p>
+<p>7、启动应用容器</p>
+<pre><code class="bash">docker run -d -p 8080:8080 --name myjava-app java-demo:v1.0 
+</code></pre>
+<p>8、部署中间件</p>
+<pre><code class="bash">docker run [OPTIONS] IMAGE [COMMAND] [ARG...]
+
+#redis使用自定义配置文件启动
+
+docker run -v /data/redis/redis.conf:/etc/redis/redis.conf \
+-v /data/redis/data:/data \
+-d --name myredis \
+-p 6379:6379 \
+redis:latest  redis-server /etc/redis/redis.conf
+</code></pre>
+<p>9、访问测试</p>
+<p>http://公网ip:8080/hello</p>
+<p>注意打开阿里云的安全组！</p>
  
       <!-- reward -->
       
@@ -213,12 +402,12 @@ ConcurrentHashMap&lt;&gt;(256);
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2022/03/19/Spring%E6%BA%90%E7%A0%81%E4%B9%8BBeanFactory%E5%88%9B%E5%BB%BA%E6%B5%81%E7%A8%8B/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2022/03/24/01%E4%BA%91%E5%8E%9F%E7%94%9F-Docker%E5%AE%B9%E5%99%A8/" alt="微信分享二维码">
     </div>
 </div>
 
 <div id="share-mask"></div>  
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring/" rel="tag">Spring</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li></ul>
 
     </footer>
   </div>
@@ -226,19 +415,19 @@ ConcurrentHashMap&lt;&gt;(256);
    
   <nav class="article-nav">
     
-      <a href="/2022/03/24/01%E4%BA%91%E5%8E%9F%E7%94%9F-Docker%E5%AE%B9%E5%99%A8/" class="article-nav-link">
+      <a href="/2022/03/24/02%E4%BA%91%E5%8E%9F%E7%94%9F-Kubernetes%E5%85%A5%E9%97%A8/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
-            01云原生--Docker容器
+            02云原生--Kubernetes入门
           
         </div>
       </a>
     
     
-      <a href="/2022/03/19/Spring%E6%BA%90%E7%A0%81%E4%B9%8BIOC%E5%AE%B9%E5%99%A8%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%BB%E4%BD%93%E6%B5%81%E7%A8%8B/" class="article-nav-link">
+      <a href="/2022/03/19/Spring%E6%BA%90%E7%A0%81%E4%B9%8BBeanFactory%E5%88%9B%E5%BB%BA%E6%B5%81%E7%A8%8B/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">Spring源码之IOC容器初始化主体流程</div>
+        <div class="article-nav-title">Spring源码之BeanFactory创建流程</div>
       </a>
     
   </nav>
