@@ -13,7 +13,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title> Tunan`s Blog</title>
+      <title>Java 多线程详解 |  Tunan`s Blog</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/favicon.ico" />
@@ -54,117 +54,8 @@
     
       
     <main class="content on">
-      
-<section class="cover">
-    
-      
-      <a class="forkMe" href="https://github.com/Zhangzhanhu"
-        target="_blank"><img width="149" height="149" src="/images/forkme.png"
-          class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>
-    
-  <div class="cover-frame">
-    <div class="bg-box">
-      <img src="/images/cover1.jpg" alt="image frame" />
-    </div>
-    <div class="cover-inner text-center text-white">
-      <h1><a href="/">Tunan`s Blog</a></h1>
-      <div id="subtitle-box">
-        
-        <span id="subtitle"></span>
-        
-      </div>
-      <div>
-        
-      </div>
-    </div>
-  </div>
-  <div class="cover-learn-more">
-    <a href="javascript:void(0)" class="anchor"><i class="ri-arrow-down-line"></i></a>
-  </div>
-</section>
-
-
-
-<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js"></script>
-
-
-<!-- Subtitle -->
-
-  <script>
-    try {
-      var typed = new Typed("#subtitle", {
-        strings: ['黑夜的光，留给专注的人', '愿你一生努力，一生被爱', '面朝大海，春暖花开'],
-        startDelay: 0,
-        typeSpeed: 200,
-        loop: true,
-        backSpeed: 100,
-        showCursor: true
-      });
-    } catch (err) {
-      console.log(err)
-    }
-  </script>
-  
-<div id="main">
-  <section class="outer">
-  
-  <ul class="ads">
-    
-        <li>
-            <a target="_blank" rel="noopener" href="https://curl.qcloud.com/kvO7hb43">
-                <img src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/ten_1.jpg" width="300" alt="云服务器限时秒杀">
-            </a>
-        </li>
-    
-        <li>
-            <a target="_blank" rel="noopener" href="https://www.vultr.com/?ref=8630075">
-                <img src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/vultr.png" width="300" alt="vultr优惠vps">
-            </a>
-        </li>
-    
-</ul>
-  
-  
-  
-<div class="notice" style="margin-top:50px">
-    <i class="ri-heart-fill"></i>
-    <div class="notice-content">坚持记录，乐于分享。</div>
-</div>
-
-
-<style>
-    .notice {
-        padding: 20px;
-        border: 1px dashed #e6e6e6;
-        color: #969696;
-        position: relative;
-        display: inline-block;
-        width: 100%;
-        background: #fbfbfb50;
-        border-radius: 10px;
-    }
-
-    .notice i {
-        float: left;
-        color: #999;
-        font-size: 16px;
-        padding-right: 10px;
-        vertical-align: middle;
-        margin-top: -2px;
-    }
-
-    .notice-content {
-        display: initial;
-        vertical-align: middle;
-    }
-</style>
-  
-  <article class="articles">
-    
-    
-    
-    
-    <article
+      <section class="outer">
+  <article
   id="post-Java-多线程详解"
   class="article article-type-post"
   itemscope
@@ -175,10 +66,9 @@
     
     <header class="article-header">
        
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/03/30/Java-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AF%A6%E8%A7%A3/"
-    >Java 多线程详解</a> 
-</h2>
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  Java 多线程详解
+</h1>
  
 
       
@@ -191,9 +81,34 @@
   <div class="article-category">
     <a class="article-category-link" href="/categories/Java%E5%9F%BA%E7%A1%80/">Java基础</a>
   </div>
-   
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> Word count:</span>
+            <span class="post-count">5.3k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> Reading time≈</span>
+            <span class="post-count">20 min</span>
+        </span>
+    </span>
+</div>
+ 
     </div>
       
+    <div class="tocbot"></div>
+
+
+
+
+  
     <div class="article-entry" itemprop="articleBody">
        
   <span id="more"></span>
@@ -681,652 +596,137 @@ class SafeLockThread implements Runnable&#123;
 
     <!-- copyright -->
     
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>Copyright： </strong>
+          
+          Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source.
+          
+        </li>
+      </ul>
+    </div>
+    
     <footer class="article-footer">
        
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2022/03/30/Java-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AF%A6%E8%A7%A3/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a></li></ul>
 
     </footer>
   </div>
 
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-Java-IO流"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/03/30/Java-IO%E6%B5%81/"
-    >Java IO流</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/03/30/Java-IO%E6%B5%81/" class="article-date">
-  <time datetime="2022-03-30T02:02:53.000Z" itemprop="datePublished">2022-03-30</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Java%E5%9F%BA%E7%A1%80/">Java基础</a>
-  </div>
    
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <span id="more"></span>
-
-<p>![](Java IO流体系图.png)</p>
-<h3 id="Java-IO流的概念和作用"><a href="#Java-IO流的概念和作用" class="headerlink" title="Java IO流的概念和作用"></a>Java IO流的概念和作用</h3><p>流是一组有顺序、有起点和终点的字节集合，是对数据传输的总称或者抽象。数据在两设备之间的传输被称为流，流的本质是数据传输，根据数据传输的特性将流抽象为各种类，方便更直观的进行数据操作。</p>
-<h3 id="IO流的分类"><a href="#IO流的分类" class="headerlink" title="IO流的分类"></a>IO流的分类</h3><p>根据处理数据类型的不同分为：字符流和字节流<br>根据数据流向不同分为：输入流和输出流</p>
-<h3 id="字符流和字节流"><a href="#字符流和字节流" class="headerlink" title="字符流和字节流"></a>字符流和字节流</h3><ul>
-<li>比特（Bit）最小的二进制单位 ，是计算机的操作部分 取值0或者1</li>
-<li>字节（Byte）是计算机操作数据的最小单位由8位bit组成 取值（-128-127）</li>
-<li>字符（Char）是用户的可读写的最小单位，在java里面由16位bit组成 取值（0-65535）</li>
-</ul>
-<p>字节流和字符流的区别</p>
-<ol>
-<li>读写单位不同：字节流以字节（8bit）为单位，字符流以字符为单位，根据码表映射字符，一次可能读多个字节。</li>
-<li>处理对象不同：字节流能处理所有类型的数据（如图片、avi等），而字符流只能处理字符类型的数据。</li>
-<li>字节流在操作的时候本身是不会用到缓冲区的，是文件本身的直接操作的；而字符流在操作的时候下后是会用到缓冲区的，是通过缓冲区来操作文件，我们将在下面验证这一点。</li>
-</ol>
-<h3 id="IO流对象"><a href="#IO流对象" class="headerlink" title="IO流对象"></a>IO流对象</h3><h4 id="1、输入字节流InputStream"><a href="#1、输入字节流InputStream" class="headerlink" title="1、输入字节流InputStream"></a>1、输入字节流InputStream</h4><p>InputStream 是所有的输入字节流的父类，它是一个抽象类。 ByteArrayInputStream、StringBufferInputStream、FileInputStream 是三种基本的介质流，它们分别从Byte 数组、StringBuffer、和本地文件中读取数据。PipedInputStream 是从与其它线程共用的管道中读取数据，与Piped 相关的知识后续单独介绍。</p>
-<p>ObjectInputStream 和所有FilterInputStream的子类都是装饰流（装饰器模式的主角）。意思是FileInputStream类可以通过一个String路径名创建一个对象，FileInputStream(String name)。而DataInputStream必须装饰一个类才能返回一个对象，DataInputStream(InputStream in)。</p>
-<p>示例：</p>
-<pre><code class="java">/**
- * 字节流
- * 读文件内容
- * */
-import java.io.*;
-class hello&#123;
-   public static void main(String[] args) throws IOException &#123;
-       String fileName=&quot;D:&quot;+File.separator+&quot;hello.txt&quot;;
-       File f=new File(fileName);
-       InputStream in=new FileInputStream(f);
-       byte[] b=new byte[1024];
-       in.read(b);
-       in.close();
-       System.out.println(new String(b));
-    &#125;
-&#125;
-</code></pre>
-<h4 id="2、输出字节流OutputStream"><a href="#2、输出字节流OutputStream" class="headerlink" title="2、输出字节流OutputStream"></a>2、输出字节流OutputStream</h4><p>OutputStream 是所有的输出字节流的父类，它是一个抽象类。</p>
-<p>ByteArrayOutputStream、FileOutputStream是两种基本的介质流，它们分别向Byte 数组、和本地文件中写入数据。PipedOutputStream 是向与其它线程共用的管道中写入数据，</p>
-<p>ObjectOutputStream 和所有FilterOutputStream的子类都是装饰流。具体例子跟InputStream是对应的。</p>
-<p>示例：</p>
-<pre><code class="java">/**
- * 字节流
- * 向文件中写入字符串
- * */
-import java.io.*;
-class hello&#123;
-   public static void main(String[] args) throws IOException &#123;
-       String fileName=&quot;D:&quot;+File.separator+&quot;hello.txt&quot;;
-       File f=new File(fileName);
-       OutputStream out =new FileOutputStream(f);
-       String str=&quot;Hello World&quot;;
-       byte[] b=str.getBytes();
-       out.write(b);
-       out.close();
-    &#125;
-&#125;
-</code></pre>
-<h4 id="3、字符输入流Reader"><a href="#3、字符输入流Reader" class="headerlink" title="3、字符输入流Reader"></a>3、字符输入流Reader</h4><p>Reader 是所有的输入字符流的父类，它是一个抽象类。</p>
-<p>CharReader、StringReader是两种基本的介质流，它们分别将Char 数组、String中读取数据。PipedReader 是从与其它线程共用的管道中读取数据。</p>
-<p>BufferedReader 很明显就是一个装饰器，它和其子类负责装饰其它Reader 对象。</p>
-<p>FilterReader 是所有自定义具体装饰流的父类，其子类PushbackReader 对Reader 对象进行装饰，会增加一个行号。</p>
-<p>InputStreamReader 是一个连接字节流和字符流的桥梁，它将字节流转变为字符流。FileReader可以说是一个达到此功能、常用的工具类，在其源代码中明显使用了将FileInputStream 转变为Reader 的方法。我们可以从这个类中得到一定的技巧。Reader 中各个类的用途和使用方法基本和InputStream 中的类使用一致。后面会有Reader 与InputStream 的对应关系。</p>
-<p>示例：</p>
-<pre><code class="java">/**
- * 字符流
- * 从文件中读出内容
- * */
-import java.io.*;
-class hello&#123;
-   public static void main(String[] args) throws IOException &#123;
-       String fileName=&quot;D:&quot;+File.separator+&quot;hello.txt&quot;;
-       File f=new File(fileName);
-       char[] ch=new char[100];
-       Reader read=new FileReader(f);
-       int count=read.read(ch);
-       read.close();
-       System.out.println(&quot;读入的长度为：&quot;+count);
-       System.out.println(&quot;内容为&quot;+new String(ch,0,count));
-    &#125;
-&#125;
-</code></pre>
-<h4 id="4、字符输出流Writer"><a href="#4、字符输出流Writer" class="headerlink" title="4、字符输出流Writer"></a>4、字符输出流Writer</h4><p>Writer 是所有的输出字符流的父类，它是一个抽象类。</p>
-<p>CharArrayWriter、StringWriter 是两种基本的介质流，它们分别向Char 数组、String 中写入数据。</p>
-<p>PipedWriter 是向与其它线程共用的管道中写入数据，</p>
-<p>BufferedWriter 是一个装饰器为Writer 提供缓冲功能。</p>
-<p>PrintWriter 和PrintStream 极其类似，功能和使用也非常相似。</p>
-<p>OutputStreamWriter 是OutputStream 到Writer 转换的桥梁，它的子类FileWriter 其实就是一个实现此功能的具体类（具体可以研究一SourceCode）。功能和使用和OutputStream 极其类似，后面会有它们的对应图。</p>
-<p>示例：</p>
-<pre><code class="java">/**
- * 字符流
- * 写入数据
- * */
-import java.io.*;
-class hello&#123;
-   public static void main(String[] args) throws IOException &#123;
-       String fileName=&quot;D:&quot;+File.separator+&quot;hello.txt&quot;;
-       File f=new File(fileName);
-       Writer out =new FileWriter(f);
-       String str=&quot;hello&quot;;
-       out.write(str);
-       out.close();
-    &#125;
-&#125;
-</code></pre>
-<h3 id="面试整理"><a href="#面试整理" class="headerlink" title="面试整理"></a>面试整理</h3><h4 id="1、io流如何读取文件"><a href="#1、io流如何读取文件" class="headerlink" title="1、io流如何读取文件"></a>1、io流如何读取文件</h4><p>使用File对象获取文件路径，通过字符流Reader加入文件，使用字符缓存流BufferedReader处理Reader，再定义一个字符串，循环遍历出文件</p>
- 
-      <!-- reward -->
-      
-    </div>
+  <nav class="article-nav">
     
-
-    <!-- copyright -->
     
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/IO%E6%B5%81/" rel="tag">IO流</a></li></ul>
-
-    </footer>
-  </div>
-
+      <a href="/2022/03/30/Java-IO%E6%B5%81/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">Java IO流</div>
+      </a>
     
- 
-    
-</article>
-
-    
-    <article
-  id="post-07云原生-DevOps使用"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/03/29/07%E4%BA%91%E5%8E%9F%E7%94%9F-DevOps%E4%BD%BF%E7%94%A8/"
-    >07云原生--DevOps使用</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/03/29/07%E4%BA%91%E5%8E%9F%E7%94%9F-DevOps%E4%BD%BF%E7%94%A8/" class="article-date">
-  <time datetime="2022-03-29T07:32:54.000Z" itemprop="datePublished">2022-03-29</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/">云原生</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="DevOps基础与实战"><a href="#DevOps基础与实战" class="headerlink" title="DevOps基础与实战"></a>DevOps基础与实战</h1><h2 id="DevOps基础"><a href="#DevOps基础" class="headerlink" title="DevOps基础"></a>DevOps基础</h2><p>DevOps <strong>是一系列做法和工具</strong>，可以使 IT 和软件开发团队之间的<strong>流程实现自动化</strong>。其中，随着敏捷软件开发日趋流行，<strong>持续集成 (CI)</strong> 和<strong>持续交付 (CD)</strong> 已经成为该领域一个理想的解决方案。 
-      <a class="article-more-link" href="/2022/03/29/07%E4%BA%91%E5%8E%9F%E7%94%9F-DevOps%E4%BD%BF%E7%94%A8/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DevOps/" rel="tag">DevOps</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-06云原生-若依项目上云"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/03/29/06%E4%BA%91%E5%8E%9F%E7%94%9F-%E8%8B%A5%E4%BE%9D%E9%A1%B9%E7%9B%AE%E4%B8%8A%E4%BA%91/"
-    >06云原生--若依项目上云</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/03/29/06%E4%BA%91%E5%8E%9F%E7%94%9F-%E8%8B%A5%E4%BE%9D%E9%A1%B9%E7%9B%AE%E4%B8%8A%E4%BA%91/" class="article-date">
-  <time datetime="2022-03-29T02:16:10.000Z" itemprop="datePublished">2022-03-29</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/">云原生</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="RuoYi-Cloud部署实战"><a href="#RuoYi-Cloud部署实战" class="headerlink" title="RuoYi-Cloud部署实战"></a>RuoYi-Cloud部署实战</h1><h2 id="项目简介"><a href="#项目简介" class="headerlink" title="项目简介"></a>项目简介</h2><h3 id="项目地址"><a href="#项目地址" class="headerlink" title="项目地址"></a>项目地址</h3><p><a target="_blank" rel="noopener" href="https://gitee.com/y_project/RuoYi-Cloud">https://gitee.com/y_project/RuoYi-Cloud</a></p> 
-      <a class="article-more-link" href="/2022/03/29/06%E4%BA%91%E5%8E%9F%E7%94%9F-%E8%8B%A5%E4%BE%9D%E9%A1%B9%E7%9B%AE%E4%B8%8A%E4%BA%91/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ruoyi/" rel="tag">ruoyi</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-05云原生-KubeSphere实战"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/03/29/05%E4%BA%91%E5%8E%9F%E7%94%9F-KubeSphere%E5%AE%9E%E6%88%98/"
-    >05云原生--KubeSphere实战</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/03/29/05%E4%BA%91%E5%8E%9F%E7%94%9F-KubeSphere%E5%AE%9E%E6%88%98/" class="article-date">
-  <time datetime="2022-03-29T01:58:59.000Z" itemprop="datePublished">2022-03-29</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/">云原生</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="中间件部署"><a href="#中间件部署" class="headerlink" title="中间件部署"></a>中间件部署</h1><h2 id="应用部署需要关注的信息【应用部署三要素】"><a href="#应用部署需要关注的信息【应用部署三要素】" class="headerlink" title="应用部署需要关注的信息【应用部署三要素】"></a>应用部署需要关注的信息【应用部署三要素】</h2><p>1、应用的部署方式</p>
-<p>2、应用的数据挂载（数据，配置文件）</p>
-<p>3、应用的可访问性 
-      <a class="article-more-link" href="/2022/03/29/05%E4%BA%91%E5%8E%9F%E7%94%9F-KubeSphere%E5%AE%9E%E6%88%98/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/KubeSphere/" rel="tag">KubeSphere</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-04云原生-KubeSphere入门"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/03/29/04%E4%BA%91%E5%8E%9F%E7%94%9F-KubeSphere%E5%85%A5%E9%97%A8/"
-    >04云原生--KubeSphere入门</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/03/29/04%E4%BA%91%E5%8E%9F%E7%94%9F-KubeSphere%E5%85%A5%E9%97%A8/" class="article-date">
-  <time datetime="2022-03-29T01:44:47.000Z" itemprop="datePublished">2022-03-29</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/">云原生</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="KubeSphere平台安装"><a href="#KubeSphere平台安装" class="headerlink" title="KubeSphere平台安装"></a>KubeSphere平台安装</h1> 
-      <a class="article-more-link" href="/2022/03/29/04%E4%BA%91%E5%8E%9F%E7%94%9F-KubeSphere%E5%85%A5%E9%97%A8/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/KubeSphere/" rel="tag">KubeSphere</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-03云原生-Kubernetes核心实战"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/03/25/03%E4%BA%91%E5%8E%9F%E7%94%9F-Kubernetes%E6%A0%B8%E5%BF%83%E5%AE%9E%E6%88%98/"
-    >03云原生--Kubernetes核心实战</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/03/25/03%E4%BA%91%E5%8E%9F%E7%94%9F-Kubernetes%E6%A0%B8%E5%BF%83%E5%AE%9E%E6%88%98/" class="article-date">
-  <time datetime="2022-03-25T08:15:07.000Z" itemprop="datePublished">2022-03-25</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/">云原生</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="资源创建方式"><a href="#资源创建方式" class="headerlink" title="资源创建方式"></a>资源创建方式</h2><ul>
-<li>命令行</li>
-<li>YAML </li>
-</ul>
-<h2 id="Namespace"><a href="#Namespace" class="headerlink" title="Namespace"></a>Namespace</h2><p>名称空间用来隔离资源 
-      <a class="article-more-link" href="/2022/03/25/03%E4%BA%91%E5%8E%9F%E7%94%9F-Kubernetes%E6%A0%B8%E5%BF%83%E5%AE%9E%E6%88%98/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/k8s/" rel="tag">k8s</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-02云原生-Kubernetes入门"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/03/24/02%E4%BA%91%E5%8E%9F%E7%94%9F-Kubernetes%E5%85%A5%E9%97%A8/"
-    >02云原生--Kubernetes入门</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/03/24/02%E4%BA%91%E5%8E%9F%E7%94%9F-Kubernetes%E5%85%A5%E9%97%A8/" class="article-date">
-  <time datetime="2022-03-24T02:25:38.000Z" itemprop="datePublished">2022-03-24</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/">云原生</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><p>1、k8s是什么</p>
-<p>Kubernetes 为你提供了一个可弹性运行分布式系统的框架。 Kubernetes 会满足你的扩展要求、故障转移、部署模式等。 例如，Kubernetes 可以轻松管理系统的 Canary 部署。（金丝雀部署：先发布一个简化版本，当没有bug时再发布最终版本） 
-      <a class="article-more-link" href="/2022/03/24/02%E4%BA%91%E5%8E%9F%E7%94%9F-Kubernetes%E5%85%A5%E9%97%A8/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/k8s/" rel="tag">k8s</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-01云原生-Docker容器"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/03/24/01%E4%BA%91%E5%8E%9F%E7%94%9F-Docker%E5%AE%B9%E5%99%A8/"
-    >01云原生--Docker容器</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/03/24/01%E4%BA%91%E5%8E%9F%E7%94%9F-Docker%E5%AE%B9%E5%99%A8/" class="article-date">
-  <time datetime="2022-03-24T01:50:04.000Z" itemprop="datePublished">2022-03-24</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/">云原生</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="Docker基础"><a href="#Docker基础" class="headerlink" title="Docker基础"></a>Docker基础</h1><h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>Docker本身是一个容器运行载体或称之为管理引擎，基于Go语言开发的。我们把应用程序和配置依赖打包好，形成一个可交付的运行环境，这个打包好的运行环境，就是image镜像文件。只有通过这个镜像文件才能生成Docker容器。image文件可以看作是容器的模板。Docker根据image文件生成容器实例，同一个镜像文件，可以生成多个同时运行的容器实例。 
-      <a class="article-more-link" href="/2022/03/24/01%E4%BA%91%E5%8E%9F%E7%94%9F-Docker%E5%AE%B9%E5%99%A8/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-Spring源码之BeanFactory创建流程"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/03/19/Spring%E6%BA%90%E7%A0%81%E4%B9%8BBeanFactory%E5%88%9B%E5%BB%BA%E6%B5%81%E7%A8%8B/"
-    >Spring源码之BeanFactory创建流程</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/03/19/Spring%E6%BA%90%E7%A0%81%E4%B9%8BBeanFactory%E5%88%9B%E5%BB%BA%E6%B5%81%E7%A8%8B/" class="article-date">
-  <time datetime="2022-03-19T08:00:57.000Z" itemprop="datePublished">2022-03-19</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">源码剖析</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="BeanFactory创建流程"><a href="#BeanFactory创建流程" class="headerlink" title="BeanFactory创建流程"></a>BeanFactory创建流程</h1><h2 id="获取BeanFactory⼦流程"><a href="#获取BeanFactory⼦流程" class="headerlink" title="获取BeanFactory⼦流程"></a>获取BeanFactory⼦流程</h2><p>时序图如下 
-      <a class="article-more-link" href="/2022/03/19/Spring%E6%BA%90%E7%A0%81%E4%B9%8BBeanFactory%E5%88%9B%E5%BB%BA%E6%B5%81%E7%A8%8B/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring/" rel="tag">Spring</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-  </article>
-  
-
-  
-  <nav class="page-nav">
-    
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">下一页</a>
   </nav>
-  
-</section>
-</div>
 
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "",
+    app_key: "",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+   
+     
+</article>
+
+</section>
       <footer class="footer">
   <div class="outer">
     <ul>
@@ -1466,6 +866,22 @@ class hello&#123;
 <script src="/js/lazyload.min.js"></script>
 
 <!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
 <link
