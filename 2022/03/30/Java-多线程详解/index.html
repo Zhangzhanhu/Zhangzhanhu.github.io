@@ -115,7 +115,7 @@
 
 <h3 id="程序、进程与线程"><a href="#程序、进程与线程" class="headerlink" title="程序、进程与线程"></a>程序、进程与线程</h3><ul>
 <li><p><strong>程序（program）</strong></p>
-<p>程序是为完成特定任务、用某种语言编写的一组指令的集合，即一段静态的代码==（还未运行）==，静态对象。</p>
+<p>程序是为完成特定任务、用某种语言编写的一组指令的集合，即一段静态的代码==（还未运行）==，静态对象。<!--more--></p>
 </li>
 <li><p><strong>进程（process）</strong></p>
 <p>进程是程序的一次执行过程，也就是说程序运行起来了，加载到了内存中，并占用了cpu的资源。这是一个动态的过程：有自身的产生、存在和消亡的过程，这也是进程的生命周期。</p>
@@ -435,16 +435,16 @@ public class ThreadPool &#123;
 
 class WindowThread implements Runnable &#123;
     private int tiketsNum = 100;
-    
+
     //由于，Runnable实现多线程，所有线程共用一个实现类的对象，所以三个线程都共用实现类中的这个Object类的对象。
     Object obj = new Object();
     //如果时继承Thread类实现多线程，那么需要使用到static Object obj = new Object();
-    
+
     public void run() &#123;
-        
+
         //Object obj = new Object();
         //如果Object对象在run()方法中创建，那么每个线程运行都会生成自己的Object类的对象，并不是三个线程的共享对象，所以并没有给加上锁。
-        
+
         while (true) &#123;
             synchronized (obj) &#123;
                 if (tiketsNum &gt; 0) &#123;
@@ -665,7 +665,7 @@ class SafeLockThread implements Runnable&#123;
    
   <nav class="article-nav">
     
-      <a href="/2022/07/09/RabbitMQ-01/" class="article-nav-link">
+      <a href="/2022/07/09/RabbitMQ-%E5%BA%94%E7%94%A8/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           

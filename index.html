@@ -165,6 +165,123 @@
     
     
     <article
+  id="post-Netty-01"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/07/12/Netty-01/"
+    >Netty-01</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/07/12/Netty-01/" class="article-date">
+  <time datetime="2022-07-12T02:08:37.000Z" itemprop="datePublished">2022-07-12</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/IO/">IO</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>在分布式系统中，各个节点之间需要远程服务调用，高性能的RPC框架必不可少，Ney作为异步高性能的通信框架，往往作为基础通信组件被这些RPC框架使用。<br><strong>典型的应用有：</strong>阿里分布式服务框架Dubbo的RPC框架使用Dubbo协议进行节点间通信，Dubbo协议默认使用Nety作为基础通信组件，用于实现各进程节点之间的内部通信 
+      <a class="article-more-link" href="/2022/07/12/Netty-01/"
+        >阅读更多...</a
+      >
+       
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Netty/" rel="tag">Netty</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-RabbitMQ-02"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/07/11/RabbitMQ-02/"
+    >RabbitMQ-02</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/07/11/RabbitMQ-02/" class="article-date">
+  <time datetime="2022-07-11T08:04:15.000Z" itemprop="datePublished">2022-07-11</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/MQ/">MQ</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="Spring整合RabbitMQ"><a href="#Spring整合RabbitMQ" class="headerlink" title="Spring整合RabbitMQ"></a>Spring整合RabbitMQ</h1><p>生产者：</p>
+<p>定义两个配置文件，一个是rabbitMQ的，里面定义基本设置信息</p>
+<p>另一个是Spring的xml文件，里面是rabbitTemplate的bean，其中包括队列配置、交换机配置等等</p>
+<p>使用：通过自动注入rabbitTemplate，调用方法converAndSend完成发送 
+      <a class="article-more-link" href="/2022/07/11/RabbitMQ-02/"
+        >阅读更多...</a
+      >
+       
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/" rel="tag">RabbitMQ</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
   id="post-RabbitMQ-01"
   class="article article-type-post"
   itemscope
@@ -176,7 +293,7 @@
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2022/07/09/RabbitMQ-01/"
+  <a class="article-title" href="/2022/07/11/RabbitMQ-01/"
     >RabbitMQ-01</a> 
 </h2>
  
@@ -185,7 +302,64 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2022/07/09/RabbitMQ-01/" class="article-date">
+      <a href="/2022/07/11/RabbitMQ-01/" class="article-date">
+  <time datetime="2022-07-11T03:05:14.000Z" itemprop="datePublished">2022-07-11</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/MQ/">MQ</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="六大工作模式"><a href="#六大工作模式" class="headerlink" title="六大工作模式"></a>六大工作模式</h1><p>工作模式：消息分发机制 
+      <a class="article-more-link" href="/2022/07/11/RabbitMQ-01/"
+        >阅读更多...</a
+      >
+       
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/" rel="tag">RabbitMQ</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-RabbitMQ-应用"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/07/09/RabbitMQ-%E5%BA%94%E7%94%A8/"
+    >RabbitMQ-01</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/07/09/RabbitMQ-%E5%BA%94%E7%94%A8/" class="article-date">
   <time datetime="2022-07-09T08:35:39.000Z" itemprop="datePublished">2022-07-09</time>
 </a> 
   <div class="article-category">
@@ -196,144 +370,11 @@
       
     <div class="article-entry" itemprop="articleBody">
        
-  <h1 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h1><h2 id="1、定义RabbitMQ工具类"><a href="#1、定义RabbitMQ工具类" class="headerlink" title="1、定义RabbitMQ工具类"></a>1、定义RabbitMQ工具类</h2><p>1.1、引入依赖</p>
-<pre><code class="xml">&lt;dependencies&gt;
-    &lt;!--rabbitmq消息队列--&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-        &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
-        &lt;artifactId&gt;spring-cloud-starter-bus-amqp&lt;/artifactId&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;com.alibaba&lt;/groupId&gt;
-        &lt;artifactId&gt;fastjson&lt;/artifactId&gt;
-    &lt;/dependency&gt;
-&lt;/dependencies&gt;
-</code></pre>
-<p>1.2、新建service包，封装一个service方法</p>
-<p>里面注入RabbitTemplate，然后实现发送消息这个方法。</p>
-<pre><code class="java">@Service
-public class RabbitService &#123;
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
-    /**
-     *  发送消息
-     * @param exchange 交换机
-     * @param routingKey 路由键
-     * @param message 消息
-     */
-    public boolean sendMessage(String exchange, String routingKey, Object message) &#123;
-        rabbitTemplate.convertAndSend(exchange, routingKey, message);
-        return true;
-    &#125;
-&#125;
-</code></pre>
-<p>1.3、新建config包，配置mq的消息转换器</p>
-<pre><code class="java">@Configuration
-public class MQConfig &#123;
-    @Bean
-    public MessageConverter messageConverter()&#123;
-        return new Jackson2JsonMessageConverter();
-    &#125;
-&#125;
-</code></pre>
-<p>默认是字符串的转换器</p>
-<p>1.4、定义消息队列的相关常量</p>
-<pre><code class="java">//更新订单
-public static final String EXCHANGE_DIRECT_ORDER = &quot;exchange.direct.order&quot;;
-public static final String ROUTING_ORDER = &quot;order&quot;;
-//队列
-public static final String QUEUE_ORDER  = &quot;queue.order&quot;;
-
-</code></pre>
-<h2 id="2、更新预约信息"><a href="#2、更新预约信息" class="headerlink" title="2、更新预约信息"></a>2、更新预约信息</h2><p>2.1、引入RabbitMQ工具类的依赖</p>
-<p>2.2、在properties中添加配置</p>
-<pre><code class="properties">#rabbitmq地址
-spring.rabbitmq.host=192.168.44.165
-spring.rabbitmq.port=5672
-spring.rabbitmq.username=guest
-spring.rabbitmq.password=guest
-</code></pre>
-<p>2.3、定义好订单的实体类</p>
-<pre><code class="java">@Data
-@ApiModel(description = &quot;OrderMqVo&quot;)
-public class OrderMqVo &#123;
-   @ApiModelProperty(value = &quot;可预约数&quot;)
-   private Integer reservedNumber;
-
-   @ApiModelProperty(value = &quot;剩余预约数&quot;)
-   private Integer availableNumber;
-
-   @ApiModelProperty(value = &quot;排班id&quot;)
-   private String scheduleId;
-&#125;
-</code></pre>
-<p>2.4、在ScheduleServiceImpl中添加一个更新排版信息方法</p>
-<pre><code class="java">@Override
-public void update(Schedule schedule) &#123;
-    schedule.setUpdateTime(new Date());
-    //主键一致就是更新
-    scheduleRepository.save(schedule);
-&#125;
-</code></pre>
-<p>2.5、封装MQ的监听器RabbitListener</p>
-<pre><code class="java">@Component
-public class HospitalReceiver &#123;
-
-    @Autowired
-    private ScheduleService scheduleService;
-
-    @Autowired
-    private RabbitService rabbitService;
-
-    @RabbitListener(bindings = @QueueBinding(
-            value = @Queue(value = MqConst.QUEUE_ORDER, durable = &quot;true&quot;),
-            exchange = @Exchange(value = MqConst.EXCHANGE_DIRECT_ORDER),
-            key = &#123;MqConst.ROUTING_ORDER&#125;
-    ))
-    public void receiver(OrderMqVo orderMqVo, Message message, Channel channel) throws IOException &#123;
-        //下单成功更新预约数
-        Schedule schedule = scheduleService.getScheduleId(orderMqVo.getScheduleId());
-        schedule.setReservedNumber(orderMqVo.getReservedNumber());
-        schedule.setAvailableNumber(orderMqVo.getAvailableNumber());
-        scheduleService.update(schedule);
-    &#125;
-&#125;
-
-</code></pre>
-<h2 id="3、下单操作"><a href="#3、下单操作" class="headerlink" title="3、下单操作"></a>3、下单操作</h2><p>3.1、引入依赖</p>
-<p>3.2、配置信息中加入rabbitMQ内容</p>
-<p>3.3、完成下单业务，流程图如下</p>
-<img src="RabbitMQ-01/image-20220709170228476.png" alt="image-20220709170228476" style="zoom:50%;" />
-
-<p>3.4、通过MQ进行发送</p>
-<pre><code class="java">@Autowired
-private RabbitService rabbitService;
-@Transactional(rollbackFor = Exception.class)
-@Override
-public Long saveOrder(String scheduleId, Long patientId) &#123;
-         //.......
-        //排班可预约数
-        Integer reservedNumber = jsonObject.getInteger(&quot;reservedNumber&quot;);
-        //排班剩余预约数
-        Integer availableNumber = jsonObject.getInteger(&quot;availableNumber&quot;);
-        //更新信息到orderMqVo实体类中
-        OrderMqVo orderMqVo = new OrderMqVo();
-        orderMqVo.setScheduleId(scheduleId);
-        orderMqVo.setReservedNumber(reservedNumber);
-        orderMqVo.setAvailableNumber(availableNumber);
-        //发送MQ
-        rabbitService.sendMessage(MqConst.EXCHANGE_DIRECT_ORDER, MqConst.ROUTING_ORDER, orderMqVo);
-    &#125; else &#123;
-        throw new YyghException(result.getString(&quot;message&quot;), ResultCodeEnum.FAIL.getCode());
-    &#125;
-    return orderInfo.getId();
-&#125;
-</code></pre>
- 
+  <h1 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h1><h2 id="1、定义RabbitMQ工具类"><a href="#1、定义RabbitMQ工具类" class="headerlink" title="1、定义RabbitMQ工具类"></a>1、定义RabbitMQ工具类</h2><p>1.1、引入依赖 
+      <a class="article-more-link" href="/2022/07/09/RabbitMQ-%E5%BA%94%E7%94%A8/"
+        >阅读更多...</a
+      >
+       
       <!-- reward -->
       
     </div>
@@ -390,7 +431,7 @@ public Long saveOrder(String scheduleId, Long patientId) &#123;
 
 <h3 id="程序、进程与线程"><a href="#程序、进程与线程" class="headerlink" title="程序、进程与线程"></a>程序、进程与线程</h3><ul>
 <li><p><strong>程序（program）</strong></p>
-<p>程序是为完成特定任务、用某种语言编写的一组指令的集合，即一段静态的代码==（还未运行）==，静态对象。</p>
+<p>程序是为完成特定任务、用某种语言编写的一组指令的集合，即一段静态的代码==（还未运行）==，静态对象。<!--more--></p>
 </li>
 <li><p><strong>进程（process）</strong></p>
 <p>进程是程序的一次执行过程，也就是说程序运行起来了，加载到了内存中，并占用了cpu的资源。这是一个动态的过程：有自身的产生、存在和消亡的过程，这也是进程的生命周期。</p>
@@ -710,16 +751,16 @@ public class ThreadPool &#123;
 
 class WindowThread implements Runnable &#123;
     private int tiketsNum = 100;
-    
+
     //由于，Runnable实现多线程，所有线程共用一个实现类的对象，所以三个线程都共用实现类中的这个Object类的对象。
     Object obj = new Object();
     //如果时继承Thread类实现多线程，那么需要使用到static Object obj = new Object();
-    
+
     public void run() &#123;
-        
+
         //Object obj = new Object();
         //如果Object对象在run()方法中创建，那么每个线程运行都会生成自己的Object类的对象，并不是三个线程的共享对象，所以并没有给加上锁。
-        
+
         while (true) &#123;
             synchronized (obj) &#123;
                 if (tiketsNum &gt; 0) &#123;
@@ -1272,189 +1313,13 @@ class hello&#123;
 </article>
 
     
-    <article
-  id="post-03云原生-Kubernetes核心实战"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/03/25/03%E4%BA%91%E5%8E%9F%E7%94%9F-Kubernetes%E6%A0%B8%E5%BF%83%E5%AE%9E%E6%88%98/"
-    >03云原生--Kubernetes核心实战</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/03/25/03%E4%BA%91%E5%8E%9F%E7%94%9F-Kubernetes%E6%A0%B8%E5%BF%83%E5%AE%9E%E6%88%98/" class="article-date">
-  <time datetime="2022-03-25T08:15:07.000Z" itemprop="datePublished">2022-03-25</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/">云原生</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="资源创建方式"><a href="#资源创建方式" class="headerlink" title="资源创建方式"></a>资源创建方式</h2><ul>
-<li>命令行</li>
-<li>YAML </li>
-</ul>
-<h2 id="Namespace"><a href="#Namespace" class="headerlink" title="Namespace"></a>Namespace</h2><p>名称空间用来隔离资源 
-      <a class="article-more-link" href="/2022/03/25/03%E4%BA%91%E5%8E%9F%E7%94%9F-Kubernetes%E6%A0%B8%E5%BF%83%E5%AE%9E%E6%88%98/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/k8s/" rel="tag">k8s</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-02云原生-Kubernetes入门"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/03/24/02%E4%BA%91%E5%8E%9F%E7%94%9F-Kubernetes%E5%85%A5%E9%97%A8/"
-    >02云原生--Kubernetes入门</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/03/24/02%E4%BA%91%E5%8E%9F%E7%94%9F-Kubernetes%E5%85%A5%E9%97%A8/" class="article-date">
-  <time datetime="2022-03-24T02:25:38.000Z" itemprop="datePublished">2022-03-24</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/">云原生</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><p>1、k8s是什么</p>
-<p>Kubernetes 为你提供了一个可弹性运行分布式系统的框架。 Kubernetes 会满足你的扩展要求、故障转移、部署模式等。 例如，Kubernetes 可以轻松管理系统的 Canary 部署。（金丝雀部署：先发布一个简化版本，当没有bug时再发布最终版本） 
-      <a class="article-more-link" href="/2022/03/24/02%E4%BA%91%E5%8E%9F%E7%94%9F-Kubernetes%E5%85%A5%E9%97%A8/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/k8s/" rel="tag">k8s</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-01云原生-Docker容器"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/03/24/01%E4%BA%91%E5%8E%9F%E7%94%9F-Docker%E5%AE%B9%E5%99%A8/"
-    >01云原生--Docker容器</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/03/24/01%E4%BA%91%E5%8E%9F%E7%94%9F-Docker%E5%AE%B9%E5%99%A8/" class="article-date">
-  <time datetime="2022-03-24T01:50:04.000Z" itemprop="datePublished">2022-03-24</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/">云原生</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="Docker基础"><a href="#Docker基础" class="headerlink" title="Docker基础"></a>Docker基础</h1><h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>Docker本身是一个容器运行载体或称之为管理引擎，基于Go语言开发的。我们把应用程序和配置依赖打包好，形成一个可交付的运行环境，这个打包好的运行环境，就是image镜像文件。只有通过这个镜像文件才能生成Docker容器。image文件可以看作是容器的模板。Docker根据image文件生成容器实例，同一个镜像文件，可以生成多个同时运行的容器实例。 
-      <a class="article-more-link" href="/2022/03/24/01%E4%BA%91%E5%8E%9F%E7%94%9F-Docker%E5%AE%B9%E5%99%A8/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
   </article>
   
 
   
   <nav class="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">下一页</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">下一页</a>
   </nav>
   
 </section>
