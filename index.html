@@ -165,6 +165,452 @@
     
     
     <article
+  id="post-Netty-03"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/07/17/Netty-03/"
+    >Netty-03</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/07/17/Netty-03/" class="article-date">
+  <time datetime="2022-07-17T07:38:45.000Z" itemprop="datePublished">2022-07-17</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/IO/">IO</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="Netty核心模块组件"><a href="#Netty核心模块组件" class="headerlink" title="Netty核心模块组件"></a>Netty核心模块组件</h1><h2 id="1、Bootstrap、ServerBootstrap"><a href="#1、Bootstrap、ServerBootstrap" class="headerlink" title="1、Bootstrap、ServerBootstrap"></a>1、Bootstrap、ServerBootstrap</h2><ol>
+<li><code>Bootstrap</code> 意思是引导，一个 <code>Netty</code> 应用通常由一个 <code>Bootstrap</code> 开始，主要作用是配置整个 <code>Netty</code> 程序，串联各个组件，<code>Netty</code> 中 <code>Bootstrap</code> 类是客户端程序的启动引导类，<code>ServerBootstrap</code> 是服务端启动引导类。</li>
+<li>常见的方法有<ul>
+<li><code>public ServerBootstrap group(EventLoopGroup parentGroup, EventLoopGroup childGroup)</code>，该方法用于服务器端，用来设置两个 <code>EventLoop</code></li>
+<li><code>public B group(EventLoopGroup group)</code>，该方法用于客户端，用来设置一个 <code>EventLoop</code></li>
+<li><code>public B channel(Class&lt;? extends C&gt; channelClass)</code>，该方法用来设置一个服务器端的通道实现</li>
+<li><code>public &lt;T&gt; B option(ChannelOption&lt;T&gt; option, T value)</code>，用来给 <code>ServerChannel</code> 添加配置</li>
+<li><code>public &lt;T&gt; ServerBootstrap childOption(ChannelOption&lt;T&gt; childOption, T value)</code>，用来给接收到的通道添加配置</li>
+<li><code>public ServerBootstrap childHandler(ChannelHandler childHandler)</code>，该方法用来设置业务处理类（自定义的<code>handler</code>）</li>
+<li><code>public ChannelFuture bind(int inetPort)</code>，该方法用于服务器端，用来设置占用的端口号</li>
+<li><code>public ChannelFuture connect(String inetHost, int inetPort)</code>，该方法用于客户端，用来连接服务器端</li>
+</ul>
+</li>
+</ol>
+<h2 id="2、Future、ChannelFuture"><a href="#2、Future、ChannelFuture" class="headerlink" title="2、Future、ChannelFuture"></a>2、Future、ChannelFuture</h2><p><code>Netty</code> 中所有的 <code>IO</code> 操作都是异步的，不能立刻得知消息是否被正确处理。但是可以过一会等它执行完成或者直接注册一个监听，具体的实现就是通过 <code>Future</code> 和 <code>ChannelFutures</code>，他们可以注册一个监听，当操作执行成功或失败时监听会自动触发注册的监听事件</p>
+<p>常见的方法有</p>
+<ul>
+<li><code>Channel channel()</code>，返回当前正在进行 <code>IO</code> 操作的通道</li>
+<li><code>ChannelFuture sync()</code>，等待异步操作执行完毕</li>
+</ul>
+<h2 id="3、Channel"><a href="#3、Channel" class="headerlink" title="3、Channel"></a>3、Channel</h2><ol>
+<li><code>Netty</code> 网络通信的组件，能够用于执行网络 <code>I/O</code> 操作。</li>
+<li>通过 <code>Channel</code> 可获得当前网络连接的通道的状态</li>
+<li>通过 <code>Channel</code> 可获得网络连接的配置参数（例如接收缓冲区大小）</li>
+<li><code>Channel</code> 提供异步的网络 <code>I/O</code> 操作(如建立连接，读写，绑定端口)，异步调用意味着任何 <code>I/O</code> 调用都将立即返回，并且不保证在调用结束时所请求的 <code>I/O</code> 操作已完成</li>
+<li>调用立即返回一个 <code>ChannelFuture</code> 实例，通过注册监听器到 <code>ChannelFuture</code> 上，可以 <code>I/O</code> 操作成功、失败或取消时回调通知调用方</li>
+<li>支持关联 <code>I/O</code> 操作与对应的处理程序</li>
+<li>不同协议、不同的阻塞类型的连接都有不同的<code>Channel</code>类型与之对应，常用的<code>Channel</code>类型：<ul>
+<li><code>NioSocketChannel</code>，异步的客户端 <code>TCP</code> <code>Socket</code> 连接。</li>
+<li><code>NioServerSocketChannel</code>，异步的服务器端 <code>TCP</code> <code>Socket</code> 连接。</li>
+<li><code>NioDatagramChannel</code>，异步的 <code>UDP</code> 连接。</li>
+<li><code>NioSctpChannel</code>，异步的客户端 <code>Sctp</code> 连接。</li>
+<li><code>NioSctpServerChannel</code>，异步的 <code>Sctp</code> 服务器端连接，这些通道涵盖了 <code>UDP</code> 和 <code>TCP</code> 网络 <code>IO</code> 以及文件 <code>IO</code>。</li>
+</ul>
+</li>
+</ol>
+<h2 id="4、Selector"><a href="#4、Selector" class="headerlink" title="4、Selector"></a>4、Selector</h2><ol>
+<li><code>Netty</code> 基于 <code>Selector</code> 对象实现 <code>I/O</code> 多路复用，通过 <code>Selector</code> 一个线程可以监听多个连接的 <code>Channel</code> 事件。</li>
+<li>当向一个 <code>Selector</code> 中注册 <code>Channel</code> 后，<code>Selector</code> 内部的机制就可以自动不断地查询（<code>Select</code>）这些注册的 <code>Channel</code> 是否有已就绪的 <code>I/O</code> 事件（例如可读，可写，网络连接完成等），这样程序就可以很简单地使用一个线程高效地管理多个 <code>Channel</code></li>
+</ol>
+<h2 id="5、ChannelHandler-及其实现类"><a href="#5、ChannelHandler-及其实现类" class="headerlink" title="5、ChannelHandler 及其实现类"></a>5、ChannelHandler 及其实现类</h2><ol>
+<li><code>ChannelHandler</code> 是一个接口，处理 <code>I/O</code> 事件或拦截 <code>I/O</code> 操作，并将其转发到其 <code>ChannelPipeline</code>（业务处理链）中的下一个处理程序。</li>
+<li><code>ChannelHandler</code> 本身并没有提供很多方法，因为这个接口有许多的方法需要实现，方便使用期间，可以继承它的子类</li>
+<li><code>ChannelHandler</code> 及其实现类一览图</li>
+</ol>
+<p><img src="Netty-03/0015.png" alt="img"></p>
+<ol start="4">
+<li>我们经常需要自定义一个 <code>Handler</code> 类去继承 <code>ChannelInboundHandlerAdapter</code>，然后通过重写相应方法实现业务逻辑，我们接下来看看一般都需要重写哪些方法</li>
+</ol>
+<p><img src="Netty-03/0016.png" alt="img"></p>
+<h2 id="6、Pipeline-和-ChannelPipeline"><a href="#6、Pipeline-和-ChannelPipeline" class="headerlink" title="6、Pipeline 和 ChannelPipeline"></a>6、Pipeline 和 ChannelPipeline</h2><p><code>ChannelPipeline</code> 是一个重点：</p>
+<ol>
+<li><code>ChannelPipeline</code> 是一个 <code>Handler</code> 的集合，它负责处理和拦截 <code>inbound</code> 或者 <code>outbound</code> 的事件和操作，相当于一个贯穿 <code>Netty</code> 的链。（也可以这样理解：<code>ChannelPipeline</code> 是保存 <code>ChannelHandler</code> 的 <code>List</code>，用于处理或拦截 <code>Channel</code> 的入站事件和出站操作）</li>
+<li><code>ChannelPipeline</code> 实现了一种高级形式的拦截过滤器模式，使用户可以完全控制事件的处理方式，以及 <code>Channel</code> 中各个的 <code>ChannelHandler</code> 如何相互交互</li>
+<li>在 <code>Netty</code> 中每个 <code>Channel</code> 都有且仅有一个 <code>ChannelPipeline</code> 与之对应，它们的组成关系如下</li>
+</ol>
+<p><img src="Netty-03/0017.png" alt="img"></p>
+<ol start="4">
+<li>常用方法<ol>
+<li><code>ChannelPipeline addFirst(ChannelHandler... handlers)</code>，把一个业务处理类（<code>handler</code>）添加到链中的第一个位置</li>
+<li><code>ChannelPipeline addLast(ChannelHandler... handlers)</code>，把一个业务处理类（<code>handler</code>）添加到链中的最后一个位置</li>
+</ol>
+</li>
+</ol>
+<h2 id="7、ChannelHandlerContext"><a href="#7、ChannelHandlerContext" class="headerlink" title="7、ChannelHandlerContext"></a>7、ChannelHandlerContext</h2><ol>
+<li><p>保存 <code>Channel</code> 相关的所有上下文信息，同时关联一个 <code>ChannelHandler</code> 对象</p>
+</li>
+<li><p>即 <code>ChannelHandlerContext</code> 中包含一个具体的事件处理器 <code>ChannelHandler</code>，同时 <code>ChannelHandlerContext</code> 中也绑定了对应的 <code>pipeline</code> 和 <code>Channel</code> 的信息，方便对 <code>ChannelHandler</code> 进行调用。</p>
+</li>
+<li><p>常用方法</p>
+<ul>
+<li><p><code>ChannelFuture close()</code>，关闭通道</p>
+</li>
+<li><p><code>ChannelOutboundInvoker flush()</code>，刷新</p>
+</li>
+<li><p><code>ChannelFuture writeAndFlush(Object msg)</code>，将数据写到<code>ChannelPipeline</code> 中当前 <code>ChannelHandler</code> 的下一个 <code>ChannelHandler</code> 开始处理（出站）</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="8、ChannelOption"><a href="#8、ChannelOption" class="headerlink" title="8、ChannelOption"></a>8、ChannelOption</h2><ol>
+<li><code>Netty</code> 在创建 <code>Channel</code> 实例后，一般都需要设置 <code>ChannelOption</code> 参数。</li>
+<li><code>ChannelOption</code> 参数如下：</li>
+</ol>
+<p><img src="Netty-03/0021.png" alt="img"></p>
+<h2 id="9、EventLoopGroup-和其实现类-NioEventLoopGroup"><a href="#9、EventLoopGroup-和其实现类-NioEventLoopGroup" class="headerlink" title="9、EventLoopGroup 和其实现类 NioEventLoopGroup"></a>9、EventLoopGroup 和其实现类 NioEventLoopGroup</h2><ol>
+<li><code>EventLoopGroup</code> 是一组 <code>EventLoop</code> 的抽象，<code>Netty</code> 为了更好的利用多核 <code>CPU</code> 资源，一般会有多个 <code>EventLoop</code> 同时工作，每个 <code>EventLoop</code> 维护着一个 <code>Selector</code> 实例。</li>
+<li><code>EventLoopGroup</code> 提供 <code>next</code> 接口，可以从组里面按照一定规则获取其中一个 <code>EventLoop</code> 来处理任务。在 <code>Netty</code> 服务器端编程中，我们一般都需要提供两个 <code>EventLoopGroup</code>，例如：<code>BossEventLoopGroup</code> 和 <code>WorkerEventLoopGroup</code>。</li>
+<li>通常一个服务端口即一个 <code>ServerSocketChannel</code> 对应一个 <code>Selector</code> 和一个 <code>EventLoop</code> 线程。<code>BossEventLoop</code> 负责接收客户端的连接并将 <code>SocketChannel</code> 交给 <code>WorkerEventLoopGroup</code> 来进行 <code>IO</code> 处理，如下图所示</li>
+</ol>
+<p><img src="Netty-03/0022.png" alt="img"></p>
+<ol start="4">
+<li>常用方法<br><code>public NioEventLoopGroup()</code>，构造方法<br><code>public Future&lt;?&gt; shutdownGracefully()</code>，断开连接，关闭线程</li>
+</ol>
+<h2 id="10、Unpooled-类"><a href="#10、Unpooled-类" class="headerlink" title="10、Unpooled 类"></a>10、Unpooled 类</h2><ol>
+<li><code>Netty</code> 提供一个专门用来操作缓冲区（即 <code>Netty</code> 的数据容器）的工具类</li>
+<li>常用方法如下所示</li>
+</ol>
+<p><img src="Netty-03/0023.png" alt="img"></p>
+<pre><code class="java">package com.atguigu.netty.buf;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+
+public class NettyByteBuf01 &#123;
+
+    public static void main(String[] args) &#123;
+        
+        //创建一个ByteBuf
+        //说明
+        //1. 创建 对象，该对象包含一个数组arr , 是一个byte[10]
+        //2. 在netty 的buffer中，不需要使用flip 进行反转
+        //   底层维护了 readerindex 和 writerIndex
+        //3. 通过 readerindex 和  writerIndex 和  capacity， 将buffer分成三个区域
+        // 0---readerindex 已经读取的区域
+        // readerindex---writerIndex ， 可读的区域
+        // writerIndex -- capacity, 可写的区域
+        ByteBuf buffer = Unpooled.buffer(10);
+
+        for (int i = 0; i &lt; 10; i++) &#123;
+            buffer.writeByte(i);
+        &#125;
+
+        System.out.println(&quot;capacity=&quot; + buffer.capacity());//10
+        //输出
+//        for(int i = 0; i&lt;buffer.capacity(); i++) &#123;
+              //这个方法readerindex不会变
+//            System.out.println(buffer.getByte(i));
+//        &#125;
+        for (int i = 0; i &lt; buffer.capacity(); i++) &#123;
+            //这个方法readerindex会变
+            System.out.println(buffer.readByte());
+        &#125;
+        System.out.println(&quot;执行完毕&quot;);
+    &#125;
+&#125;
+</code></pre>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Netty/" rel="tag">Netty</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-SQL刷题总结"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/07/17/SQL%E5%88%B7%E9%A2%98%E6%80%BB%E7%BB%93/"
+    >SQL刷题总结</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/07/17/SQL%E5%88%B7%E9%A2%98%E6%80%BB%E7%BB%93/" class="article-date">
+  <time datetime="2022-07-17T02:09:37.000Z" itemprop="datePublished">2022-07-17</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/SQL/">SQL</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="选择"><a href="#选择" class="headerlink" title="选择"></a>选择</h1><p>SELECT <code>字段名</code> FROM <code>表名</code> WHERE <code>判断条件</code></p>
+<p><strong>判断条件总结</strong></p>
+<ul>
+<li>num=1                  <strong>判断等值</strong></li>
+<li>num &gt;=2               <strong>判断区间</strong></li>
+<li>num%2=0、!=0   <strong>判断取余</strong></li>
+<li>num IS NULL        <strong>空字段用IS</strong></li>
+<li>sex=”N”                 <strong>枚举类型</strong></li>
+<li>IN、NOT IN          <strong>两个表联查</strong>，<strong>可以用子查询</strong></li>
+<li>LIKE、NOT LIKE   <strong>匹配<code>&#39;%s&#39;</code>s结尾、   <code>&#39;s%&#39; </code>s开头、  <code>&#39;%s%&#39;</code>包含s</strong></li>
+</ul>
+<h1 id="选择并修改"><a href="#选择并修改" class="headerlink" title="选择并修改"></a>选择并修改</h1><ul>
+<li>使用联接关键字UNION</li>
+</ul>
+<pre><code class="sql">SELECT employee_id ,salary AS bonus
+FROM Employees
+WHERE employee_id%2!=0 AND name NOT LIKE (&#39;M%&#39;) #  查询条件1
+UNION
+SELECT employee_id, salary*0 AS bonus #  在选择的字段上直接修改
+FROM Employees
+WHERE employee_id%2=0 OR name LIKE (&#39;M%&#39;)  #  查询条件2
+ORDER BY employee_id
+</code></pre>
+<ul>
+<li><p>使用UPDATE修改枚举类型’m’，’f’。要求仅使用一次update，使mf互换</p>
+<ul>
+<li>这里用到了选择case</li>
+</ul>
+<pre><code class="sql">UPDATE Salary
+SET sex = (
+    case sex when &#39;m&#39; then &#39;f&#39; else &#39;m&#39; end
+);
+</code></pre>
+</li>
+<li><p>删除操作。要求删除重复数据，仅保留其中id最小的数据</p>
+<pre><code class="sql">DELETE from Person 
+where id not in
+(
+    SELECT dt.id FROM
+    (
+        SELECT min(id) as id # 选择最小，通过min函数
+        FROM Person
+        GROUP BY email  # 根据重复数据分组
+    ) dt
+)
+</code></pre>
+</li>
+</ul>
+<h1 id="字符串处理函数-正则"><a href="#字符串处理函数-正则" class="headerlink" title="字符串处理函数/正则"></a>字符串处理函数/正则</h1><ul>
+<li><p>CONCAT() 函数<br>CONCAT 可以将多个字符串拼接在一起。</p>
+</li>
+<li><p>LEFT(str, length) 函数<br>从左开始截取字符串，length 是截取的长度。</p>
+</li>
+<li><p>UPPER(str) 与 LOWER(str)<br>UPPER(str) 将字符串中所有字符转为大写；LOWER(str) 将字符串中所有字符转为小写</p>
+</li>
+<li><p>SUBSTRING(str, begin, end)<br>截取字符串，end 不写默认为空。SUBSTRING(name, 2) 从第二个截取到末尾，注意并不是下标，就是第二个</p>
+</li>
+</ul>
+<ol>
+<li><p>将名字转换成第一个字母大写、后面字母小写</p>
+<pre><code class="sql">SELECT user_id, CONCAT(UPPER(LEFT(name,1)), LOWER(SUBSTRING(name,2))) as name
+FROM Users
+Order By user_id;
+</code></pre>
+</li>
+<li><p>按日期统计不同的产品数量，并将产品名字按字典序排列</p>
+<p><img src="SQL%E5%88%B7%E9%A2%98%E6%80%BB%E7%BB%93/image-20220719094346259.png" alt="image-20220719094346259"></p>
+<pre><code class="sql">SELECT sell_date,
+COUNT(DISTINCT product) as num_sold,
+GROUP_CONCAT(DISTINCT(product) ORDER BY product SEPARATOR &quot;,&quot;) AS products
+FROM Activities
+GROUP BY sell_date
+ORDER BY sell_date;
+</code></pre>
+<p>GROUP_CONCAT函数用法</p>
+<p>GROUP_CONCAT([去重：DISTINCT] ‘字符串’ [排序：group by 该字符串 asc/desc] 分隔符：separator ‘,’)</p>
+</li>
+</ol>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SQL/" rel="tag">SQL</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Netty-02"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/07/15/Netty-02/"
+    >Netty-02</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/07/15/Netty-02/" class="article-date">
+  <time datetime="2022-07-15T03:09:50.000Z" itemprop="datePublished">2022-07-15</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/IO/">IO</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="原生NIO存在的问题"><a href="#原生NIO存在的问题" class="headerlink" title="原生NIO存在的问题"></a>原生NIO存在的问题</h1><ol>
+<li>NIO的类库和API繁杂，使用麻烦：需要熟练掌握Selector、ServerSocketChannel、SocketChannel、ByteBuffer等. 
+      <a class="article-more-link" href="/2022/07/15/Netty-02/"
+        >阅读更多...</a
+      >
+       
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Netty/" rel="tag">Netty</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-关于Mybatis持久化的演进过程阐述"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/07/12/%E5%85%B3%E4%BA%8EMybatis%E6%8C%81%E4%B9%85%E5%8C%96%E7%9A%84%E6%BC%94%E8%BF%9B%E8%BF%87%E7%A8%8B%E9%98%90%E8%BF%B0/"
+    >关于Mybatis持久化的演进过程阐述</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/07/12/%E5%85%B3%E4%BA%8EMybatis%E6%8C%81%E4%B9%85%E5%8C%96%E7%9A%84%E6%BC%94%E8%BF%9B%E8%BF%87%E7%A8%8B%E9%98%90%E8%BF%B0/" class="article-date">
+  <time datetime="2022-07-12T07:05:45.000Z" itemprop="datePublished">2022-07-12</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Mybatis/">Mybatis</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><strong>什么是持久化？</strong></p>
+<p>“持久化”的狭义理解：指把域对象永久的保存至数据库中；</p>
+<p>“持久化”的广义理解：指数据库相关的各种操作：</p>
+<ul>
+<li>保存： 把域对象永久的保存至数据库中</li>
+<li>更新： 更新数据库中域对象的状态</li>
+<li>删除： 从数据库中删除一个域对象</li>
+<li>加载： 根据特定的<em>OID</em>（SNMP对象标识符），把一个域对象从数据库加载到内存</li>
+<li>查询： 根据特定的查询条件，把符合查询条件的一个或多个域对象从数据库加载内在存中</li>
+</ul>
+<p>————孙卫琴《精通<em>Hibernate</em>：<em>Java</em>对象持久化技术详解》 
+      <a class="article-more-link" href="/2022/07/12/%E5%85%B3%E4%BA%8EMybatis%E6%8C%81%E4%B9%85%E5%8C%96%E7%9A%84%E6%BC%94%E8%BF%9B%E8%BF%87%E7%A8%8B%E9%98%90%E8%BF%B0/"
+        >阅读更多...</a
+      >
+       
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Mybatis/" rel="tag">Mybatis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%8C%81%E4%B9%85%E5%8C%96/" rel="tag">持久化</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
   id="post-Netty-01"
   class="article article-type-post"
   itemscope
@@ -1073,236 +1519,6 @@ class hello&#123;
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/IO%E6%B5%81/" rel="tag">IO流</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-07云原生-DevOps使用"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/03/29/07%E4%BA%91%E5%8E%9F%E7%94%9F-DevOps%E4%BD%BF%E7%94%A8/"
-    >07云原生--DevOps使用</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/03/29/07%E4%BA%91%E5%8E%9F%E7%94%9F-DevOps%E4%BD%BF%E7%94%A8/" class="article-date">
-  <time datetime="2022-03-29T07:32:54.000Z" itemprop="datePublished">2022-03-29</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/">云原生</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="DevOps基础与实战"><a href="#DevOps基础与实战" class="headerlink" title="DevOps基础与实战"></a>DevOps基础与实战</h1><h2 id="DevOps基础"><a href="#DevOps基础" class="headerlink" title="DevOps基础"></a>DevOps基础</h2><p>DevOps <strong>是一系列做法和工具</strong>，可以使 IT 和软件开发团队之间的<strong>流程实现自动化</strong>。其中，随着敏捷软件开发日趋流行，<strong>持续集成 (CI)</strong> 和<strong>持续交付 (CD)</strong> 已经成为该领域一个理想的解决方案。 
-      <a class="article-more-link" href="/2022/03/29/07%E4%BA%91%E5%8E%9F%E7%94%9F-DevOps%E4%BD%BF%E7%94%A8/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DevOps/" rel="tag">DevOps</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-06云原生-若依项目上云"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/03/29/06%E4%BA%91%E5%8E%9F%E7%94%9F-%E8%8B%A5%E4%BE%9D%E9%A1%B9%E7%9B%AE%E4%B8%8A%E4%BA%91/"
-    >06云原生--若依项目上云</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/03/29/06%E4%BA%91%E5%8E%9F%E7%94%9F-%E8%8B%A5%E4%BE%9D%E9%A1%B9%E7%9B%AE%E4%B8%8A%E4%BA%91/" class="article-date">
-  <time datetime="2022-03-29T02:16:10.000Z" itemprop="datePublished">2022-03-29</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/">云原生</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="RuoYi-Cloud部署实战"><a href="#RuoYi-Cloud部署实战" class="headerlink" title="RuoYi-Cloud部署实战"></a>RuoYi-Cloud部署实战</h1><h2 id="项目简介"><a href="#项目简介" class="headerlink" title="项目简介"></a>项目简介</h2><h3 id="项目地址"><a href="#项目地址" class="headerlink" title="项目地址"></a>项目地址</h3><p><a target="_blank" rel="noopener" href="https://gitee.com/y_project/RuoYi-Cloud">https://gitee.com/y_project/RuoYi-Cloud</a></p> 
-      <a class="article-more-link" href="/2022/03/29/06%E4%BA%91%E5%8E%9F%E7%94%9F-%E8%8B%A5%E4%BE%9D%E9%A1%B9%E7%9B%AE%E4%B8%8A%E4%BA%91/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ruoyi/" rel="tag">ruoyi</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-05云原生-KubeSphere实战"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/03/29/05%E4%BA%91%E5%8E%9F%E7%94%9F-KubeSphere%E5%AE%9E%E6%88%98/"
-    >05云原生--KubeSphere实战</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/03/29/05%E4%BA%91%E5%8E%9F%E7%94%9F-KubeSphere%E5%AE%9E%E6%88%98/" class="article-date">
-  <time datetime="2022-03-29T01:58:59.000Z" itemprop="datePublished">2022-03-29</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/">云原生</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="中间件部署"><a href="#中间件部署" class="headerlink" title="中间件部署"></a>中间件部署</h1><h2 id="应用部署需要关注的信息【应用部署三要素】"><a href="#应用部署需要关注的信息【应用部署三要素】" class="headerlink" title="应用部署需要关注的信息【应用部署三要素】"></a>应用部署需要关注的信息【应用部署三要素】</h2><p>1、应用的部署方式</p>
-<p>2、应用的数据挂载（数据，配置文件）</p>
-<p>3、应用的可访问性 
-      <a class="article-more-link" href="/2022/03/29/05%E4%BA%91%E5%8E%9F%E7%94%9F-KubeSphere%E5%AE%9E%E6%88%98/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/KubeSphere/" rel="tag">KubeSphere</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-04云原生-KubeSphere入门"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/03/29/04%E4%BA%91%E5%8E%9F%E7%94%9F-KubeSphere%E5%85%A5%E9%97%A8/"
-    >04云原生--KubeSphere入门</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/03/29/04%E4%BA%91%E5%8E%9F%E7%94%9F-KubeSphere%E5%85%A5%E9%97%A8/" class="article-date">
-  <time datetime="2022-03-29T01:44:47.000Z" itemprop="datePublished">2022-03-29</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/">云原生</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="KubeSphere平台安装"><a href="#KubeSphere平台安装" class="headerlink" title="KubeSphere平台安装"></a>KubeSphere平台安装</h1> 
-      <a class="article-more-link" href="/2022/03/29/04%E4%BA%91%E5%8E%9F%E7%94%9F-KubeSphere%E5%85%A5%E9%97%A8/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/KubeSphere/" rel="tag">KubeSphere</a></li></ul>
 
     </footer>
   </div>
