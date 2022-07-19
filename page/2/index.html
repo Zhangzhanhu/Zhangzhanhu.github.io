@@ -165,6 +165,826 @@
     
     
     <article
+  id="post-RabbitMQ-02"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/04/12/RabbitMQ-02/"
+    >消息队列02-spring框架整合RabbitMQ</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/04/12/RabbitMQ-02/" class="article-date">
+  <time datetime="2022-04-12T08:04:15.000Z" itemprop="datePublished">2022-04-12</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/MQ/">MQ</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="Spring整合RabbitMQ"><a href="#Spring整合RabbitMQ" class="headerlink" title="Spring整合RabbitMQ"></a>Spring整合RabbitMQ</h1><p>生产者：</p>
+<p>定义两个配置文件，一个是rabbitMQ的，里面定义基本设置信息</p>
+<p>另一个是Spring的xml文件，里面是rabbitTemplate的bean，其中包括队列配置、交换机配置等等</p>
+<p>使用：通过自动注入rabbitTemplate，调用方法converAndSend完成发送 
+      <a class="article-more-link" href="/2022/04/12/RabbitMQ-02/"
+        >阅读更多...</a
+      >
+       
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/" rel="tag">RabbitMQ</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-RabbitMQ-01"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/04/11/RabbitMQ-01/"
+    >消息队列01-RabbitMQ工作模式</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/04/11/RabbitMQ-01/" class="article-date">
+  <time datetime="2022-04-11T03:05:14.000Z" itemprop="datePublished">2022-04-11</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/MQ/">MQ</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="六大工作模式"><a href="#六大工作模式" class="headerlink" title="六大工作模式"></a>六大工作模式</h1><p>工作模式：消息分发机制 
+      <a class="article-more-link" href="/2022/04/11/RabbitMQ-01/"
+        >阅读更多...</a
+      >
+       
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/" rel="tag">RabbitMQ</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Java-多线程详解"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/03/30/Java-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AF%A6%E8%A7%A3/"
+    >Java 多线程详解</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/03/30/Java-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AF%A6%E8%A7%A3/" class="article-date">
+  <time datetime="2022-03-30T02:38:53.000Z" itemprop="datePublished">2022-03-30</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java%E5%9F%BA%E7%A1%80/">Java基础</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <span id="more"></span>
+
+<h3 id="程序、进程与线程"><a href="#程序、进程与线程" class="headerlink" title="程序、进程与线程"></a>程序、进程与线程</h3><ul>
+<li><p><strong>程序（program）</strong></p>
+<p>程序是为完成特定任务、用某种语言编写的一组指令的集合，即一段静态的代码==（还未运行）==，静态对象。<!--more--></p>
+</li>
+<li><p><strong>进程（process）</strong></p>
+<p>进程是程序的一次执行过程，也就是说程序运行起来了，加载到了内存中，并占用了cpu的资源。这是一个动态的过程：有自身的产生、存在和消亡的过程，这也是进程的生命周期。</p>
+<p>==进程是系统资源分配的单位==，系统在运行时会为每个进程分配不同的内存区域。</p>
+</li>
+<li><p><strong>线程（thread）</strong></p>
+<p>进程可以进一步细化为线程，是程序内部的执行路径。</p>
+<p>若一个进程同一时间执行多个线程，那么这个进程就是支持多线程的。</p>
+<p>==线程是CPU调度和执行的单位，每个线程拥有独立的运行栈和程序计数器==，线程切换的开销小。</p>
+<p>一个进程中的多个线程共享相同的内存单元/内存地址空间——》他们从同一堆中分配对象，可以访问相同的变量和对象。这就使得相乘间通信更简便、搞笑。但索格线程操作共享的系统资源可能就会带来安全隐患（隐患为到底哪个线程操作这个数据，可能一个线程正在操作这个数据，有一个线程也来操作了这个数据）。</p>
+</li>
+</ul>
+<p>对于Java应用程序java.exe来讲，至少会存在三个线程：main()主线程，gc()垃圾回收线程，异常处理线程。发生异常时会影响主线程。</p>
+<ul>
+<li><p><strong>Java线程的分类</strong>：==用户线程== 和 ==守护线程==</p>
+<ul>
+<li>Java的gc()垃圾回收线程就是一个守护线程</li>
+<li>守护线程是用来服务用户线程的，通过在start()方法前调用thread.setDaemon(true)可以吧一个用户线程变成一个守护线程。</li>
+</ul>
+</li>
+<li><p><strong>并行和并发</strong></p>
+<ul>
+<li><strong>并行</strong>：多个cpu同时执行多个任务。比如，多个人做不同的事。</li>
+<li><strong>并发</strong>：一个cpu（采用时间片）同时执行多个任务。比如，多个人做同一件事。</li>
+</ul>
+</li>
+<li><p><strong>多线程的优点</strong></p>
+<ol>
+<li>提高应用程序的响应。堆图像化界面更有意义，可以增强用户体验。</li>
+<li>提高计算机系CPU的利用率。</li>
+<li>改善程序结构。将既长又复杂的进程分为多个线程，独立运行，利于理解和修改。</li>
+</ol>
+</li>
+<li><p><strong>何时需要多线程</strong></p>
+<ul>
+<li>程序需要同时执行两个或多个任务。</li>
+<li>程序需要实现一些需要等待的任务时，如用户输入、文件读写操作、网络操作、搜索等。</li>
+<li>需要一些后台运行的程序时。</li>
+</ul>
+</li>
+</ul>
+<h3 id="线程的创建和启动"><a href="#线程的创建和启动" class="headerlink" title="线程的创建和启动"></a>线程的创建和启动</h3><h4 id="1-多线程实现的原理"><a href="#1-多线程实现的原理" class="headerlink" title="1 多线程实现的原理"></a>1 多线程实现的原理</h4><p>Java语言的JVM允许程序运行多个线程，多线程可以通过Java中的java.lang.Thread类来体现</p>
+<ul>
+<li>Thread类的特性<ul>
+<li>每个线程都是通过某个特定的Thread对象的run()方法来完成操作的，经常吧run()方法的主体称为线程体。</li>
+<li>通过Thread方法的start()方法来启动这个线程，而非直接调用run()。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-创建方式一：继承Thread类"><a href="#2-创建方式一：继承Thread类" class="headerlink" title="2 创建方式一：继承Thread类"></a>2 创建方式一：继承Thread类</h4><ol>
+<li>创建一个继承于Thread类的子类。</li>
+<li>重写Thread类的run()方法。</li>
+<li>创建Thread类的子类的对象。</li>
+<li>通过此对象调用start()来启动一个线程。</li>
+</ol>
+<pre><code class="java">package com.broky.multiThread;
+
+/**
+ * @author 13roky
+ * @date 2021-04-19 21:22
+ */
+public class ThreadTest extends Thread&#123;
+    @Override
+    //线程体,启动线程时会运行run()方法中的代码
+    public void run() &#123;
+        //输出100以内的偶数
+        for (int i = 0; i &lt; 100; i++) &#123;
+            if (i % 2 == 0)&#123;
+                System.out.println(Thread.currentThread().getName()+&quot;:\t&quot;+i);
+            &#125;
+        &#125;
+    &#125;
+
+    public static void main(String[] args) &#123;
+        //创建一个Thread类的子类对象
+        ThreadTest t1 = new ThreadTest();
+        //通过此对象调用start()启动一个线程
+        t1.start();
+        //注意:已经启动过一次的线程无法再次启动
+        //再创建一个线程
+        ThreadTest t2 = new ThreadTest();
+        t2.start();
+
+        //另一种调用方法,此方法并没有给对象命名
+        new ThreadTest().start();
+
+        System.out.println(&quot;主线程&quot;);
+    &#125;
+&#125;
+</code></pre>
+<h4 id="3-创建方式二：-创建Therad匿名子类"><a href="#3-创建方式二：-创建Therad匿名子类" class="headerlink" title="3 创建方式二： 创建Therad匿名子类"></a>3 创建方式二： 创建Therad匿名子类</h4><pre><code class="java">public class AnonymousSubClass &#123;
+    public static void main(String[] args) &#123;
+
+        new Thread()&#123;
+            @Override
+            public void run() &#123;
+                for (int i = 0; i &lt; 100; i++) &#123;
+                    if (i % 2 == 0) System.out.println(Thread.currentThread().getName() + &quot;:\t&quot; + i);
+                &#125;
+            &#125;
+        &#125;.start();
+
+    &#125;
+&#125;
+</code></pre>
+<h4 id="4-创建方式三：-实现Runnable接口"><a href="#4-创建方式三：-实现Runnable接口" class="headerlink" title="4 创建方式三： 实现Runnable接口"></a>4 创建方式三： 实现Runnable接口</h4><ol>
+<li>创建一个实现Runnable接口的类。</li>
+<li>实现类去实现Runnable接口中的抽象方法：run()。</li>
+<li>创建实现类的对象。</li>
+<li>将此对象作为参数传到Thread类的构造器中，创建Thread类的对象。</li>
+<li>通过Thread类的对象调用start()方法。</li>
+</ol>
+<pre><code class="java">public class RunnableThread &#123;
+    public static void main(String[] args) &#123;
+        //创建实现类的对象
+        RunnableThread01 runnableThread01 = new RunnableThread01();
+        //创建Thread类的对象,并将实现类的对象当做参数传入构造器
+        Thread t1 = new Thread(runnableThread01);
+        //使用Thread类的对象去调用Thread类的start()方法:①启动了线程 ②Thread中的run()调用了Runnable中的run()
+        t1.start();
+
+        //在创建一个线程时，只需要new一个Thread类就可,不需要new实现类
+        Thread t2 = new Thread(runnableThread01);
+        t2.start();
+    &#125;
+&#125;
+
+//RunnableThread01实现Runnable接口的run()抽象方法
+class RunnableThread01 implements Runnable &#123;
+    @Override
+    public void run() &#123;
+        for (int i = 0; i &lt; 100; i++) &#123;
+            if (i % 2 == 0) System.out.println(Thread.currentThread().getName() + &quot;:\t&quot; + i);
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p><strong>继承Thread类和实现Runnable的不同点：</strong></p>
+<ul>
+<li>当一个类本身就存在父类时，不可以继承Thread类来完成多线程任务了，但一个类可以实现多个接口，因此==Runnable的实现方式没有类的单继承性的局限性==，用实现Runnable接口的方式来完成多线程更加实用。</li>
+</ul>
+<ul>
+<li>实现Runnable接口的方式天然具有共享数据的特性（不用static变量）。因为继承Thread的实现方式，需要创建多个子类的对象来进行多线程，如果子类中有变量A，而不使用static约束变量的话，每个子类的对象都会有自己独立的变量A，只有static约束A后，子类的对象才共享变量A。而实现Runnable接口的方式，只需要创建一个实现类的对象，要将这个对象传入Thread类并创建多个Thread类的对象来完成多线程，而这多个Thread类对象实际上就是调用一个实现类对象而已。实现的方式更适合来处理多个线程有共享数据的情况。</li>
+</ul>
+<p><strong>继承Thread类和实现Runnable的相同点：</strong></p>
+<ul>
+<li>Thread类中也实现了Runnable接口</li>
+<li>两种方式都需要重写run()方法，线程的执行逻辑都在run()方法中</li>
+</ul>
+<h4 id="5-创建方式四：实现Callable接口–JDK5新特性"><a href="#5-创建方式四：实现Callable接口–JDK5新特性" class="headerlink" title="5 创建方式四：实现Callable接口–JDK5新特性"></a>5 创建方式四：实现Callable接口–JDK5新特性</h4><p><strong>与Runnable相比，Callable功能更强大</strong></p>
+<ol>
+<li>相比run()方法，可以有返回值</li>
+<li>方法可以抛出异常</li>
+<li>支持泛型的返回值</li>
+<li>需要借助FutureTask类，比如获取返回结果</li>
+</ol>
+<pre><code class="java">//1.创建一个实现Callable的实现类
+class NumThread implements Callable&lt;Integer&gt;&#123;
+    //2.实现call方法，将此线程需要执行的操作声明在call()中
+    @Override
+    public Integer call() throws Exception &#123;
+        int sum = 0;
+        for (int i = 1; i &lt; 100; i++) &#123;
+            if(i%2==0)&#123;
+                System.out.println(i);
+                sum += i;
+            &#125;
+        &#125;
+        return sum;
+    &#125;
+&#125;
+
+public class ThreadNew &#123;
+    public static void main(String[] args) &#123;
+        //3.创建Callable接口实现类的对象
+        NumThread numThread = new NumThread();
+        //4.将此Callable接口实现类的对象作为参数传递到FutureTask构造器中，创建FutureTask对象
+        FutureTask&lt;Integer&gt; futureTask = new FutureTask(numThread);
+        //5.将FutureTask的对象作为参数传递到Thread类的构造器中，创建Thread对象，并调用start()
+        new Thread(futureTask).start();
+
+        try &#123;
+            //6.获取Callable中Call方法的返回值
+            Integer sum = futureTask.get();
+            System.out.println(&quot;总和为&quot;+sum);
+        &#125; catch (InterruptedException e) &#123;
+            e.printStackTrace();
+        &#125; catch (ExecutionException e) &#123;
+            e.printStackTrace();
+        &#125;
+
+    &#125;
+&#125;
+</code></pre>
+<h4 id="6-创建方式五：线程池"><a href="#6-创建方式五：线程池" class="headerlink" title="6 创建方式五：线程池"></a>6 创建方式五：线程池</h4><p><strong>背景：</strong></p>
+<p> 经常创建和销毁、使用量特别大的资源、比如并发情况下的线程、对性能影响很大。</p>
+<p><strong>思路：</strong></p>
+<p> 提前创建好多个线程，放入线程池中，使用时直接获取，使用完放回池中。可以避免频繁创建销毁、实现重复利用。类似生活中的公共交通工具。</p>
+<p><strong>优点：</strong></p>
+<p> 提高响应速度（减少了创建新线程的时间）</p>
+<p> 降低资源消耗（重复利用线程池中线程，不需要每次都创建）</p>
+<p> 便于线程管理</p>
+<pre><code class="java">class NumberThread implements Runnable &#123;
+    @Override
+    public void run() &#123;
+        for (int i = 0; i &lt; 100; i++) &#123;
+            if (i % 2 == 0) &#123;
+                System.out.println(Thread.currentThread().getName() + &quot;:\t&quot; + i);
+            &#125;
+        &#125;
+    &#125;
+&#125;
+
+public class ThreadPool &#123;
+    public static void main(String[] args) &#123;
+
+        //1.提供指定线程数量的线程池
+        ExecutorService service = Executors.newFixedThreadPool(10);
+        ThreadPoolExecutor service1 = (ThreadPoolExecutor) service;
+        //设置线程池的属性
+        //        System.out.println(service.getClass());
+        //        service1.setCorePoolSize(15);
+        //        service1.setKeepAliveTime();
+
+        //2.执行指定的线程的操作。需要提供实现Runnable接口或Callable接口实现类的对象。
+        service.execute(new NumberThread()); //适合用于Runnable
+        //        service.submit(); 适合适用于Callable
+        //关闭线程池
+        service.shutdown();
+    &#125;
+&#125;
+</code></pre>
+<h3 id="Thread类的常用方法"><a href="#Thread类的常用方法" class="headerlink" title="Thread类的常用方法"></a>Thread类的常用方法</h3><ul>
+<li>start() : 启动当前线程, 调用当前线程的run()方法</li>
+<li>run() : 通常需要重写Thread类中的此方法, 将创建的线程要执行的操作声明在此方法中</li>
+<li>currentThread() : 静态方法, 返回当前代码执行的线程</li>
+<li>getName() : 获取当前线程的名字</li>
+<li>setName() : 设置当前线程的名字</li>
+<li>yield() : 释放当前CPU的执行权</li>
+<li>join() : 在线程a中调用线程b的join(), 此时线程a进入阻塞状态, 知道线程b完全执行完以后, 线程a才结束阻塞状态</li>
+<li>stop() : 已过时. 当执行此方法时,强制结束当前线程.</li>
+<li>sleep(long militime) : 让线程睡眠指定的毫秒数，在指定时间内，线程是阻塞状态</li>
+<li>isAlive() ：判断当前线程是否存活</li>
+</ul>
+<h3 id="线程的调度"><a href="#线程的调度" class="headerlink" title="线程的调度"></a>线程的调度</h3><h4 id="cpu的调度策略"><a href="#cpu的调度策略" class="headerlink" title="cpu的调度策略"></a>cpu的调度策略</h4><ul>
+<li><p><strong>时间片：</strong>cpu正常情况下的调度策略。即CPU分配给各个程序的时间，每个线程被分配一个时间段，称作它的时间片，即该进程允许运行的时间，使各个程序从表面上看是同时进行的。如果在时间片结束时进程还在运行，则CPU将被剥夺并分配给另一个进程。如果进程在时间片结束前阻塞或结束，则CPU当即进行切换。而不会造成CPU资源浪费。在宏观上：我们可以同时打开多个应用程序，每个程序并行不悖，同时运行。但在微观上：由于只有一个CPU，一次只能处理程序要求的一部分，如何处理公平，一种方法就是引入时间片，每个程序轮流执行。</p>
+</li>
+<li><p><strong>抢占式：</strong>高优先级的线程抢占cpu。</p>
+</li>
+</ul>
+<h4 id="Java的调度算法"><a href="#Java的调度算法" class="headerlink" title="Java的调度算法"></a>Java的调度算法</h4><ul>
+<li>同优先级线程组成先进先出队列（先到先服务），使用时间片策略。</li>
+<li>堆高优先级，使用优先调度的抢占式策略。</li>
+</ul>
+<p>线程优先级（共有10档）</p>
+<ul>
+<li>MAX_PRIORITY：10</li>
+<li>MIN_PRIORITY：1</li>
+<li>NORM_PRIORITY：5 (默认优先级)</li>
+</ul>
+<p>获取和设置当前线程的优先级：</p>
+<ul>
+<li><code>getPriority();</code> 获取</li>
+<li><code>setPriority(int p);</code> 设置</li>
+</ul>
+<p>注意：<strong>高优先级的线程要抢占低优先级线程cpu的执行权。但是只是从概率上讲，高优先级的线程高概率的情况下被执行。并不意味着只有高优先级的线程执行完成以后，低优先级的线程才执行。</strong></p>
+<h3 id="线程的生命周期"><a href="#线程的生命周期" class="headerlink" title="线程的生命周期"></a>线程的生命周期</h3><p>想要实现多线程，必须在主线程中创建新的线程对象。Java语言使用Thread类及其子类的对象来表示线程，在他的一个完整的生命周期中通常要经历如下的<strong>五种状态</strong>：</p>
+<ol>
+<li>新建：当一个Thread类或其子类的对象被声明并创建时，新的线程对象处于新建状态。</li>
+<li>就绪：处于新建状态的线程被start()后，将进入线程队列等待CPU时间片，此时它已具备了运行的条件，只是没分配到CPU资源。</li>
+<li>运行：当就绪的线程被调度并获得CPU资源时，便进入运行状态，run()方法定义了线程的操作和功能。</li>
+<li>阻塞：在某种特殊情况下，被认为挂起或执行输入输出操作时，让出CPU并临时中止自己的执行，进入阻塞状态。</li>
+<li>死亡：线程完成了它的全部工作或线程被提前强制性的中止或出现异常倒置导致结束。</li>
+</ol>
+<p><img src="image-20220330112508507.png"></p>
+<h3 id="线程的同步"><a href="#线程的同步" class="headerlink" title="线程的同步"></a>线程的同步</h3><p>线程的安全问题Demo: 卖票过程中出现了重票和错票的情况</p>
+<p><strong>线程的安全性问题时因为多个线程正在执行代码的过程中，并且尚未完成的时候，其他线程参与进来执行代码所导致的。</strong></p>
+<h4 id="多线程安全性问题的解决"><a href="#多线程安全性问题的解决" class="headerlink" title="多线程安全性问题的解决"></a>多线程安全性问题的解决</h4><p><strong>原理：</strong></p>
+<p>当一个线程在操作共享数据的时候，其他线程不能参与进来。知道这个线程操作完共享数据的时候，其他线程才可以操作。即使当这个线程操作共享数据的时候发生了阻塞，依旧无法改变这种情况。</p>
+<p>在Java中，我们通过同步机制，来解决线程的安全问题：</p>
+<h4 id="解决方式一：同步代码块"><a href="#解决方式一：同步代码块" class="headerlink" title="解决方式一：同步代码块"></a>解决方式一：同步代码块</h4><p><strong>synchronized(同步监视器){需要被同步的代码}</strong></p>
+<p><strong>说明：</strong></p>
+<ol>
+<li>操作共享数据（多个线程共同操作的变量）的代码，即为需要被同步的代码。 不能多包涵代码（效率低，如果包到while前面就变成了单线程了），也不能少包含代码</li>
+<li>共享数据：多个线程共同操作的变量。</li>
+<li>==同步监视器：俗称，锁==。任何一个类的对象都可以充当锁。但是所有的线程都必须共用一把锁，共用一个对象。</li>
+</ol>
+<p><strong>锁的选择：</strong></p>
+<ol>
+<li><p>自行创建，共用对象，如下面demo中的Object对象。</p>
+</li>
+<li><p>使用this表示当前类的对象</p>
+<p>继承Thread的方法中的锁不能使用this代替，因为继承thread实现多线程时，会创建多个子类对象来代表多个线程，这个时候this指的时当前这个类的多个对象，不唯一，无法当作锁。</p>
+<p>实现Runnable接口的方式中，this可以当作锁，因为这种方式只需要创建一个实现类的对象，将实现类的对象传递给多个Thread类对象来当作多个线程，this就是这个一个实现类的对象，是唯一的，被所有线程所共用的对象。</p>
+</li>
+<li><p>使用类当作锁，以下面demo为例，其中的锁可以写为<code>WindowThread.class</code>, 从这里可以得出结论，类也是一个对象</p>
+</li>
+</ol>
+<p>优点：同步的方式，解决了线程安全的问题</p>
+<p>缺点：操作同步代码时，只能有一个线程参与，其他线程等待。相当于时一个单线程的过程，效率低。</p>
+<pre><code class="java">public class SafeTicketsWindow &#123;
+    public static void main(String[] args) &#123;
+        WindowThread ticketsThread02 = new WindowThread();
+        Thread t1 = new Thread(ticketsThread02);
+        Thread t2 = new Thread(ticketsThread02);
+        Thread t3 = new Thread(ticketsThread02);
+
+        t1.setName(&quot;窗口1&quot;);
+        t2.setName(&quot;窗口2&quot;);
+        t3.setName(&quot;窗口3&quot;);
+
+        t1.start();
+        t2.start();
+        t3.start();
+    &#125;
+&#125;
+
+class WindowThread implements Runnable &#123;
+    private int tiketsNum = 100;
+
+    //由于，Runnable实现多线程，所有线程共用一个实现类的对象，所以三个线程都共用实现类中的这个Object类的对象。
+    Object obj = new Object();
+    //如果时继承Thread类实现多线程，那么需要使用到static Object obj = new Object();
+
+    public void run() &#123;
+
+        //Object obj = new Object();
+        //如果Object对象在run()方法中创建，那么每个线程运行都会生成自己的Object类的对象，并不是三个线程的共享对象，所以并没有给加上锁。
+
+        while (true) &#123;
+            synchronized (obj) &#123;
+                if (tiketsNum &gt; 0) &#123;
+                    try &#123;
+                        //手动让线程进入阻塞,增大安全性发生的概率
+                        Thread.sleep(100);
+                    &#125; catch (InterruptedException e) &#123;
+                        e.printStackTrace();
+                    &#125;
+                    System.out.println(Thread.currentThread().getName() + &quot;:\t票号:&quot; + tiketsNum + &quot;\t剩余票数:&quot; + --tiketsNum);
+                &#125; else &#123;
+                    break;
+                &#125;
+            &#125;
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<h4 id="解决方式二：同步方法"><a href="#解决方式二：同步方法" class="headerlink" title="解决方式二：同步方法"></a>解决方式二：同步方法</h4><p>将所要同步的代码放到一个方法中，将方法声明为synchronized同步方法。之后可以在run()方法中调用同步方法。</p>
+<p><strong>要点：</strong></p>
+<ol>
+<li>同步方法仍然涉及到同步监视器，只是不需要我们显示的声明。</li>
+<li>非静态的同步方法，同步监视器是：this。</li>
+<li>静态的同步方法，同步监视器是：当前类本身。</li>
+</ol>
+<pre><code class="java">public class Window02 &#123;
+    public static void main(String[] args) &#123;
+        Window02Thread ticketsThread02 = new Window02Thread();
+        Thread t1 = new Thread(ticketsThread02);
+        Thread t2 = new Thread(ticketsThread02);
+        Thread t3 = new Thread(ticketsThread02);
+
+        t1.setName(&quot;窗口1&quot;);
+        t2.setName(&quot;窗口2&quot;);
+        t3.setName(&quot;窗口3&quot;);
+
+        t1.start();
+        t2.start();
+        t3.start();
+    &#125;
+&#125;
+
+class Window02Thread implements Runnable &#123;
+    private int tiketsNum = 100;
+
+    @Override
+    public void run() &#123;
+        while (tiketsNum &gt; 0) &#123;
+            show();
+        &#125;
+    &#125;
+
+    private synchronized void show() &#123; //同步监视器：this
+        if (tiketsNum &gt; 0) &#123;
+            try &#123;
+                //手动让线程进入阻塞,增大安全性发生的概率
+                Thread.sleep(100);
+            &#125; catch (InterruptedException e) &#123;
+                e.printStackTrace();
+            &#125;
+            System.out.println(Thread.currentThread().getName() + &quot;:\t票号:&quot; + tiketsNum + &quot;\t剩余票数:&quot; + --tiketsNum);
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<h4 id="解决方式三：Lock锁"><a href="#解决方式三：Lock锁" class="headerlink" title="解决方式三：Lock锁"></a>解决方式三：Lock锁</h4><p>JDK5.0之后，可以通过实例化ReentrantLock对象，在所需要同步的语句前，调用ReentrantLock对象的lock()方法，实现同步锁，在同步语句结束时，调用unlock()方法结束同步锁。</p>
+<p><strong>synchronized和lock的异同</strong>：</p>
+<pre><code class="markdown">1. Lcok是显式锁（需要手动开启和关闭锁），synchronized是隐式锁，除了作用域自动释放。
+2. Lock只有代码块锁，synchronized有代码块锁和方法锁。
+3. 使用Lcok锁，JVM将花费较少的时间来调度线程，性能更好。并且具有更好的拓展性（提供更多的子类）
+</code></pre>
+<pre><code class="java">public class SafeLock &#123;
+    public static void main(String[] args) &#123;
+        SafeLockThread safeLockThread = new SafeLockThread();
+        Thread t1 = new Thread(safeLockThread);
+        Thread t2 = new Thread(safeLockThread);
+        Thread t3 = new Thread(safeLockThread);
+
+        t1.start();
+        t2.start();
+        t3.start();
+    &#125;
+&#125;
+
+class SafeLockThread implements Runnable&#123;
+    private int tickets = 100;
+    private ReentrantLock lock = new ReentrantLock();
+
+    @Override
+    public void run() &#123;
+        while (tickets&gt;0) &#123;
+            try &#123;
+                //在这里锁住，有点类似同步监视器
+                lock.lock();
+                if (tickets &gt; 0) &#123;
+                    Thread.sleep(100);
+                    System.out.println(Thread.currentThread().getName() + &quot;:\t票号:&quot; + tickets + &quot;\t剩余票数:&quot; + --tickets);
+                &#125;
+            &#125; catch (InterruptedException e) &#123;
+                e.printStackTrace();
+            &#125; finally &#123;
+                //操作完成共享数据后在这里解锁
+                lock.unlock();
+            &#125;
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<h3 id="线程的死锁"><a href="#线程的死锁" class="headerlink" title="线程的死锁"></a>线程的死锁</h3><p><strong>原理：</strong></p>
+<p> 不同的线程分别占用对方需要的同步资源不放弃，都在等待对方放弃自己需要的同步资源，就形成了死锁。</p>
+<p> 出现死锁后，并不会出现异常，不会出现提示，只是所有的线程都处于阻塞状态，无法继续。</p>
+<p> 使用同步时应避免出现死锁。</p>
+<p><strong>根本原因：</strong></p>
+<p>线程在获得一个锁L1的情况下再去申请另外一个锁L2，也就是锁L1想要包含了锁L2，也就是说在获得了锁L1，并且没有释放锁L1的情况下，又去申请获得锁L2，这个是产生死锁的最根本原因。另一个原因是默认的锁申请操作是阻塞的。</p>
+<p><strong>解决办法：</strong></p>
+<ol>
+<li>专门的算法、原则。</li>
+<li>尽量减少同步资源的定义。</li>
+<li>尽量避免嵌套同步</li>
+</ol>
+<h3 id="线程的通信"><a href="#线程的通信" class="headerlink" title="线程的通信"></a>线程的通信</h3><p><strong>原理：</strong></p>
+<p>当一个线程执行完成其所应该执行的代码后，手动让这个线程进入阻塞状态，这样一来，接下来的操作只能由其他线程来操作。当其他线程执行的开始阶段，再手动让已经阻塞的线程停止阻塞，进入就绪状态，虽说这时候阻塞的线程停止了阻塞，但是由于现在正在运行的线程拿着同步锁，所以停止阻塞的线程也无法立马执行。如此操作就可以完成线程间的通信。</p>
+<p><strong>所用的到方法：</strong></p>
+<p> wait()：一旦执行此方法，当前线程就会进入阻塞，一旦执行wait()会释放同步监视器。</p>
+<p> notify()：一旦执行此方法，将会唤醒被wait的一个线程。如果有多个线程被wait，就唤醒优先度最高的。</p>
+<p> notifyAll() ：一旦执行此方法，就会唤醒所有被wait的线程</p>
+<p><strong>说明：</strong></p>
+<p> 这三个方法必须在同步代码块或同步方法中使用。</p>
+<p> 三个方法的调用者必须是同步代码块或同步方法中的同步监视器。</p>
+<p> 这三个方法并不时定义在Thread类中的，而是定义在Object类当中的。因为所有的对象都可以作为同步监视器，而这三个方法需要由同步监视器调用，所以任何一个类都要满足，那么只能写在Object类中。</p>
+<p><strong>sleep()和wait()的异同：(面试题)</strong></p>
+<ol>
+<li><p>相同点：两个方法一旦执行，都可以让线程进入阻塞状态。</p>
+</li>
+<li><p>不同点：1) 两个方法声明的位置不同：Thread类中声明sleep(),Object类中声明wait()</p>
+<ol start="2">
+<li><p>调用要求不同：sleep()可以在任何需要的场景下调用。wait()必须在同步代码块中调用。</p>
+</li>
+<li><p>关于是否释放同步监视器：如果两个方法都使用在同步代码块呵呵同步方法中，sleep不会释放锁，wait会释放锁。</p>
+</li>
+</ol>
+</li>
+</ol>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Netty-03"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/02/17/Netty-03/"
+    >Java IO编程04-Netty核心模块组件</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/02/17/Netty-03/" class="article-date">
+  <time datetime="2022-02-17T07:38:45.000Z" itemprop="datePublished">2022-02-17</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/IO/">IO</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="Netty核心模块组件"><a href="#Netty核心模块组件" class="headerlink" title="Netty核心模块组件"></a>Netty核心模块组件</h1><h2 id="1、Bootstrap、ServerBootstrap"><a href="#1、Bootstrap、ServerBootstrap" class="headerlink" title="1、Bootstrap、ServerBootstrap"></a>1、Bootstrap、ServerBootstrap</h2><ol>
+<li><code>Bootstrap</code> 意思是引导，一个 <code>Netty</code> 应用通常由一个 <code>Bootstrap</code> 开始，主要作用是配置整个 <code>Netty</code> 程序，串联各个组件，<code>Netty</code> 中 <code>Bootstrap</code> 类是客户端程序的启动引导类，<code>ServerBootstrap</code> 是服务端启动引导类。 
+      <a class="article-more-link" href="/2022/02/17/Netty-03/"
+        >阅读更多...</a
+      >
+       
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Netty/" rel="tag">Netty</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Netty-02"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/02/04/Netty-02/"
+    >Java IO编程03-Netty高性能架构</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/02/04/Netty-02/" class="article-date">
+  <time datetime="2022-02-04T03:09:50.000Z" itemprop="datePublished">2022-02-04</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/IO/">IO</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="原生NIO存在的问题"><a href="#原生NIO存在的问题" class="headerlink" title="原生NIO存在的问题"></a>原生NIO存在的问题</h1><ol>
+<li>NIO的类库和API繁杂，使用麻烦：需要熟练掌握Selector、ServerSocketChannel、SocketChannel、ByteBuffer等. 
+      <a class="article-more-link" href="/2022/02/04/Netty-02/"
+        >阅读更多...</a
+      >
+       
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Netty/" rel="tag">Netty</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Netty-01"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/01/18/Netty-01/"
+    >Java IO编程02-IO模型</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/01/18/Netty-01/" class="article-date">
+  <time datetime="2022-01-18T02:08:37.000Z" itemprop="datePublished">2022-01-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/IO/">IO</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>在分布式系统中，各个节点之间需要远程服务调用，高性能的RPC框架必不可少，Ney作为异步高性能的通信框架，往往作为基础通信组件被这些RPC框架使用。<br><strong>典型的应用有：</strong>阿里分布式服务框架Dubbo的RPC框架使用Dubbo协议进行节点间通信，Dubbo协议默认使用Nety作为基础通信组件，用于实现各进程节点之间的内部通信 
+      <a class="article-more-link" href="/2022/01/18/Netty-01/"
+        >阅读更多...</a
+      >
+       
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Netty/" rel="tag">Netty</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
   id="post-Java-IO流"
   class="article article-type-post"
   itemscope
@@ -176,8 +996,8 @@
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2022/03/30/Java-IO%E6%B5%81/"
-    >Java IO流</a> 
+  <a class="article-title" href="/2022/01/12/Java-IO%E6%B5%81/"
+    >Java IO编程01-初识IO流</a> 
 </h2>
  
 
@@ -185,11 +1005,11 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2022/03/30/Java-IO%E6%B5%81/" class="article-date">
-  <time datetime="2022-03-30T02:02:53.000Z" itemprop="datePublished">2022-03-30</time>
+      <a href="/2022/01/12/Java-IO%E6%B5%81/" class="article-date">
+  <time datetime="2022-01-12T02:02:53.000Z" itemprop="datePublished">2022-01-12</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Java%E5%9F%BA%E7%A1%80/">Java基础</a>
+    <a class="article-category-link" href="/categories/IO/">IO</a>
   </div>
    
     </div>
@@ -323,412 +1143,6 @@ class hello&#123;
 
     
     <article
-  id="post-07云原生-DevOps使用"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/03/29/07%E4%BA%91%E5%8E%9F%E7%94%9F-DevOps%E4%BD%BF%E7%94%A8/"
-    >07云原生--DevOps使用</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/03/29/07%E4%BA%91%E5%8E%9F%E7%94%9F-DevOps%E4%BD%BF%E7%94%A8/" class="article-date">
-  <time datetime="2022-03-29T07:32:54.000Z" itemprop="datePublished">2022-03-29</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/">云原生</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="DevOps基础与实战"><a href="#DevOps基础与实战" class="headerlink" title="DevOps基础与实战"></a>DevOps基础与实战</h1><h2 id="DevOps基础"><a href="#DevOps基础" class="headerlink" title="DevOps基础"></a>DevOps基础</h2><p>DevOps <strong>是一系列做法和工具</strong>，可以使 IT 和软件开发团队之间的<strong>流程实现自动化</strong>。其中，随着敏捷软件开发日趋流行，<strong>持续集成 (CI)</strong> 和<strong>持续交付 (CD)</strong> 已经成为该领域一个理想的解决方案。 
-      <a class="article-more-link" href="/2022/03/29/07%E4%BA%91%E5%8E%9F%E7%94%9F-DevOps%E4%BD%BF%E7%94%A8/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DevOps/" rel="tag">DevOps</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-06云原生-若依项目上云"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/03/29/06%E4%BA%91%E5%8E%9F%E7%94%9F-%E8%8B%A5%E4%BE%9D%E9%A1%B9%E7%9B%AE%E4%B8%8A%E4%BA%91/"
-    >06云原生--若依项目上云</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/03/29/06%E4%BA%91%E5%8E%9F%E7%94%9F-%E8%8B%A5%E4%BE%9D%E9%A1%B9%E7%9B%AE%E4%B8%8A%E4%BA%91/" class="article-date">
-  <time datetime="2022-03-29T02:16:10.000Z" itemprop="datePublished">2022-03-29</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/">云原生</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="RuoYi-Cloud部署实战"><a href="#RuoYi-Cloud部署实战" class="headerlink" title="RuoYi-Cloud部署实战"></a>RuoYi-Cloud部署实战</h1><h2 id="项目简介"><a href="#项目简介" class="headerlink" title="项目简介"></a>项目简介</h2><h3 id="项目地址"><a href="#项目地址" class="headerlink" title="项目地址"></a>项目地址</h3><p><a target="_blank" rel="noopener" href="https://gitee.com/y_project/RuoYi-Cloud">https://gitee.com/y_project/RuoYi-Cloud</a></p> 
-      <a class="article-more-link" href="/2022/03/29/06%E4%BA%91%E5%8E%9F%E7%94%9F-%E8%8B%A5%E4%BE%9D%E9%A1%B9%E7%9B%AE%E4%B8%8A%E4%BA%91/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ruoyi/" rel="tag">ruoyi</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-05云原生-KubeSphere实战"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/03/29/05%E4%BA%91%E5%8E%9F%E7%94%9F-KubeSphere%E5%AE%9E%E6%88%98/"
-    >05云原生--KubeSphere实战</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/03/29/05%E4%BA%91%E5%8E%9F%E7%94%9F-KubeSphere%E5%AE%9E%E6%88%98/" class="article-date">
-  <time datetime="2022-03-29T01:58:59.000Z" itemprop="datePublished">2022-03-29</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/">云原生</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="中间件部署"><a href="#中间件部署" class="headerlink" title="中间件部署"></a>中间件部署</h1><h2 id="应用部署需要关注的信息【应用部署三要素】"><a href="#应用部署需要关注的信息【应用部署三要素】" class="headerlink" title="应用部署需要关注的信息【应用部署三要素】"></a>应用部署需要关注的信息【应用部署三要素】</h2><p>1、应用的部署方式</p>
-<p>2、应用的数据挂载（数据，配置文件）</p>
-<p>3、应用的可访问性 
-      <a class="article-more-link" href="/2022/03/29/05%E4%BA%91%E5%8E%9F%E7%94%9F-KubeSphere%E5%AE%9E%E6%88%98/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/KubeSphere/" rel="tag">KubeSphere</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-04云原生-KubeSphere入门"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/03/29/04%E4%BA%91%E5%8E%9F%E7%94%9F-KubeSphere%E5%85%A5%E9%97%A8/"
-    >04云原生--KubeSphere入门</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/03/29/04%E4%BA%91%E5%8E%9F%E7%94%9F-KubeSphere%E5%85%A5%E9%97%A8/" class="article-date">
-  <time datetime="2022-03-29T01:44:47.000Z" itemprop="datePublished">2022-03-29</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/">云原生</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="KubeSphere平台安装"><a href="#KubeSphere平台安装" class="headerlink" title="KubeSphere平台安装"></a>KubeSphere平台安装</h1> 
-      <a class="article-more-link" href="/2022/03/29/04%E4%BA%91%E5%8E%9F%E7%94%9F-KubeSphere%E5%85%A5%E9%97%A8/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/KubeSphere/" rel="tag">KubeSphere</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-03云原生-Kubernetes核心实战"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/03/25/03%E4%BA%91%E5%8E%9F%E7%94%9F-Kubernetes%E6%A0%B8%E5%BF%83%E5%AE%9E%E6%88%98/"
-    >03云原生--Kubernetes核心实战</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/03/25/03%E4%BA%91%E5%8E%9F%E7%94%9F-Kubernetes%E6%A0%B8%E5%BF%83%E5%AE%9E%E6%88%98/" class="article-date">
-  <time datetime="2022-03-25T08:15:07.000Z" itemprop="datePublished">2022-03-25</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/">云原生</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h2 id="资源创建方式"><a href="#资源创建方式" class="headerlink" title="资源创建方式"></a>资源创建方式</h2><ul>
-<li>命令行</li>
-<li>YAML </li>
-</ul>
-<h2 id="Namespace"><a href="#Namespace" class="headerlink" title="Namespace"></a>Namespace</h2><p>名称空间用来隔离资源 
-      <a class="article-more-link" href="/2022/03/25/03%E4%BA%91%E5%8E%9F%E7%94%9F-Kubernetes%E6%A0%B8%E5%BF%83%E5%AE%9E%E6%88%98/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/k8s/" rel="tag">k8s</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-02云原生-Kubernetes入门"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/03/24/02%E4%BA%91%E5%8E%9F%E7%94%9F-Kubernetes%E5%85%A5%E9%97%A8/"
-    >02云原生--Kubernetes入门</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/03/24/02%E4%BA%91%E5%8E%9F%E7%94%9F-Kubernetes%E5%85%A5%E9%97%A8/" class="article-date">
-  <time datetime="2022-03-24T02:25:38.000Z" itemprop="datePublished">2022-03-24</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/">云原生</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><p>1、k8s是什么</p>
-<p>Kubernetes 为你提供了一个可弹性运行分布式系统的框架。 Kubernetes 会满足你的扩展要求、故障转移、部署模式等。 例如，Kubernetes 可以轻松管理系统的 Canary 部署。（金丝雀部署：先发布一个简化版本，当没有bug时再发布最终版本） 
-      <a class="article-more-link" href="/2022/03/24/02%E4%BA%91%E5%8E%9F%E7%94%9F-Kubernetes%E5%85%A5%E9%97%A8/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/k8s/" rel="tag">k8s</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-01云原生-Docker容器"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/03/24/01%E4%BA%91%E5%8E%9F%E7%94%9F-Docker%E5%AE%B9%E5%99%A8/"
-    >01云原生--Docker容器</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/03/24/01%E4%BA%91%E5%8E%9F%E7%94%9F-Docker%E5%AE%B9%E5%99%A8/" class="article-date">
-  <time datetime="2022-03-24T01:50:04.000Z" itemprop="datePublished">2022-03-24</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/">云原生</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="Docker基础"><a href="#Docker基础" class="headerlink" title="Docker基础"></a>Docker基础</h1><h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>Docker本身是一个容器运行载体或称之为管理引擎，基于Go语言开发的。我们把应用程序和配置依赖打包好，形成一个可交付的运行环境，这个打包好的运行环境，就是image镜像文件。只有通过这个镜像文件才能生成Docker容器。image文件可以看作是容器的模板。Docker根据image文件生成容器实例，同一个镜像文件，可以生成多个同时运行的容器实例。 
-      <a class="article-more-link" href="/2022/03/24/01%E4%BA%91%E5%8E%9F%E7%94%9F-Docker%E5%AE%B9%E5%99%A8/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
   id="post-Spring源码之BeanFactory创建流程"
   class="article article-type-post"
   itemscope
@@ -740,8 +1154,8 @@ class hello&#123;
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2022/03/19/Spring%E6%BA%90%E7%A0%81%E4%B9%8BBeanFactory%E5%88%9B%E5%BB%BA%E6%B5%81%E7%A8%8B/"
-    >Spring源码之BeanFactory创建流程</a> 
+  <a class="article-title" href="/2021/10/04/Spring%E6%BA%90%E7%A0%81%E4%B9%8BBeanFactory%E5%88%9B%E5%BB%BA%E6%B5%81%E7%A8%8B/"
+    >初识Spring中的IOC容器04</a> 
 </h2>
  
 
@@ -749,8 +1163,8 @@ class hello&#123;
     </header>
      
     <div class="article-meta">
-      <a href="/2022/03/19/Spring%E6%BA%90%E7%A0%81%E4%B9%8BBeanFactory%E5%88%9B%E5%BB%BA%E6%B5%81%E7%A8%8B/" class="article-date">
-  <time datetime="2022-03-19T08:00:57.000Z" itemprop="datePublished">2022-03-19</time>
+      <a href="/2021/10/04/Spring%E6%BA%90%E7%A0%81%E4%B9%8BBeanFactory%E5%88%9B%E5%BB%BA%E6%B5%81%E7%A8%8B/" class="article-date">
+  <time datetime="2021-10-04T08:00:57.000Z" itemprop="datePublished">2021-10-04</time>
 </a> 
   <div class="article-category">
     <a class="article-category-link" href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">源码剖析</a>
@@ -761,7 +1175,7 @@ class hello&#123;
     <div class="article-entry" itemprop="articleBody">
        
   <h1 id="BeanFactory创建流程"><a href="#BeanFactory创建流程" class="headerlink" title="BeanFactory创建流程"></a>BeanFactory创建流程</h1><h2 id="获取BeanFactory⼦流程"><a href="#获取BeanFactory⼦流程" class="headerlink" title="获取BeanFactory⼦流程"></a>获取BeanFactory⼦流程</h2><p>时序图如下 
-      <a class="article-more-link" href="/2022/03/19/Spring%E6%BA%90%E7%A0%81%E4%B9%8BBeanFactory%E5%88%9B%E5%BB%BA%E6%B5%81%E7%A8%8B/"
+      <a class="article-more-link" href="/2021/10/04/Spring%E6%BA%90%E7%A0%81%E4%B9%8BBeanFactory%E5%88%9B%E5%BB%BA%E6%B5%81%E7%A8%8B/"
         >阅读更多...</a
       >
        
@@ -797,8 +1211,8 @@ class hello&#123;
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2022/03/19/Spring%E6%BA%90%E7%A0%81%E4%B9%8BIOC%E5%AE%B9%E5%99%A8%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%BB%E4%BD%93%E6%B5%81%E7%A8%8B/"
-    >Spring源码之IOC容器初始化主体流程</a> 
+  <a class="article-title" href="/2021/10/02/Spring%E6%BA%90%E7%A0%81%E4%B9%8BIOC%E5%AE%B9%E5%99%A8%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%BB%E4%BD%93%E6%B5%81%E7%A8%8B/"
+    >初识Spring中的IOC容器03</a> 
 </h2>
  
 
@@ -806,8 +1220,8 @@ class hello&#123;
     </header>
      
     <div class="article-meta">
-      <a href="/2022/03/19/Spring%E6%BA%90%E7%A0%81%E4%B9%8BIOC%E5%AE%B9%E5%99%A8%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%BB%E4%BD%93%E6%B5%81%E7%A8%8B/" class="article-date">
-  <time datetime="2022-03-19T06:48:53.000Z" itemprop="datePublished">2022-03-19</time>
+      <a href="/2021/10/02/Spring%E6%BA%90%E7%A0%81%E4%B9%8BIOC%E5%AE%B9%E5%99%A8%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%BB%E4%BD%93%E6%B5%81%E7%A8%8B/" class="article-date">
+  <time datetime="2021-10-02T06:48:53.000Z" itemprop="datePublished">2021-10-02</time>
 </a> 
   <div class="article-category">
     <a class="article-category-link" href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">源码剖析</a>
@@ -826,7 +1240,66 @@ class hello&#123;
 </li>
 <li>读源码的⽅法和技巧<ul>
 <li>断点（观察调⽤栈） 
-      <a class="article-more-link" href="/2022/03/19/Spring%E6%BA%90%E7%A0%81%E4%B9%8BIOC%E5%AE%B9%E5%99%A8%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%BB%E4%BD%93%E6%B5%81%E7%A8%8B/"
+      <a class="article-more-link" href="/2021/10/02/Spring%E6%BA%90%E7%A0%81%E4%B9%8BIOC%E5%AE%B9%E5%99%A8%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%BB%E4%BD%93%E6%B5%81%E7%A8%8B/"
+        >阅读更多...</a
+      >
+       
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring/" rel="tag">Spring</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Spring-IoC-的高级特性"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/09/19/Spring-IoC-%E7%9A%84%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7/"
+    >初识Spring中的IOC容器02</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/09/19/Spring-IoC-%E7%9A%84%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7/" class="article-date">
+  <time datetime="2021-09-19T02:58:20.000Z" itemprop="datePublished">2021-09-19</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">源码剖析</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="Spring-IOC高级特性"><a href="#Spring-IOC高级特性" class="headerlink" title="Spring IOC高级特性"></a>Spring IOC高级特性</h1><h2 id="lazy-Init-延迟加载"><a href="#lazy-Init-延迟加载" class="headerlink" title="lazy-Init 延迟加载"></a>lazy-Init 延迟加载</h2><p>Bean 的延迟加载（延迟创建）</p>
+<p>ApplicationContext 容器的默认⾏为是在启动服务器时将所有 singleton bean 提前进⾏实例化。提前实例化意味着作为初始化过程的⼀部分，ApplicationContext 实例会创建并配置所有的singleton bean。</p>
+<p>比如： 
+      <a class="article-more-link" href="/2021/09/19/Spring-IoC-%E7%9A%84%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7/"
         >阅读更多...</a
       >
        

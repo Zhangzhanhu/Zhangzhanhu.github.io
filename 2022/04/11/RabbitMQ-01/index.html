@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-Hans">
+  
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta name="description" content="Technical output and problem solving record" />
+      
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title>消息队列01-RabbitMQ工作模式 |  Tunan`s Blog</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/favicon.ico" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css"
+      />
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+       
+ 
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bulma@5.0.1/bulma.min.css"
+      />
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+
+      <!-- mermaid -->
+      
+      <style>
+        .swal2-styled.swal2-confirm {
+          font-size: 1.6rem;
+        }
+      </style>
+    </head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-RabbitMQ-01"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  消息队列01-RabbitMQ工作模式
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/04/11/RabbitMQ-01/" class="article-date">
+  <time datetime="2022-04-11T03:05:14.000Z" itemprop="datePublished">2022-04-11</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/MQ/">MQ</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> Word count:</span>
+            <span class="post-count">2.3k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> Reading time≈</span>
+            <span class="post-count">9 min</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="六大工作模式"><a href="#六大工作模式" class="headerlink" title="六大工作模式"></a>六大工作模式</h1><p>工作模式：消息分发机制<span id="more"></span></p>
+<h2 id="Hello-world-简单模式"><a href="#Hello-world-简单模式" class="headerlink" title="Hello world 简单模式"></a>Hello world 简单模式</h2><p><img src="RabbitMQ-01/image-20220711110647947.png" alt="image-20220711110647947"></p>
+<ul>
+<li>P:生产者，要发送消息的程序</li>
+<li>C:消费者，接受消息的程序，会一直等待消息到来</li>
+<li>queue：消息队列，类似于一个邮箱，可以缓存消息</li>
+</ul>
+<p>需求：使用简单模式完成消息传递</p>
+<h3 id="编写生产者"><a href="#编写生产者" class="headerlink" title="编写生产者"></a>编写生产者</h3><p>==步骤：==</p>
+<ol>
+<li>定义好队列名称hello</li>
+<li>通过连接工厂建立连接factory</li>
+<li>传入设置的值（主机、端口、用户、密码）</li>
+<li>创建连接connection</li>
+<li>创建信道channel</li>
+<li>创建队列channel.queueDeclare</li>
+<li>定义需要发送的消息message</li>
+<li>发送信息channel.basicPublish</li>
+<li>关闭channel资源</li>
+</ol>
+<p>==代码：==</p>
+<pre><code class="java">package com.dmbjz.one;
+
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.TimeoutException;
+
+/*HelloWord模型 生产者代码*/
+public class Producer &#123;
+
+    public static final String QUEUE_NAME = &quot;hello&quot;; // 队列名称
+
+    public static void main(String[] args) throws IOException, TimeoutException &#123;
+  
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost(&quot;192.168.226.129&quot;);           // 设置MQ所在机器IP进行连接
+        factory.setPort(5672);                        // 指定MQ服务端口
+        factory.setVirtualHost(&quot;study&quot;);              // 指定使用的VirtualHost
+        factory.setUsername(&quot;admin&quot;);                 // 指定MQ账号名
+        factory.setPassword(&quot;123&quot;);                   // 指定MQ密码
+    
+        Connection connection = factory.newConnection();    // 创建连接
+        Channel channel = connection.createChannel();       // 创建信道
+    
+        /*  队列设置（创建队列)
+         *参数1：队列名称，名称不存在就自动创建
+         *参数2：定义队列是否持久化（重启MQ后是队列否存在）,true开启，false关闭
+         *参数3：exclusive 是否独占队列（设置是否只能有一个消费者使用），true独占，false非独占
+         *参数4：autoelete 是否在消费完成后是否自动删除队列 ，true删除,false不删除
+         *参数5：额外附加参数
+         */
+        channel.queueDeclare(QUEUE_NAME, true, false, false, null);
+    
+        String message = &quot;Hello RabbitMQ&quot;;            // 需要发送的消息
+    
+        /*  交换机&amp;队列设置（指定消息使用的交换机和队列）
+         * 参数1： exchange交换机名称（简单队列无交换机，这里不写）
+         * 参数2： 有交换机就是路由key。没有交换机就是队列名称，意为往该队列里存放消息
+         * 参数3： 传递消息的额外设置 (设置消息是否持久化）  MessageProperties.PERSISTENT_TEXT_PLAIN设置消息持久化
+         * 参数4： 消息具体内容（要为 Byte类型）
+         */
+        channel.basicPublish(&quot;&quot;, QUEUE_NAME, null, message.getBytes(StandardCharsets.UTF_8));
+    
+        /*关闭资源*/
+        channel.close();
+        connection.close();
+    
+        System.out.println(&quot;消息生产完毕&quot;);
+        
+    &#125;
+&#125;
+</code></pre>
+<h3 id="编写消费者"><a href="#编写消费者" class="headerlink" title="编写消费者"></a>编写消费者</h3><p>与生产者的不同：</p>
+<ol>
+<li><p>创建信道后不需要创建队列了（创建也无妨，但要保证和生产者创建的一样）</p>
+</li>
+<li><p>调用channel.basicConsume接收消息，实现两个回调方法</p>
+<p>消费者成功消费时的回调接口<br>消费者取消消费的回调</p>
+</li>
+</ol>
+<p>==代码：==</p>
+<pre><code class="java">package com.dmbjz.one;
+
+import com.rabbitmq.client.*;
+
+import java.io.IOException;
+import java.util.concurrent.TimeoutException;
+
+
+/*HelloWord模型 消费者案例*/
+public class Consumer &#123;
+
+      public static final String QUEUE_NAME = &quot;hello&quot;;  // 队列名称
+
+      public static void main(String[] args) throws IOException, TimeoutException &#123;
+
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost(&quot;192.168.226.129&quot;);             // 设置MQ所在机器IP进行连接
+        factory.setPort(5672);                          // 指定MQ服务端口
+        factory.setVirtualHost(&quot;study&quot;);                // 指定使用的VirtualHost
+        factory.setUsername(&quot;admin&quot;);                   // 指定MQ账号名
+        factory.setPassword(&quot;123&quot;);                     // 指定MQ密码
+
+        Connection connection = factory.newConnection();    // 创建连接
+        Channel channel = connection.createChannel();       // 创建信道
+
+        /*消费者成功消费时的回调接口，这里为打印获取到的消息*/
+        DeliverCallback deliverCallback = (consumerTag, message) -&gt; &#123;
+              System.out.println(new String(message.getBody()));
+        &#125;;
+
+        /*消费者取消消费的回调*/
+        CancelCallback callback = consumerTag -&gt; &#123;
+              System.out.println(&quot;消息者取消消费接口回调逻辑&quot;);
+        &#125;;
+
+        /* 接受消息部分
+         * 参数1 ： 消费队列的名称
+         * 参数2 ： 消息的自动确认机制(一获得消息就通知 MQ 消息已被消费)  true打开，false关闭 (接收到消息并消费后也不通知 MQ ，常用)
+         * 参数3 ： 消费者成功消费时的回调接口
+         * 参数4 ： 消费者取消消费的回调
+         */
+        channel.basicConsume(QUEUE_NAME, true, deliverCallback, callback);
+
+        System.out.println(&quot;消费者执行完毕&quot;);
+
+      &#125;
+
+&#125;
+</code></pre>
+<h2 id="Work-queues"><a href="#Work-queues" class="headerlink" title="Work queues"></a>Work queues</h2><p><img src="RabbitMQ-01/image-20220711144458380.png" alt="image-20220711144458380"></p>
+<ul>
+<li><p><strong>工作队列：</strong>与入门程序相比，多了一个或一些消费者，多个消费者共同消费同一个队列中的消息</p>
+</li>
+<li><p><strong>应用场景：</strong>对于任务较多的情况用工作队列可以提高任务处理速度</p>
+</li>
+<li><p>C1、C2处于竞争关系，各消费者处理消息时，会阻塞队列</p>
+</li>
+<li><p>代码与简单模式一样，只是增加一份消费者代码</p>
+</li>
+</ul>
+<h2 id="Publish-Subscribe"><a href="#Publish-Subscribe" class="headerlink" title="Publish/Subscribe"></a>Publish/Subscribe</h2><p><img src="RabbitMQ-01/image-20220711144546980.png" alt="image-20220711144546980"></p>
+<ul>
+<li>X:交换机Exchange，一方面接收生产者的消息，另一方面知道如何处理消息，例如递交给某个贴别的队列、递交给所有队列、或将消息丢弃。到底如何操作取决于Exchange的类型，交换机常见有以下3种类型：<ul>
+<li>广播Fanout：将消息交给所有绑定到交换机的队列</li>
+<li>定向Direct：将消息交给符合指定routing key的队列</li>
+<li>通配符Topic：将消息交给符合routing pattern的队列</li>
+</ul>
+</li>
+<li>交换机只负责转发消息，不具备存储消费的能力，因此如果没有任何队列和交换机绑定，或没有符合路由规则的队列，那么消息会丢失。</li>
+</ul>
+<p>需求：P发布日志，C1接受到日志打印出来，C2接受到日志保存到数据库</p>
+<h3 id="生产者"><a href="#生产者" class="headerlink" title="生产者"></a>生产者</h3><p>代码：</p>
+<pre><code class="java">package com.dmbjz.one;
+
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.TimeoutException;
+
+/*HelloWord模型 生产者代码*/
+public class Producer &#123;
+
+    public static final String QUEUE_NAME = &quot;hello&quot;; // 队列名称
+
+    public static void main(String[] args) throws IOException, TimeoutException &#123;
+  
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost(&quot;192.168.226.129&quot;);           // 设置MQ所在机器IP进行连接
+        factory.setPort(5672);                        // 指定MQ服务端口
+        factory.setVirtualHost(&quot;study&quot;);              // 指定使用的VirtualHost
+        factory.setUsername(&quot;admin&quot;);                 // 指定MQ账号名
+        factory.setPassword(&quot;123&quot;);                   // 指定MQ密码
+    
+        Connection connection = factory.newConnection();    // 创建连接
+        Channel channel = connection.createChannel();       // 创建信道
+        
+        //创建交换机FANOUT
+        /* 参数解释
+         * 1.exchange:交换机名称
+         * 2.type:交换机类型
+            DIRECT(&quot;direct&quot;),:定向
+            FANOUT(&quot;fanout&quot;),:扇形（广播）
+            TOPIC(“topic“),通配符的方式
+            HEADERS(&quot;headers“);参数匹配
+         * 3.durable:是否持久化
+         * 4.autoDelete:自动除
+           * 5,internal:内部使用。一般False
+         * 6.arguments:参数
+        */
+        channel.exchangeDeclare(&quot;exName&quot;, BuiltinExchangeType.FANOUT,true,false,false,null);
+        //创建队列(两个)
+        channel.queueDeclare(&quot;queue1&quot;,false,false,null);
+        channel.queueDeclare(&quot;queue2&quot;,false,false,null);
+        //绑定队列和交换机
+        /* 参数解释
+         * 1.queue:队列名称
+         * 2.exchange:交换机名称
+           * 3.routingKey:路由键，绑定规则
+                   如果交换机的类型为fanout,routingKey设置为&quot;”
+         */
+        channel.queueBind(&quot;queue1&quot;,&quot;exName&quot;,&quot;&quot;);
+        channel.queueBind(&quot;queue2&quot;,&quot;exName&quot;,&quot;&quot;);
+        //发送消息
+        String body = &quot;日志信息&quot;;
+        channel.basicPublish(&quot;exName&quot;, &quot;&quot;, null, body.getBytes());
+        //释放资源
+        channel.close();
+        connection.close();
+        
+    &#125;
+&#125;
+</code></pre>
+<p>PS：消费者端代码没有变动</p>
+<h2 id="Routing"><a href="#Routing" class="headerlink" title="Routing"></a>Routing</h2><p><img src="RabbitMQ-01/image-20220711144633308.png" alt="image-20220711144633308"></p>
+<p>模式说明：</p>
+<ul>
+<li>队列与交换机的绑定，不能是任意绑定了，而是要指定一个RoutingKey(路由key)</li>
+<li>消息的发送方在向Exchange发送消息时，也必须指定消息的RoutingKey</li>
+<li>Exchange不再把消息交给每一个绑定的队列，而是根据消息的Routing Key进行判断，只有队列的<br>Routingkey与消息的Routing key完全一致，才会接收到消息</li>
+</ul>
+<p>需求：日志级别为info的需要单独处理</p>
+<p>生产者代码：</p>
+<pre><code class="java">package com.dmbjz.one;
+
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.TimeoutException;
+
+/*HelloWord模型 生产者代码*/
+public class Producer &#123;
+
+    public static final String QUEUE_NAME = &quot;hello&quot;; // 队列名称
+
+    public static void main(String[] args) throws IOException, TimeoutException &#123;
+  
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost(&quot;192.168.226.129&quot;);           // 设置MQ所在机器IP进行连接
+        factory.setPort(5672);                        // 指定MQ服务端口
+        factory.setVirtualHost(&quot;study&quot;);              // 指定使用的VirtualHost
+        factory.setUsername(&quot;admin&quot;);                 // 指定MQ账号名
+        factory.setPassword(&quot;123&quot;);                   // 指定MQ密码
+    
+        Connection connection = factory.newConnection();    // 创建连接
+        Channel channel = connection.createChannel();       // 创建信道
+        
+        //创建交换机DIRECT
+        /* 参数解释
+         * 1.exchange:交换机名称
+         * 2.type:交换机类型
+            DIRECT(&quot;direct&quot;),:定向
+            FANOUT(&quot;fanout&quot;),:扇形（广播）
+            TOPIC(“topic“),通配符的方式
+            HEADERS(&quot;headers“);参数匹配
+         * 3.durable:是否持久化
+         * 4.autoDelete:自动除
+           * 5,internal:内部使用。一般False
+         * 6.arguments:参数
+        */
+        channel.exchangeDeclare(&quot;exName&quot;, BuiltinExchangeType.DIRECT,true,false,false,null);
+        //创建队列(两个)
+        channel.queueDeclare(&quot;queue1&quot;,false,false,null);
+        channel.queueDeclare(&quot;queue2&quot;,false,false,null);
+        //绑定队列和交换机
+        /* 参数解释
+         * 1.queue:队列名称
+         * 2.exchange:交换机名称
+           * 3.routingKey:路由键，绑定规则
+                   如果交换机的类型为fanout,routingKey设置为&quot;”
+         */
+        channel.queueBind(&quot;queue1&quot;,&quot;exName&quot;,&quot;error&quot;);//队列1绑定error
+        channel.queueBind(&quot;queue2&quot;,&quot;exName&quot;,&quot;infor&quot;);//队列2绑定info
+        channel.queueBind(&quot;queue2&quot;,&quot;exName&quot;,&quot;error&quot;);//队列3绑定error
+        channel.queueBind(&quot;queue2&quot;,&quot;exName&quot;,&quot;warning&quot;);//队列4绑定warning
+        //发送消息
+        String body = &quot;日志信息&quot;;
+        channel.basicPublish(&quot;exName&quot;, &quot;info&quot;, null, body.getBytes());//需要指定routing key
+        //释放资源
+        channel.close();
+        connection.close();
+        
+    &#125;
+&#125;
+</code></pre>
+<h2 id="Topics"><a href="#Topics" class="headerlink" title="Topics"></a>Topics</h2><p><img src="RabbitMQ-01/image-20220711144653905.png" alt="image-20220711144653905"></p>
+<p>*匹配一个字符串</p>
+<p>#匹配多个字符串</p>
+<p>在定向的基础上加了一个模糊匹配</p>
+<h2 id="RPC"><a href="#RPC" class="headerlink" title="RPC"></a>RPC</h2><p><img src="RabbitMQ-01/image-20220711144711146.png" alt="image-20220711144711146"></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>Copyright： </strong>
+          
+          Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source.
+          
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2022/04/11/RabbitMQ-01/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/" rel="tag">RabbitMQ</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2022/04/12/RabbitMQ-02/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            消息队列02-spring框架整合RabbitMQ
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2022/03/30/Java-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AF%A6%E8%A7%A3/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">Java 多线程详解</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "",
+    app_key: "",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+   
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2018-2022
+        <i class="ri-heart-fill heart_icon"></i> Tunan
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>Visitors:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>Views:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>    
+    </main>
+    <div class="float_btns">
+      <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+    </div>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/ayer-side.svg" alt="Tunan`s Blog"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags/share">分享</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" target="_blank" rel="noopener" href="https://blog.csdn.net/North_City_">CSDN</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="Search">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-3.6.0.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+    
+
+  </div>
+</body>
+
+</html>

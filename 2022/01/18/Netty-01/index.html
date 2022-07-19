@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-Hans">
+  
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta name="description" content="Technical output and problem solving record" />
+      
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title>Java IO编程02-IO模型 |  Tunan`s Blog</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/favicon.ico" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css"
+      />
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+       
+ 
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bulma@5.0.1/bulma.min.css"
+      />
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+
+      <!-- mermaid -->
+      
+      <style>
+        .swal2-styled.swal2-confirm {
+          font-size: 1.6rem;
+        }
+      </style>
+    </head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-Netty-01"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  Java IO编程02-IO模型
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/01/18/Netty-01/" class="article-date">
+  <time datetime="2022-01-18T02:08:37.000Z" itemprop="datePublished">2022-01-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/IO/">IO</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> Word count:</span>
+            <span class="post-count">4.1k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> Reading time≈</span>
+            <span class="post-count">17 min</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>在分布式系统中，各个节点之间需要远程服务调用，高性能的RPC框架必不可少，Ney作为异步高性能的通信框架，往往作为基础通信组件被这些RPC框架使用。<br><strong>典型的应用有：</strong>阿里分布式服务框架Dubbo的RPC框架使用Dubbo协议进行节点间通信，Dubbo协议默认使用Nety作为基础通信组件，用于实现各进程节点之间的内部通信<span id="more"></span></p>
+<h1 id="IO模型"><a href="#IO模型" class="headerlink" title="IO模型"></a>IO模型</h1><ul>
+<li><p>简单解释：用什么样的通道进行数据的发送和接受，很大程度上决定了程序通信的性能</p>
+</li>
+<li><p>Java共支持三种网络编程IO模式</p>
+<ul>
+<li><p>BIO：传统同步阻塞IO，服务器实现模式为一个连接一个线程，即客户端有连接请求时服务器端就要启动一个线程去处理，如果这个连接不错任何事情会造成不必要的线程开销</p>
+<p>适用于连接数目比较少且固定的框架</p>
+</li>
+<li><p>NIO：同步非阻塞IO，服务器实现模式为一个线程处理多个请求，即客户端发送的连接请求都会注册到<strong>多路复用器</strong>（<strong>selector选择器</strong>）上，多路复用器轮询到连接有IO请求就处理</p>
+<p>适用于连接数目多且比较短的框架，比如聊天服务器、服务器通讯等</p>
+</li>
+<li><p>AIO：异步非阻塞IO，有效的请求才启动线程，目前应用少，Netty也是基于NIO使用的。</p>
+<p>适用于连接数目多且连接比较长的架构</p>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="BIO（blocking-io）"><a href="#BIO（blocking-io）" class="headerlink" title="BIO（blocking io）"></a>BIO（blocking io）</h1><p>传统JavaIO编程，其相关类和接口在java.io下</p>
+<p>可以通过多个线程池改善（但解决不了根本问题） ，实现多个客户连接服务器。</p>
+<h2 id="编程简单流程"><a href="#编程简单流程" class="headerlink" title="编程简单流程"></a>编程简单流程</h2><ol>
+<li>服务器端启动一个ServerSocket</li>
+<li>客户端启动Socket对服务器进行通信 </li>
+<li>客户端发出请求后，先咨询服务器是否有线程响应，如果没有则等待，或者被拒绝。</li>
+<li>如果有响应，客户端线程会等待请求结束后才继续执行（阻塞行为）</li>
+</ol>
+<pre><code class="java">public class BIOServer &#123;
+    public static void main(String[] args) throws Exception &#123;
+
+        //线程池机制
+
+        //思路
+        //1. 创建一个线程池
+        //2. 如果有客户端连接，就创建一个线程，与之通讯(单独写一个方法)
+
+        ExecutorService newCachedThreadPool = Executors.newCachedThreadPool();
+
+        //创建ServerSocket
+        ServerSocket serverSocket = new ServerSocket(6666);
+
+        System.out.println(&quot;服务器启动了&quot;);
+
+        while (true) &#123;
+
+            System.out.println(&quot;线程信息 id =&quot; + Thread.currentThread().getId() + &quot; 名字=&quot; + Thread.currentThread().getName());
+            //监听，等待客户端连接
+            System.out.println(&quot;等待连接....&quot;);
+            final Socket socket = serverSocket.accept();
+            System.out.println(&quot;连接到一个客户端&quot;);
+
+            //就创建一个线程，与之通讯(单独写一个方法)
+            newCachedThreadPool.execute(new Runnable() &#123;
+                public void run() &#123; //我们重写
+                    //可以和客户端通讯
+                    handler(socket);
+                &#125;
+            &#125;);
+
+        &#125;
+
+
+    &#125;
+
+    //编写一个handler方法，和客户端通讯
+    public static void handler(Socket socket) &#123;
+
+        try &#123;
+            System.out.println(&quot;线程信息 id =&quot; + Thread.currentThread().getId() + &quot; 名字=&quot; + Thread.currentThread().getName());
+            byte[] bytes = new byte[1024];
+            //通过socket 获取输入流
+            InputStream inputStream = socket.getInputStream();
+
+            //循环的读取客户端发送的数据
+            while (true) &#123;
+
+                System.out.println(&quot;线程信息 id =&quot; + Thread.currentThread().getId() + &quot; 名字=&quot; + Thread.currentThread().getName());
+
+                System.out.println(&quot;read....&quot;);
+               int read =  inputStream.read(bytes);
+               if(read != -1) &#123;
+                   System.out.println(new String(bytes, 0, read)); //输出客户端发送的数据
+               &#125; else &#123;
+                   break;
+               &#125;
+            &#125;
+
+
+        &#125;catch (Exception e) &#123;
+            e.printStackTrace();
+        &#125;finally &#123;
+            System.out.println(&quot;关闭和client的连接&quot;);
+            try &#123;
+                socket.close();
+            &#125;catch (Exception e) &#123;
+                e.printStackTrace();
+            &#125;
+
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p>BIO问题分析：</p>
+<ol>
+<li>每个请求都要创建独立的线程，与对应的客户端进行数据的读写、业务处理操作</li>
+<li>当并发数比较大时，需要创建大量线程来处理连接，系统资源占用比较大</li>
+<li>建立连接后，如果当前线程没有数据可读，线程就会阻塞在Read操作上，造成线程资源的浪费</li>
+</ol>
+<h1 id="NIO（no-blocking-io）"><a href="#NIO（no-blocking-io）" class="headerlink" title="NIO（no-blocking io）"></a>NIO（no-blocking io）</h1><ul>
+<li>同步非阻塞</li>
+<li>相关类都在java.nio包下</li>
+<li>三大核心部分：Channel、Buffer、Selector</li>
+<li>NIO是面向缓冲区编程的，数据读取到一个缓冲区稍后处理，需要时可在缓冲区前后移动，这就增加了处理过程的灵活性，使用它可以提供非阻塞式的高伸缩性网络</li>
+<li>NIO的非阻塞模式，使一个线程从某通道发送请求或者读取数据，但是它仅能得到目前可用的数据，如果目前没有数据可用时，就什么都不会获取，而不是保持线程阻塞，所以直至数据变的可以读取之前，该线程可以继续做其他的事情。非阻塞写也是如此，一个线程请求写入一些数据到某通道，但不需要等待它完全写入，这个线程同时可以去做别的事情。</li>
+<li>通俗理解：NIO是可以做到用一个线程来处理多个操作的。假设有10000个请求过来根据实际情况，可以分配50或者100个线程来处理。不像之前的阻塞1O那样，非得分配10000个。</li>
+<li>HTTP2.0使用了多路复用的技术，做到同一个连接并发处理多个请求，而且并发请求<br>的数量比HTTP1.1大了好几个数量级。</li>
+</ul>
+<h2 id="三大核心原理示意"><a href="#三大核心原理示意" class="headerlink" title="三大核心原理示意"></a>三大核心原理示意</h2><p><img src="Netty-01/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xlbzE4Nw==,size_16,color_FFFFFF,t_70.png" alt="img"></p>
+<ul>
+<li>每一个channel对应一个buffer</li>
+<li>selector对应一个线程，一个线程对应多个channel（连接）</li>
+<li>程序切换到哪个channel是由事件Event决定的</li>
+<li>selector会根据不同的事件在各个channel上切换</li>
+<li>buffer就是一个内存块，底层是一个数组</li>
+<li>数据的读写是通过buffer，这是和BIO的本质不同：BIO要么是输入流要么是输出流，不能是双向的；但NIO的buffer既可以读也可以写，使用filp()方法切换。channel是双向的。</li>
+</ul>
+<h2 id="缓冲区（buffer）"><a href="#缓冲区（buffer）" class="headerlink" title="缓冲区（buffer）"></a>缓冲区（buffer）</h2><p>缓冲区(Buffer)：本质上是一个可以读写数据的内存块，可以理解成是一个容器对象（含数组），该对象提供了一组方法，可以更轻松地使用内存块；缓冲区对象内置了一些机制，能够跟踪和记录缓冲区的状态变化情况。</p>
+<ol>
+<li><p>在NIO中，Buffer是一个顶层父类，它是一个抽象类。包含常用子类、ByteBuffer，ShortBuffer，CharBuffer，IntBuffer等八个基本类型的子类</p>
+</li>
+<li><p>四个属性</p>
+<pre><code class="java">Capacity//容量，在创建缓冲区时设定且不能改变
+Limit//表示当前缓冲区终点，不能对超过终点的位置进行读写操作。极限是可以修改的
+Position//位置，下一个被访问元素的索引，每次读写都会改变这个值
+Mark//标记
+</code></pre>
+</li>
+<li><p>常用方法</p>
+<pre><code class="java">intBuffer.flip();
+intBuffer.position(1);//1,2
+intBuffer.limit(3);
+</code></pre>
+</li>
+</ol>
+<pre><code class="java">public class BasicBuffer &#123;
+    public static void main(String[] args) &#123;
+
+        //举例说明Buffer 的使用 (简单说明)
+        //创建一个Buffer, 大小为 5, 即可以存放5个int
+        IntBuffer intBuffer = IntBuffer.allocate(5);
+
+        //向buffer 存放数据
+//        intBuffer.put(10);
+//        intBuffer.put(11);
+//        intBuffer.put(12);
+//        intBuffer.put(13);
+//        intBuffer.put(14);
+        for(int i = 0; i &lt; intBuffer.capacity(); i++) &#123;
+            intBuffer.put( i * 2);
+        &#125;
+
+        //如何从buffer读取数据
+        //将buffer转换，读写切换(!!!)
+        /*
+        public final Buffer flip() &#123;
+            limit = position; //读数据不能超过5
+            position = 0;
+            mark = -1;
+            return this;
+        &#125;
+         */
+        intBuffer.flip();
+        intBuffer.position(1);//1,2
+        System.out.println(intBuffer.get());
+        intBuffer.limit(3);
+        while (intBuffer.hasRemaining()) &#123;
+            System.out.println(intBuffer.get());
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<h2 id="通道（Channel）"><a href="#通道（Channel）" class="headerlink" title="通道（Channel）"></a>通道（Channel）</h2><ul>
+<li>通道可以同时进行读写，可以实现异步读写数据，可以从缓冲区读取数据，也可以写数据到缓冲区</li>
+<li>常用Channel类，FileChannel（文件读写）、DatagramChannel（UPD）、ServerSocketChannel（TCP）、ScoketChannel (TCP)</li>
+<li>FileChannel主要用来对本地文件进行IO操作，常见的方法有<ul>
+<li>public int read(ByteBuffer dst), 从通道读取数据并放到缓冲区中</li>
+<li>public int write(ByteBuffer src), 把缓冲区的数据写到通道中</li>
+<li>public long transferFrom(ReadableByteChannel src,long position,long count),从目标通道中复制数据到当前通道</li>
+<li>public long transferTo long position,long count,,WritableByteChannel target),把数据从当前通道复制给目标通道</li>
+</ul>
+</li>
+</ul>
+<h2 id="选择器（Selector）"><a href="#选择器（Selector）" class="headerlink" title="选择器（Selector）"></a>选择器（Selector）</h2><ul>
+<li>Java的NIO, 用非阻塞的IO方式。可以用一个线程，处理多个的客户端连接，就会使用到Selector(选择器)</li>
+<li>Selector能够检测多个注册的通道上是否有事件发生（注意：多个Channel以事件的方式可以注册到同一个Selector],如果有事件发生，便获取事件然后针对每个事件进行相应的处理。这样就可以只用一个单线程去管理多个通道，也就是管理多个连接和请求。</li>
+<li>只有在连接真正有读写事件发生时，才会进行读写，就大大地减少了系统开销，并且不必为每个连接都创建一个线程，不用去维护多个线程</li>
+<li>避免了多线程之间的上下文切换导致的开销</li>
+<li>核心点：selectorKey<ul>
+<li>当客户端连接时，会通过serverSocketChannel得到SocketChannel</li>
+<li>使用register()方法将SocketChannel注册到selector上，一个selector可以注册多个SocketChannel</li>
+<li>注册后返回一个selectorKey，会和该selector关联</li>
+<li>selector使用select()方法进行监听，会返回有事件发生的通道个数</li>
+<li>进一步得到各个selectorKey（有事件发生）</li>
+<li>再通过selectorKey反向获取SocketChannel</li>
+</ul>
+</li>
+</ul>
+<h1 id="NIO群聊系统"><a href="#NIO群聊系统" class="headerlink" title="NIO群聊系统"></a>NIO群聊系统</h1><p><img src="Netty-01/v2-5ccd8c1dae006334fdcc4fa269879e93_r.jpg" alt="preview"></p>
+<p>服务端</p>
+<pre><code class="java">
+package com.atguigu.nio.groupchat;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.*;
+import java.util.Iterator;
+
+public class GroupChatServer &#123;
+    //定义属性
+    private Selector selector;
+    private ServerSocketChannel listenChannel;
+    private static final int PORT = 6667;
+
+    //构造器
+    //初始化工作
+    public GroupChatServer() &#123;
+
+        try &#123;
+
+            //得到选择器
+            selector = Selector.open();
+            //ServerSocketChannel
+            listenChannel =  ServerSocketChannel.open();
+            //绑定端口
+            listenChannel.socket().bind(new InetSocketAddress(PORT));
+            //设置非阻塞模式
+            listenChannel.configureBlocking(false);
+            //将该listenChannel 注册到selector
+            listenChannel.register(selector, SelectionKey.OP_ACCEPT);
+
+        &#125;catch (IOException e) &#123;
+            e.printStackTrace();
+        &#125;
+
+    &#125;
+
+    //监听
+    public void listen() &#123;
+
+        System.out.println(&quot;监听线程: &quot; + Thread.currentThread().getName());
+        try &#123;
+
+            //循环处理
+            while (true) &#123;
+
+                int count = selector.select();
+                if(count &gt; 0) &#123;//有事件处理
+
+                    //遍历得到selectionKey 集合
+                    Iterator&lt;SelectionKey&gt; iterator = selector.selectedKeys().iterator();
+                    while (iterator.hasNext()) &#123;
+                        //取出selectionkey
+                        SelectionKey key = iterator.next();
+
+                        //监听到accept
+                        if(key.isAcceptable()) &#123;
+                            SocketChannel sc = listenChannel.accept();
+                            sc.configureBlocking(false);
+                            //将该 sc 注册到seletor
+                            sc.register(selector, SelectionKey.OP_READ);
+
+                            //拿到IP地址，提示上线
+                            System.out.println(sc.getRemoteAddress() + &quot; 上线 &quot;);
+
+                        &#125;
+                        if(key.isReadable()) &#123; //通道发送read事件，即通道是可读的状态
+                            //处理读 (专门写方法..)
+
+                            readData(key);
+
+                        &#125;
+                        //当前的key 删除，防止重复处理
+                        iterator.remove();
+                    &#125;
+
+                &#125; else &#123;
+                    System.out.println(&quot;等待....&quot;);
+                &#125;
+            &#125;
+
+        &#125;catch (Exception e) &#123;
+            e.printStackTrace();
+
+        &#125;finally &#123;
+            //发生异常处理....
+
+        &#125;
+    &#125;
+
+    //读取客户端消息
+    private void readData(SelectionKey key) &#123;
+
+        //取到关联的channle
+        SocketChannel channel = null;
+
+        try &#123;
+           //得到channel
+            channel = (SocketChannel) key.channel();
+            //创建buffer
+            ByteBuffer buffer = ByteBuffer.allocate(1024);
+
+            int count = channel.read(buffer);
+            //根据count的值做处理
+            if(count &gt; 0) &#123;
+                //把缓存区的数据转成字符串
+                String msg = new String(buffer.array());
+                //输出该消息
+                System.out.println(&quot;form 客户端: &quot; + msg);
+
+                //向其它的客户端转发消息(去掉自己), 专门写一个方法来处理
+                sendInfoToOtherClients(msg, channel);
+            &#125;
+
+        &#125;catch (IOException e) &#123;
+            try &#123;
+                System.out.println(channel.getRemoteAddress() + &quot; 离线了..&quot;);
+                //取消注册
+                key.cancel();
+                //关闭通道
+                channel.close();
+            &#125;catch (IOException e2) &#123;
+                e2.printStackTrace();;
+            &#125;
+        &#125;
+    &#125;
+
+    //转发消息给其它客户(通道)
+    private void sendInfoToOtherClients(String msg, SocketChannel self ) throws  IOException&#123;
+
+        System.out.println(&quot;服务器转发消息中...&quot;);
+        System.out.println(&quot;服务器转发数据给客户端线程: &quot; + Thread.currentThread().getName());
+        //遍历 所有注册到selector 上的 SocketChannel,并排除 self
+        for(SelectionKey key: selector.keys()) &#123;
+
+            //通过 key  取出对应的 SocketChannel
+            Channel targetChannel = key.channel();
+
+            //排除自己
+            if(targetChannel instanceof  SocketChannel &amp;&amp; targetChannel != self) &#123;
+
+                //转型
+                SocketChannel dest = (SocketChannel)targetChannel;
+                //将msg 存储到buffer
+                ByteBuffer buffer = ByteBuffer.wrap(msg.getBytes());
+                //将buffer 的数据写入 通道
+                dest.write(buffer);
+            &#125;
+        &#125;
+
+    &#125;
+
+    public static void main(String[] args) &#123;
+
+        //创建服务器对象
+        GroupChatServer groupChatServer = new GroupChatServer();
+        groupChatServer.listen();
+    &#125;
+&#125;
+
+//可以写一个Handler
+class MyHandler &#123;
+    public void readData() &#123;
+
+    &#125;
+    public void sendInfoToOtherClients()&#123;
+
+    &#125;
+&#125;
+</code></pre>
+<p>客户端</p>
+<pre><code class="java">package com.atguigu.nio.groupchat;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.SocketChannel;
+import java.util.Iterator;
+import java.util.Scanner;
+import java.util.Set;
+
+public class GroupChatClient &#123;
+
+    //定义相关的属性
+    private final String HOST = &quot;127.0.0.1&quot;; // 服务器的ip
+    private final int PORT = 6667; //服务器端口
+    private Selector selector;
+    private SocketChannel socketChannel;
+    private String username;
+
+    //构造器, 完成初始化工作
+    public GroupChatClient() throws IOException &#123;
+
+        selector = Selector.open();
+        //连接服务器
+        socketChannel = socketChannel.open(new InetSocketAddress(&quot;127.0.0.1&quot;, PORT));
+        //设置非阻塞
+        socketChannel.configureBlocking(false);
+        //将channel 注册到selector
+        socketChannel.register(selector, SelectionKey.OP_READ);
+        //得到username
+        username = socketChannel.getLocalAddress().toString().substring(1);
+        System.out.println(username + &quot; is ok...&quot;);
+
+    &#125;
+
+    //向服务器发送消息
+    public void sendInfo(String info) &#123;
+
+        info = username + &quot; 说：&quot; + info;
+
+        try &#123;
+            socketChannel.write(ByteBuffer.wrap(info.getBytes()));
+        &#125;catch (IOException e) &#123;
+            e.printStackTrace();
+        &#125;
+    &#125;
+
+    //读取从服务器端回复的消息
+    public void readInfo() &#123;
+
+        try &#123;
+
+            int readChannels = selector.select();
+            if(readChannels &gt; 0) &#123;//有可以用的通道
+
+                Iterator&lt;SelectionKey&gt; iterator = selector.selectedKeys().iterator();
+                while (iterator.hasNext()) &#123;
+
+                    SelectionKey key = iterator.next();
+                    if(key.isReadable()) &#123;
+                        //得到相关的通道
+                       SocketChannel sc = (SocketChannel) key.channel();
+                       //得到一个Buffer
+                        ByteBuffer buffer = ByteBuffer.allocate(1024);
+                        //读取
+                        sc.read(buffer);
+                        //把读到的缓冲区的数据转成字符串
+                        String msg = new String(buffer.array());
+                        System.out.println(msg.trim());
+                    &#125;
+                &#125;
+                iterator.remove(); //删除当前的selectionKey, 防止重复操作
+            &#125; else &#123;
+                //System.out.println(&quot;没有可以用的通道...&quot;);
+
+            &#125;
+
+        &#125;catch (Exception e) &#123;
+            e.printStackTrace();
+        &#125;
+    &#125;
+
+    public static void main(String[] args) throws Exception &#123;
+
+        //启动我们客户端
+        GroupChatClient chatClient = new GroupChatClient();
+
+        //启动一个线程, 每个3秒，读取从服务器发送数据
+        new Thread() &#123;
+            public void run() &#123;
+
+                while (true) &#123;
+                    chatClient.readInfo();
+                    try &#123;
+                        Thread.currentThread().sleep(3000);
+                    &#125;catch (InterruptedException e) &#123;
+                        e.printStackTrace();
+                    &#125;
+                &#125;
+            &#125;
+        &#125;.start();
+
+        //发送数据给服务器端
+        Scanner scanner = new Scanner(System.in);
+
+        while (scanner.hasNextLine()) &#123;
+            String s = scanner.nextLine();
+            chatClient.sendInfo(s);
+        &#125;
+    &#125;
+
+
+&#125;
+</code></pre>
+<h1 id="NIO与零拷贝"><a href="#NIO与零拷贝" class="headerlink" title="NIO与零拷贝"></a>NIO与零拷贝</h1><ul>
+<li>零拷贝是网络编程的关键，很多性能的优化离不开零拷贝</li>
+<li>在Java中常用的零拷贝有mmap(内存映射)和sendFile。</li>
+</ul>
+<p>所谓零拷贝，不是说没有拷贝，而是指没有cpu拷贝，而dma拷贝是不可避免的。</p>
+<h2 id="传统IO模型"><a href="#传统IO模型" class="headerlink" title="传统IO模型"></a>传统IO模型</h2><p><strong>DMA</strong>：<code>direct memory access</code> 直接内存拷贝（不使用 <code>CPU</code>）</p>
+<p>一共有四次拷贝，三次上下文的切换（用户态、内核态、用户态、内核态）</p>
+<ol>
+<li>硬件拷贝到内核缓冲</li>
+<li>内核缓冲拷贝到用户缓冲</li>
+<li>用户缓冲拷贝到socket缓冲</li>
+<li>socket缓冲拷贝到控制协议引擎</li>
+</ol>
+<p><img src="Netty-01/0024.png" alt="img"></p>
+<h2 id="mmap优化"><a href="#mmap优化" class="headerlink" title="mmap优化"></a>mmap优化</h2><p>通过内存映射，将文件映射到内核缓冲区，同时，用户空间可以共享内核空间的数据。这样，在进行网络传输时，就可以减少内核空间到用户空间的拷贝次数（3次），上下文状态切换还是三次。mmap示意图如下</p>
+<ol>
+<li>硬件拷贝到内核缓冲（内核缓冲核用户缓冲是共享数据的）</li>
+<li>内核缓冲拷贝到socket缓冲</li>
+<li>socket缓冲拷贝到控制协议引擎</li>
+</ol>
+<p><img src="Netty-01/0025.png" alt="img"></p>
+<h2 id="sendFile优化"><a href="#sendFile优化" class="headerlink" title="sendFile优化"></a>sendFile优化</h2><ul>
+<li><p><code>Linux2.1</code> 版本提供了 <code>sendFile</code> 函数，其基本原理如下：数据根本不经过用户态，直接从内核缓冲区进入到 <code>SocketBuffer</code>，同时，由于和用户态完全无关，就减少了一次上下文切换</p>
+<ul>
+<li>拷贝次数3、切换次数2</li>
+<li>这里其实有一次 <code>cpu</code> 拷贝 <code>kernel buffer</code> -&gt; <code>socket buffer</code> 但是，拷贝的信息很少，比如 <code>lenght</code>、<code>offset</code> 消耗低，可以忽略</li>
+</ul>
+<p><img src="Netty-01/0026.png" alt="img"></p>
+</li>
+</ul>
+<h2 id="编程示例"><a href="#编程示例" class="headerlink" title="编程示例"></a>编程示例</h2><p>传输一个大文件</p>
+<p>服务端</p>
+<pre><code class="java">package com.atguigu.nio.zerocopy;
+
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.nio.ByteBuffer;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
+
+//服务器
+public class NewIOServer &#123;
+    public static void main(String[] args) throws Exception &#123;
+
+        InetSocketAddress address = new InetSocketAddress(7001);
+
+        ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
+
+        ServerSocket serverSocket = serverSocketChannel.socket();
+
+        serverSocket.bind(address);
+
+        //创建buffer
+        ByteBuffer byteBuffer = ByteBuffer.allocate(4096);
+
+        while (true) &#123;
+            SocketChannel socketChannel = serverSocketChannel.accept();
+
+            int readcount = 0;
+            while (-1 != readcount) &#123;
+                try &#123;
+
+                    readcount = socketChannel.read(byteBuffer);
+
+                &#125;catch (Exception ex) &#123;
+                   // ex.printStackTrace();
+                    break;
+                &#125;
+                //
+                byteBuffer.rewind(); //倒带 position = 0 mark 作废
+            &#125;
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p>客户端</p>
+<pre><code class="java">package com.atguigu.nio.zerocopy;
+
+import java.io.FileInputStream;
+import java.net.InetSocketAddress;
+import java.nio.channels.FileChannel;
+import java.nio.channels.SocketChannel;
+
+public class NewIOClient &#123;
+    public static void main(String[] args) throws Exception &#123;
+
+        SocketChannel socketChannel = SocketChannel.open();
+        socketChannel.connect(new InetSocketAddress(&quot;localhost&quot;, 7001));
+        String filename = &quot;protoc-3.6.1-win32.zip&quot;;
+
+        //得到一个文件channel
+        FileChannel fileChannel = new FileInputStream(filename).getChannel();
+
+        //准备发送
+        long startTime = System.currentTimeMillis();
+
+        //在linux下一个transferTo 方法就可以完成传输
+        //在windows 下 一次调用 transferTo 只能发送8m , 就需要分段传输文件, 而且要主要
+        //传输时的位置 =》 课后思考...
+        //transferTo 底层使用到零拷贝
+        long transferCount = fileChannel.transferTo(0, fileChannel.size(), socketChannel);
+
+        System.out.println(&quot;发送的总的字节数 =&quot; + transferCount + &quot; 耗时:&quot; + (System.currentTimeMillis() - startTime));
+
+        //关闭
+        fileChannel.close();
+
+    &#125;
+&#125;
+</code></pre>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>Copyright： </strong>
+          
+          Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source.
+          
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2022/01/18/Netty-01/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Netty/" rel="tag">Netty</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2022/02/04/Netty-02/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            Java IO编程03-Netty高性能架构
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2022/01/12/Java-IO%E6%B5%81/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">Java IO编程01-初识IO流</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "",
+    app_key: "",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+   
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2018-2022
+        <i class="ri-heart-fill heart_icon"></i> Tunan
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>Visitors:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>Views:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>    
+    </main>
+    <div class="float_btns">
+      <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+    </div>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/ayer-side.svg" alt="Tunan`s Blog"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags/share">分享</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" target="_blank" rel="noopener" href="https://blog.csdn.net/North_City_">CSDN</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="Search">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-3.6.0.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+    
+
+  </div>
+</body>
+
+</html>
