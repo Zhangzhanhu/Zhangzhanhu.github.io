@@ -165,6 +165,164 @@
     
     
     <article
+  id="post-Java-IO流"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/03/30/Java-IO%E6%B5%81/"
+    >Java IO流</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/03/30/Java-IO%E6%B5%81/" class="article-date">
+  <time datetime="2022-03-30T02:02:53.000Z" itemprop="datePublished">2022-03-30</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java%E5%9F%BA%E7%A1%80/">Java基础</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <span id="more"></span>
+
+<p>![](Java IO流体系图.png)</p>
+<h3 id="Java-IO流的概念和作用"><a href="#Java-IO流的概念和作用" class="headerlink" title="Java IO流的概念和作用"></a>Java IO流的概念和作用</h3><p>流是一组有顺序、有起点和终点的字节集合，是对数据传输的总称或者抽象。数据在两设备之间的传输被称为流，流的本质是数据传输，根据数据传输的特性将流抽象为各种类，方便更直观的进行数据操作。</p>
+<h3 id="IO流的分类"><a href="#IO流的分类" class="headerlink" title="IO流的分类"></a>IO流的分类</h3><p>根据处理数据类型的不同分为：字符流和字节流<br>根据数据流向不同分为：输入流和输出流</p>
+<h3 id="字符流和字节流"><a href="#字符流和字节流" class="headerlink" title="字符流和字节流"></a>字符流和字节流</h3><ul>
+<li>比特（Bit）最小的二进制单位 ，是计算机的操作部分 取值0或者1</li>
+<li>字节（Byte）是计算机操作数据的最小单位由8位bit组成 取值（-128-127）</li>
+<li>字符（Char）是用户的可读写的最小单位，在java里面由16位bit组成 取值（0-65535）</li>
+</ul>
+<p>字节流和字符流的区别</p>
+<ol>
+<li>读写单位不同：字节流以字节（8bit）为单位，字符流以字符为单位，根据码表映射字符，一次可能读多个字节。</li>
+<li>处理对象不同：字节流能处理所有类型的数据（如图片、avi等），而字符流只能处理字符类型的数据。</li>
+<li>字节流在操作的时候本身是不会用到缓冲区的，是文件本身的直接操作的；而字符流在操作的时候下后是会用到缓冲区的，是通过缓冲区来操作文件，我们将在下面验证这一点。</li>
+</ol>
+<h3 id="IO流对象"><a href="#IO流对象" class="headerlink" title="IO流对象"></a>IO流对象</h3><h4 id="1、输入字节流InputStream"><a href="#1、输入字节流InputStream" class="headerlink" title="1、输入字节流InputStream"></a>1、输入字节流InputStream</h4><p>InputStream 是所有的输入字节流的父类，它是一个抽象类。 ByteArrayInputStream、StringBufferInputStream、FileInputStream 是三种基本的介质流，它们分别从Byte 数组、StringBuffer、和本地文件中读取数据。PipedInputStream 是从与其它线程共用的管道中读取数据，与Piped 相关的知识后续单独介绍。</p>
+<p>ObjectInputStream 和所有FilterInputStream的子类都是装饰流（装饰器模式的主角）。意思是FileInputStream类可以通过一个String路径名创建一个对象，FileInputStream(String name)。而DataInputStream必须装饰一个类才能返回一个对象，DataInputStream(InputStream in)。</p>
+<p>示例：</p>
+<pre><code class="java">/**
+ * 字节流
+ * 读文件内容
+ * */
+import java.io.*;
+class hello&#123;
+   public static void main(String[] args) throws IOException &#123;
+       String fileName=&quot;D:&quot;+File.separator+&quot;hello.txt&quot;;
+       File f=new File(fileName);
+       InputStream in=new FileInputStream(f);
+       byte[] b=new byte[1024];
+       in.read(b);
+       in.close();
+       System.out.println(new String(b));
+    &#125;
+&#125;
+</code></pre>
+<h4 id="2、输出字节流OutputStream"><a href="#2、输出字节流OutputStream" class="headerlink" title="2、输出字节流OutputStream"></a>2、输出字节流OutputStream</h4><p>OutputStream 是所有的输出字节流的父类，它是一个抽象类。</p>
+<p>ByteArrayOutputStream、FileOutputStream是两种基本的介质流，它们分别向Byte 数组、和本地文件中写入数据。PipedOutputStream 是向与其它线程共用的管道中写入数据，</p>
+<p>ObjectOutputStream 和所有FilterOutputStream的子类都是装饰流。具体例子跟InputStream是对应的。</p>
+<p>示例：</p>
+<pre><code class="java">/**
+ * 字节流
+ * 向文件中写入字符串
+ * */
+import java.io.*;
+class hello&#123;
+   public static void main(String[] args) throws IOException &#123;
+       String fileName=&quot;D:&quot;+File.separator+&quot;hello.txt&quot;;
+       File f=new File(fileName);
+       OutputStream out =new FileOutputStream(f);
+       String str=&quot;Hello World&quot;;
+       byte[] b=str.getBytes();
+       out.write(b);
+       out.close();
+    &#125;
+&#125;
+</code></pre>
+<h4 id="3、字符输入流Reader"><a href="#3、字符输入流Reader" class="headerlink" title="3、字符输入流Reader"></a>3、字符输入流Reader</h4><p>Reader 是所有的输入字符流的父类，它是一个抽象类。</p>
+<p>CharReader、StringReader是两种基本的介质流，它们分别将Char 数组、String中读取数据。PipedReader 是从与其它线程共用的管道中读取数据。</p>
+<p>BufferedReader 很明显就是一个装饰器，它和其子类负责装饰其它Reader 对象。</p>
+<p>FilterReader 是所有自定义具体装饰流的父类，其子类PushbackReader 对Reader 对象进行装饰，会增加一个行号。</p>
+<p>InputStreamReader 是一个连接字节流和字符流的桥梁，它将字节流转变为字符流。FileReader可以说是一个达到此功能、常用的工具类，在其源代码中明显使用了将FileInputStream 转变为Reader 的方法。我们可以从这个类中得到一定的技巧。Reader 中各个类的用途和使用方法基本和InputStream 中的类使用一致。后面会有Reader 与InputStream 的对应关系。</p>
+<p>示例：</p>
+<pre><code class="java">/**
+ * 字符流
+ * 从文件中读出内容
+ * */
+import java.io.*;
+class hello&#123;
+   public static void main(String[] args) throws IOException &#123;
+       String fileName=&quot;D:&quot;+File.separator+&quot;hello.txt&quot;;
+       File f=new File(fileName);
+       char[] ch=new char[100];
+       Reader read=new FileReader(f);
+       int count=read.read(ch);
+       read.close();
+       System.out.println(&quot;读入的长度为：&quot;+count);
+       System.out.println(&quot;内容为&quot;+new String(ch,0,count));
+    &#125;
+&#125;
+</code></pre>
+<h4 id="4、字符输出流Writer"><a href="#4、字符输出流Writer" class="headerlink" title="4、字符输出流Writer"></a>4、字符输出流Writer</h4><p>Writer 是所有的输出字符流的父类，它是一个抽象类。</p>
+<p>CharArrayWriter、StringWriter 是两种基本的介质流，它们分别向Char 数组、String 中写入数据。</p>
+<p>PipedWriter 是向与其它线程共用的管道中写入数据，</p>
+<p>BufferedWriter 是一个装饰器为Writer 提供缓冲功能。</p>
+<p>PrintWriter 和PrintStream 极其类似，功能和使用也非常相似。</p>
+<p>OutputStreamWriter 是OutputStream 到Writer 转换的桥梁，它的子类FileWriter 其实就是一个实现此功能的具体类（具体可以研究一SourceCode）。功能和使用和OutputStream 极其类似，后面会有它们的对应图。</p>
+<p>示例：</p>
+<pre><code class="java">/**
+ * 字符流
+ * 写入数据
+ * */
+import java.io.*;
+class hello&#123;
+   public static void main(String[] args) throws IOException &#123;
+       String fileName=&quot;D:&quot;+File.separator+&quot;hello.txt&quot;;
+       File f=new File(fileName);
+       Writer out =new FileWriter(f);
+       String str=&quot;hello&quot;;
+       out.write(str);
+       out.close();
+    &#125;
+&#125;
+</code></pre>
+<h3 id="面试整理"><a href="#面试整理" class="headerlink" title="面试整理"></a>面试整理</h3><h4 id="1、io流如何读取文件"><a href="#1、io流如何读取文件" class="headerlink" title="1、io流如何读取文件"></a>1、io流如何读取文件</h4><p>使用File对象获取文件路径，通过字符流Reader加入文件，使用字符缓存流BufferedReader处理Reader，再定义一个字符串，循环遍历出文件</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/IO%E6%B5%81/" rel="tag">IO流</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
   id="post-07云原生-DevOps使用"
   class="article article-type-post"
   itemscope
@@ -669,65 +827,6 @@
 <li>读源码的⽅法和技巧<ul>
 <li>断点（观察调⽤栈） 
       <a class="article-more-link" href="/2022/03/19/Spring%E6%BA%90%E7%A0%81%E4%B9%8BIOC%E5%AE%B9%E5%99%A8%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%BB%E4%BD%93%E6%B5%81%E7%A8%8B/"
-        >阅读更多...</a
-      >
-       
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring/" rel="tag">Spring</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-Spring-IoC-的高级特性"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2022/03/19/Spring-IoC-%E7%9A%84%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7/"
-    >Spring IoC 的高级特性</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2022/03/19/Spring-IoC-%E7%9A%84%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7/" class="article-date">
-  <time datetime="2022-03-19T02:58:20.000Z" itemprop="datePublished">2022-03-19</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">源码剖析</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h1 id="Spring-IOC高级特性"><a href="#Spring-IOC高级特性" class="headerlink" title="Spring IOC高级特性"></a>Spring IOC高级特性</h1><h2 id="lazy-Init-延迟加载"><a href="#lazy-Init-延迟加载" class="headerlink" title="lazy-Init 延迟加载"></a>lazy-Init 延迟加载</h2><p>Bean 的延迟加载（延迟创建）</p>
-<p>ApplicationContext 容器的默认⾏为是在启动服务器时将所有 singleton bean 提前进⾏实例化。提前实例化意味着作为初始化过程的⼀部分，ApplicationContext 实例会创建并配置所有的singleton bean。</p>
-<p>比如： 
-      <a class="article-more-link" href="/2022/03/19/Spring-IoC-%E7%9A%84%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7/"
         >阅读更多...</a
       >
        
