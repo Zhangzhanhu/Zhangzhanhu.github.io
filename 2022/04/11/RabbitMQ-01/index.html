@@ -112,7 +112,7 @@
     <div class="article-entry" itemprop="articleBody">
        
   <h1 id="六大工作模式"><a href="#六大工作模式" class="headerlink" title="六大工作模式"></a>六大工作模式</h1><p>工作模式：消息分发机制<span id="more"></span></p>
-<h2 id="Hello-world-简单模式"><a href="#Hello-world-简单模式" class="headerlink" title="Hello world 简单模式"></a>Hello world 简单模式</h2><p><img src="RabbitMQ-01/image-20220711110647947.png" alt="image-20220711110647947"></p>
+<h2 id="Hello-world-简单模式"><a href="#Hello-world-简单模式" class="headerlink" title="Hello world 简单模式"></a>Hello world 简单模式</h2><p><img src="image-20220711110647947.png" alt="image-20220711110647947"></p>
 <ul>
 <li>P:生产者，要发送消息的程序</li>
 <li>C:消费者，接受消息的程序，会一直等待消息到来</li>
@@ -245,7 +245,7 @@ public class Consumer &#123;
 
 &#125;
 </code></pre>
-<h2 id="Work-queues"><a href="#Work-queues" class="headerlink" title="Work queues"></a>Work queues</h2><p><img src="RabbitMQ-01/image-20220711144458380.png" alt="image-20220711144458380"></p>
+<h2 id="Work-queues"><a href="#Work-queues" class="headerlink" title="Work queues"></a>Work queues</h2><p><img src="image-20220711144458380.png" alt="image-20220711144458380"></p>
 <ul>
 <li><p><strong>工作队列：</strong>与入门程序相比，多了一个或一些消费者，多个消费者共同消费同一个队列中的消息</p>
 </li>
@@ -256,7 +256,7 @@ public class Consumer &#123;
 <li><p>代码与简单模式一样，只是增加一份消费者代码</p>
 </li>
 </ul>
-<h2 id="Publish-Subscribe"><a href="#Publish-Subscribe" class="headerlink" title="Publish/Subscribe"></a>Publish/Subscribe</h2><p><img src="RabbitMQ-01/image-20220711144546980.png" alt="image-20220711144546980"></p>
+<h2 id="Publish-Subscribe"><a href="#Publish-Subscribe" class="headerlink" title="Publish/Subscribe"></a>Publish/Subscribe</h2><p><img src="image-20220711144546980.png" alt="image-20220711144546980"></p>
 <ul>
 <li>X:交换机Exchange，一方面接收生产者的消息，另一方面知道如何处理消息，例如递交给某个贴别的队列、递交给所有队列、或将消息丢弃。到底如何操作取决于Exchange的类型，交换机常见有以下3种类型：<ul>
 <li>广播Fanout：将消息交给所有绑定到交换机的队列</li>
@@ -332,7 +332,7 @@ public class Producer &#123;
 &#125;
 </code></pre>
 <p>PS：消费者端代码没有变动</p>
-<h2 id="Routing"><a href="#Routing" class="headerlink" title="Routing"></a>Routing</h2><p><img src="RabbitMQ-01/image-20220711144633308.png" alt="image-20220711144633308"></p>
+<h2 id="Routing"><a href="#Routing" class="headerlink" title="Routing"></a>Routing</h2><p><img src="image-20220711144633308.png" alt="image-20220711144633308"></p>
 <p>模式说明：</p>
 <ul>
 <li>队列与交换机的绑定，不能是任意绑定了，而是要指定一个RoutingKey(路由key)</li>
@@ -406,11 +406,11 @@ public class Producer &#123;
     &#125;
 &#125;
 </code></pre>
-<h2 id="Topics"><a href="#Topics" class="headerlink" title="Topics"></a>Topics</h2><p><img src="RabbitMQ-01/image-20220711144653905.png" alt="image-20220711144653905"></p>
+<h2 id="Topics"><a href="#Topics" class="headerlink" title="Topics"></a>Topics</h2><p><img src="image-20220711144653905.png" alt="image-20220711144653905"></p>
 <p>*匹配一个字符串</p>
 <p>#匹配多个字符串</p>
 <p>在定向的基础上加了一个模糊匹配</p>
-<h2 id="RPC"><a href="#RPC" class="headerlink" title="RPC"></a>RPC</h2><p><img src="RabbitMQ-01/image-20220711144711146.png" alt="image-20220711144711146"></p>
+<h2 id="RPC"><a href="#RPC" class="headerlink" title="RPC"></a>RPC</h2><p><img src="image-20220711144711146.png" alt="image-20220711144711146"></p>
  
       <!-- reward -->
       

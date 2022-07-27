@@ -122,7 +122,7 @@
 <li>Netty可以帮助你快速、简单的开发出一个网络应用，相当于简化和流程化了NIO的开发过程</li>
 <li>Netty是目前最流行的NIO框架，Netty在互联网领域、大数据分布式计算领域、游戏行业、通信行业等获得了广泛的应用，知名的Elasticsearch、Dubbo框架内部都采用了Netty</li>
 </ol>
-<h1 id="Netty高性能架构设计"><a href="#Netty高性能架构设计" class="headerlink" title="Netty高性能架构设计"></a>Netty高性能架构设计</h1><h2 id="传统阻塞IO服务模型"><a href="#传统阻塞IO服务模型" class="headerlink" title="传统阻塞IO服务模型"></a>传统阻塞IO服务模型</h2><p><img src="Netty-02/0002.png" alt="img"></p>
+<h1 id="Netty高性能架构设计"><a href="#Netty高性能架构设计" class="headerlink" title="Netty高性能架构设计"></a>Netty高性能架构设计</h1><h2 id="传统阻塞IO服务模型"><a href="#传统阻塞IO服务模型" class="headerlink" title="传统阻塞IO服务模型"></a>传统阻塞IO服务模型</h2><p><img src="0002.png" alt="img"></p>
 <p>工作原理图：</p>
 <ol>
 <li>黄色的框表示对象，蓝色的框表示线程</li>
@@ -143,7 +143,7 @@
 <li>基于/0复用模型：多个连接共用一个阻塞对象，应用程序只需要在一个阻塞对象等待，无需阻塞等待所有连接。当某个连接有新的数据可以处理时，操作系统通知应用程序，线程从阻塞状态返回，开始进行业务处理</li>
 <li>基于线程池复用线程资源：不必再为每个连接创建线程，将连接完成后的业务处理任务分配给线程进行处理，一个线程可以处理多个连接的业务。</li>
 </ol>
-<p><img src="Netty-02/0004.png" alt="img"></p>
+<p><img src="0004.png" alt="img"></p>
 <p>关于上图的解释 </p>
 <ol>
 <li><code>Reactor</code> 模式，通过一个或多个输入同时传递给服务处理器（ServiceHandler）的模式（基于事件驱动）</li>
@@ -156,7 +156,7 @@
 </ol>
 <p>根据Reactor的数量和处理资源线程池的数量不同，有三种典型实现</p>
 <h3 id="单Reactor单线程"><a href="#单Reactor单线程" class="headerlink" title="单Reactor单线程"></a>单Reactor单线程</h3><p>结合群聊程序</p>
-<p><img src="Netty-02/0005.png" alt="img"></p>
+<p><img src="0005.png" alt="img"></p>
 <p><strong>方案说明</strong></p>
 <ol>
 <li><code>Select</code> 是前面 <code>I/O</code> 复用模型介绍的标准网络编程 <code>API</code>，可以实现应用程序通过一个阻塞对象监听多路连接请求</li>
@@ -173,7 +173,7 @@
 <li>缺点：可靠性问题，线程意外终止，或者进入死循环，会导致整个系统通信模块不可用，不能接收和处理外部消息，造成节点故障</li>
 <li>使用场景：客户端的数量有限，业务处理非常快速，比如 <code>Redis</code> 在业务处理的时间复杂度 <code>O(1)</code> 的情况</li>
 </ol>
-<h3 id="单Reactor多线程"><a href="#单Reactor多线程" class="headerlink" title="单Reactor多线程"></a>单Reactor多线程</h3><p><img src="Netty-02/0006.png" alt="img"></p>
+<h3 id="单Reactor多线程"><a href="#单Reactor多线程" class="headerlink" title="单Reactor多线程"></a>单Reactor多线程</h3><p><img src="0006.png" alt="img"></p>
 <p><strong>方案说明</strong></p>
 <ol>
 <li><code>Reactor</code> 对象通过 <code>Select</code> 监控客户端请求事件，收到事件后，通过 <code>Dispatch</code> 进行分发</li>
@@ -188,7 +188,7 @@
 <li>优点：可以充分的利用多核 <code>cpu</code> 的处理能力</li>
 <li>缺点：多线程数据共享和访问比较复杂。<code>Reactor</code> 承担所有的事件的监听和响应，它是单线程运行，在高并发场景容易出现性能瓶颈。也就是说<code>Reactor</code>主线程承担了过多的事</li>
 </ol>
-<h3 id="主从Reactor多线程"><a href="#主从Reactor多线程" class="headerlink" title="主从Reactor多线程"></a>主从Reactor多线程</h3><p><img src="Netty-02/0007.png" alt="img"></p>
+<h3 id="主从Reactor多线程"><a href="#主从Reactor多线程" class="headerlink" title="主从Reactor多线程"></a>主从Reactor多线程</h3><p><img src="0007.png" alt="img"></p>
 <p><strong>方案说明</strong></p>
 <ol>
 <li><code>Reactor</code> 主线程 <code>MainReactor</code> 对象通过 <code>select</code> 监听连接事件，收到事件后，通过 <code>Acceptor</code> 处理连接事件</li>
@@ -222,7 +222,7 @@
 </ol>
 <h2 id="Netty线程模式"><a href="#Netty线程模式" class="headerlink" title="Netty线程模式"></a>Netty线程模式</h2><p>基于主从Reactor多线程模型做了改进</p>
 <p><strong>简单示意</strong></p>
-<p><img src="Netty-02/0010.png" alt="img"></p>
+<p><img src="0010.png" alt="img"></p>
 <ol>
 <li><code>BossGroup</code> 线程维护 <code>Selector</code>，只关注 <code>Accecpt</code></li>
 <li>当接收到 <code>Accept</code> 事件，获取到对应的 <code>SocketChannel</code>，封装成 <code>NIOScoketChannel</code> 并注册到 <code>Worker</code> 线程（事件循环），并进行维护</li>
@@ -230,7 +230,7 @@
 </ol>
 <p>==PS：<code>BossGroup</code>有点像主<code>Reactor</code> 可以有多个，<code>WorkerGroup</code>则像<code>SubReactor</code>一样可以有多个。==</p>
 <p><strong>详细版</strong></p>
-<p><img src="Netty-02/0012.png" alt="img"></p>
+<p><img src="0012.png" alt="img"></p>
 <p><strong>方案说明</strong></p>
 <ol>
 <li><code>Netty</code> 抽象出两组线程池 ，<code>BossGroup</code> 专门负责接收客户端的连接，<code>WorkerGroup</code> 专门负责网络的读写</li>
@@ -491,8 +491,8 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter &#123;
 <p>可以添加监听器，当事件发生时，就会通知到监听器。</p>
 </li>
 </ol>
-<h2 id="工作原理示意图"><a href="#工作原理示意图" class="headerlink" title="工作原理示意图"></a>工作原理示意图</h2><p><img src="Netty-02/0013.png" alt="img"></p>
-<p><img src="Netty-02/0014.png" alt="img"></p>
+<h2 id="工作原理示意图"><a href="#工作原理示意图" class="headerlink" title="工作原理示意图"></a>工作原理示意图</h2><p><img src="0013.png" alt="img"></p>
+<p><img src="0014.png" alt="img"></p>
 <p><strong>说明</strong></p>
 <ol>
 <li>在使用 <code>Netty</code> 进行编程时，拦截操作和转换出入站数据只需要您提供 <code>callback</code> 或利用 <code>future</code> 即可。这使得链式操作简单、高效，并有利于编写可重用的、通用的代码。</li>
